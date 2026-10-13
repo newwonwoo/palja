@@ -14,7 +14,7 @@ export const BRANCH_KO = ['자','축','인','묘','진','사','오','미','신',
 export const ENGINE_VERSION = 'legacy-saju-6389ec7-v1';
 
 export function solarDate(birth) {
-  const { input_year: year, input_month: month, input_day: day, calendar_type: calendar } = birth;
+  const { input_year: year, input_month: month, input_day: day, calendar_type: calendar } = birthForCalculation(birth);
   if (![year, month, day].every(Number.isInteger)) throw new Error('생년월일을 확인해 주세요.');
   if (year < 1900 || year > 2030) throw new Error('현재 계산 범위는 1900~2030년입니다. 기록은 그대로 보관됩니다.');
   if (month < 1 || month > 12 || day < 1 || day > 31) throw new Error('생년월일을 확인해 주세요.');
