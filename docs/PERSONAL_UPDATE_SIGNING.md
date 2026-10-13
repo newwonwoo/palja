@@ -9,10 +9,10 @@
 - 기존 1.1.2 앱의 signer SHA-256: `76b0434edf1bde06e8b82b41eb8b40d380f06cb6d989827a4ce5c6506cabcd02`.
 - 일반 Debug APK는 서명이 달라 **기존 개인 앱 업데이트 불가**.
 - 새로운 임의 keystore로 서명한 Release APK도 **기존 개인 앱 업데이트 불가**.
-- **현재까지 원래 keystore를 확보하지 못함.** 이 문서/스크립트만으로 업데이트가 완료된 것이 아니다.
+- **2026-10-14 복구 완료:** 비공개 파일 보관함의 과거 업데이트 보관 ZIP에서 **기존 1.1.2와 같은 서명키**를 확인함. 비공개 로컬 환경에서 1.1.4 서명 APK를 제작했으며 `appId=com.newwonwoo.saju`, versionCode 12→14, signer SHA-256 일치, APK v2·v3 서명 및 16KiB 정렬을 검증. 이 개인 APK·키는 **공개 GitHub에 올리지 않음**. 실제 물리 기기 덮어쓰기 및 DB 유지 확인은 아직 필요.
 - 개인 명식은 공개 GitHub에 올리지 않으며, 기존 앱을 삭제하거나 앱 데이터 지우기를 수행하면 안 된다.
 
-## 원래 서명키가 있을 때
+**개인용 1.1.4 업데이트 APK SHA-256:** `3c92600cfbec6be9ab8fc4284bf0242cb3ad009ed3b39885c2bba92df93ef5cd` · **크기:** 3,419,697바이트. 163건 개인 DB를 새 APK에 재포함하거나 덮어쓰지 않고 기존 기기 SQLite를 보존하는 일반 Android in-place 업데이트. **실기기 미검증.**\n\n## 원래 서명키가 있을 때
 
 1. 기존 개인 앱에서 **설정과 백업 → 백업 내보내기**로 JSON 백업을 별도 보관한다. 기존 앱 삭제 금지.
 2. `palja/main`에서 GitHub Actions → **Build unsigned Palja release for ORIGINAL personal signer** → **Run workflow**. artifact `palja-1.1.4-release-UNSIGNED-NEEDS-ORIGINAL-KEY` 다운로드. **이 파일은 설치 파일이 아니다.**
