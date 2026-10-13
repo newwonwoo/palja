@@ -1,0 +1,23 @@
+.manse-tools { color:#51596b; }
+.manse-tools h1 { font-size:25px; }
+.mt-tabs { display:flex;gap:6px;border-bottom:1px solid #d7dce6;margin-bottom:22px; }
+.mt-tabs button { flex:1;border:0;background:white;min-height:46px;border-bottom:3px solid transparent; }
+.mt-tabs [aria-pressed=true] { border-bottom-color:#85a9d3;font-weight:700;color:#415674; }
+.mt-date-nav { display:flex;align-items:center;gap:9px;margin-bottom:18px; }
+.mt-date-nav > button { min-height:44px;border:1px solid #dce2ea;border-radius:8px;background:#f3f6fb;white-space:nowrap; }
+.mt-date-nav > label { flex:1;min-width:0; }
+.mt-date-nav input { padding:9px!important;min-width:0; }
+.mt-calendar-grid { display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;margin-bottom:22px; }
+.mt-weekday { text-align:center;color:#7f899a;padding-bottom:7px;font-size:13px; }
+.mt-calendar-grid > button { display:flex;flex-direction:column;align-items:center;min-height:85px;padding:4px 0;border:1px solid #e9edf2;border-radius:8px;background:#fff; }
+.mt-calendar-grid > button small { font-size:12px;margin-bottom:2px; }
+.mt-calendar-grid > button span { font-size:20px;line-height:1.25;font-weight:600; }
+.mt-calendar-grid > button[aria-pressed=true] { background:#eef5ff;outline:2px solid #729cc7; }
+.mt-calendar-grid [data-tone=fire] { color:#cf3655; }.mt-calendar-grid [data-tone=wood] { color:#118164; }.mt-calendar-grid [data-tone=earth] { color:#967316; }.mt-calendar-grid [data-tone=metal] { color:#596c73; }.mt-calendar-grid [data-tone=water] { color:#384346; }
+.mt-day-hours > div { display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-bottom:20px; }
+.mt-day-hours > div > button { border:1px solid #e4e8ef;background:white;border-radius:9px;padding:8px 2px;min-height:64px;font-size:12px; }
+.mt-day-hours strong { display:block;font-size:21px; }.mt-day-hours button[aria-pressed=true] { background:#edf7f1;outline:2px solid #62b18d; }
+.mt-two { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px 10px;margin-bottom:20px; }
+.mt-two label { min-width:0;font-size:13px; }.mt-two input,.mt-two select { padding:9px!important;min-width:0;margin-top:5px; }
+.mt-search-results { padding:0;list-style:none; }.mt-search-results li { display:flex;align-items:center;justify-content:space-between;gap:7px;padding:12px 0;border-bottom:1px solid #e3e7ed; }.mt-search-results strong,.mt-search-results small { display:block; }.mt-search-results small { color:#778094;font-size:12px; }
+.mt-guide table { border-collapse:collapse;width:100%;font-size:14px; }.mt-guide th,.mt-guide td { text-align:center;padding:10px 5px;border-bottom:1px solid #e2e7ef; }.mt-guide thead { background:#f0f5fc; }.mt-table-scroll { overflow:auto; }.mt-table-scroll table { min-width:450px; }.mt-guide select { margin:8px 0 20px; }

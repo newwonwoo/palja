@@ -1,0 +1,44 @@
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
+const fs = require('node:fs');
+const assert = require('node:assert/strict');
+(async()=>{
+  const browser=await chromium.launch({args:['--no-sandbox']});
+  const page=await browser.newPage({locale:'ko-KR',viewport:{width:390,height:844}});
+  const errors=[];page.on('pageerror',err=>errors.push(String(err)));
+  page.on('console',msg=>{if(msg.type()==='error')errors.push(msg.text())});
+  await page.goto(process.env.QA_URL||'http://127.0.0.1:8765');
+  await page.getByRole('button',{name:'커스텀',exact:true}).waitFor();
+  const seed=JSON.parse(fs.readFileSync(process.env.QA_DIR+'/seed.json','utf8'));
+  await page.evaluate(seed=>new Promise((resolve,reject)=>{
+    const r=indexedDB.open('saju-vault',1);
+    r.onsuccess=()=>{
+      const db=r.result,t=db.transaction('state','readwrite');
+      t.objectStore('state').put({json:JSON.stringify(seed),revision:seed.revision},'vault');
+      t.oncomplete=()=>{db.close();resolve()};t.onerror=reject;
+    };r.onerror=reject;
+  }),seed);
+  await page.reload();
+  await page.getByRole('button',{name:/합성 명식 가/}).first().click();
+  await page.locator('.rr-six').first().waitFor();
+  await page.locator('[data-testid="engine-crosscheck"] summary').click();
+  assert.equal(await page.locator('[data-testid="engine-crosscheck"] tbody tr').count(),4);
+  assert.match(await page.locator('[data-testid="engine-crosscheck"]').innerText(),/기존 엔진/);
+  await page.getByRole('navigation',{name:'명식 주 메뉴'}).getByRole('button',{name:'풀이',exact:true}).click();
+  await page.locator('.integration-nayin').waitFor();
+  assert.equal(await page.locator('.integration-nayin-grid > div').count(),4);
+  assert.match(await page.locator('.integration-nayin').innerText(),/공망/);
+  assert.match(await page.locator('.integration-nayin').innerText(),/삼재/);
+  await page.getByRole('tab',{name:'궁합',exact:true}).click();
+  await page.getByLabel('비교할 명식').selectOption(seed.entries[1].id);
+  await page.locator('.integration-compare-facts').first().waitFor();
+  assert.match(await page.locator('.integration-compare-facts').first().innerText(),/일주/);
+  await page.getByRole('button',{name:'저장된 명식의 공통 글자 검색'}).click();
+  assert.ok(await page.locator('.integration-similar-list li').count() >= 1);
+  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true);
+  await page.screenshot({path:process.env.QA_DIR+'/independent-compare-390.png',fullPage:true});
+  await page.getByRole('tab',{name:'분석',exact:true}).click();
+  await page.screenshot({path:process.env.QA_DIR+'/independent-overview-390.png',fullPage:true});
+  assert.deepEqual(errors,[]);
+  await browser.close();
+  console.log('PASS engine crosscheck, Nayin, void, samjae, pair facts, local similarity, and no page errors');
+})().catch(err=>{console.error(err);process.exit(1)});

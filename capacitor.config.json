@@ -1,0 +1,14 @@
+{
+  "appId": "com.newwonwoo.saju",
+  "appName": "사주 보관함",
+  "webDir": "dist-mobile",
+  "loggingBehavior": "none",
+  "android": {
+    "webContentsDebuggingEnabled": false
+  },
+  "plugins": {
+    "SystemBars": {
+      "style": "DARK"
+    }
+  }
+}

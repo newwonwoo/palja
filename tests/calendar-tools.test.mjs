@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {build} from 'esbuild';
+import {fileURLToPath} from 'node:url';
+const root=fileURLToPath(new URL('../',import.meta.url));
+const code=await build({stdin:{contents:"export * from './src/mobile/calendar-model.js';export {getDP,calcSaju} from './src/App.jsx';",resolveDir:root,loader:'js'},bundle:true,write:false,format:'esm',platform:'node',logLevel:'silent',define:{'import.meta.env.VITE_APP_MODE':'"mobile"','import.meta.env.VITE_GEMINI_API_KEY':'""'}});
+const m=await import('data:text/javascript;base64,'+Buffer.from(code.outputFiles[0].text).toString('base64'));
+test('calendar validates range, real leap days and incomplete input',()=>{for(const x of ['','2031-01-01','1900-02-29','2001-02-29','2000-13-01','2000-01-32'])assert.throws(()=>m.parseCalendarDate(x));assert.deepEqual(m.parseCalendarDate('2000-02-29'),{year:2000,month:2,day:29});});
+test('calendar month days, UTC weekdays and displayed pillar match baseline',()=>{const x=m.calendarMonth(2000,2);assert.equal(x.days.length,29);assert.equal(x.firstWeekday,2);for(const d of x.days)assert.deepEqual(d.pillar,m.getDP(d.year,d.month,d.day));});
+test('12 representative hour slots match existing engine without changing birth data',()=>{const x=m.dayHours('2000-02-29');assert.equal(x.length,12);for(const d of x)assert.deepEqual(d.pillar,m.calcSaju(2000,2,29,d.hour,0).pillars[0]);});
+test('day-pillar reverse search finds exact dates and caps are explicit',async()=>{const p=m.getDP(2000,1,1);const r=await m.findDayPillar({start:'2000-01-01',end:'2000-12-31',stem:p.stem,branch:p.branch});assert.equal(r.results[0].key,'2000-01-01');assert.equal(r.truncated,false);assert.equal(r.checked,366);const limited=await m.findDayPillar({start:'2000-01-01',end:'2000-12-31',stem:p.stem,branch:p.branch,limit:1});assert.equal(limited.results.length,1);assert.equal(limited.truncated,true);});
+test('invalid stem-branch parity and inverted date intervals are rejected',async()=>{await assert.rejects(m.findDayPillar({start:'2000-01-01',end:'2000-12-31',stem:'甲',branch:'丑'}));await assert.rejects(m.findDayPillar({start:'2001-01-01',end:'2000-01-01',stem:'甲',branch:'子'}));});
+test('cancelled reverse search cannot return fabricated completed results',async()=>{const c=new AbortController();c.abort();await assert.rejects(m.findDayPillar({start:'2000-01-01',end:'2000-12-31',stem:'甲',branch:'子',signal:c.signal}),{name:'AbortError'});});

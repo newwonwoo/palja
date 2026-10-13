@@ -1,0 +1,41 @@
+# palja — Android 앱 전용 개발 인수인계
+
+## 변경된 단일 개발 기준
+
+- **이제 `newwonwoo/palja`의 `main`이 Android 앱 정식 개발 브랜치**입니다.
+- `newwonwoo/saju`의 `main`은 기존 웹사이트만 유지합니다.
+- `newwonwoo/saju`의 `app/offline-vault`는 이번 이전 시점의 **역사적 원본/백업**입니다. 이 브랜치에서 새 기능을 개발하지 마세요.
+- 이 저장소는 다른 저장소의 Git 히스토리를 끌어오지 않은 **1.1.2 소스 스냅샷**으로 시작합니다. 이전 PR #1, #2, #3, #6, #7, #8, #9, #10은 [기존 저장소](https://github.com/newwonwoo/saju/pulls?q=is%3Apr+is%3Amerged)의 이력으로 보존합니다.
+- 이 저장소에서는 `feature/*`에서 기능 개발하고 `main`을 대상으로 PR을 여세요.
+
+## 사용자 고정 요구
+
+- **미완료 기능 모두 구현:** 최초 기능 분해 기준 79개 중 구현 43 / 일부 구현 27 / 미구현 9 (1.1.2 기준; 실제 코드로 재판정). 버튼만 있고 동작하지 않는 기능은 구현으로 세지 말 것.
+- 사용자 요청상 원본 8자어때와 직접 산식 대조하지 않음. **기존 앱 계산 엔진 + 별도 독립 천문/명리 엔진**을 동일 입력으로 비교하고, 차이와 규칙 기준을 설명.
+- 격국/용신/신살 확장, 대운·년월일시운 전체 계층, 근거 있는 궁합, 디자인/표시·탭 설정, 데이터 공유 등을 기능표 행 단위로 완수.
+- **회귀 금지:** 기존 출생 정보/결과, 명식 ID, 그룹·메모·사진·그림·삭제 표식·SQLite, 백업/복원·저장 이력을 보존.
+- 오프라인 우선. 인위적인 길흉/예언 수치 생성 금지. 상이한 학파의 규칙은 설정으로 구분하고 근거 노출.
+- 각 기능은 입력→조작→결과→재열기→백업→오프라인→회귀검증에 통과해야 완료.
+
+## 개발 및 검증
+
+```sh
+npm ci
+npm test
+npm run build
+npm run build:mobile
+npm run android:sync
+(cd android && ./gradlew testDebugUnitTest assembleDebug)
+```
+
+- 원본 `docs/OFFLINE_APP_HANDOFF.md`는 이전 저장소의 **병합 이력**을 설명하는 보존 문서입니다. **새 작업 기준은 이 문서**입니다.
+- `docs/full-feature-scope.json`과 `docs/full-feature-scope.md`에 전체 남은 기능이 있습니다. 79는 추적 단위 수이지 원본 기능 총수가 아닙니다.
+- 1.1.2 과거 성공 CI: [JavaScript 203, 브라우저 13, Android 19](https://github.com/newwonwoo/saju/actions/runs/38345610594). 이것은 새 저장소의 Android 실기기 테스트를 의미하지 않습니다.
+- Android app ID: `com.newwonwoo.saju`, 기존 인증서 공개 지문 SHA-256 `76b0434edf1bde06e8b82b41eb8b40d380f06cb6d989827a4ce5c6506cabcd02`. 서명 **개인키는 저장소에 없습니다**.
+- 개인용 APK 업데이트는 기존 서명키로만 가능. 서명을 확인하지 않은 `app-debug.apk`를 업데이트용으로 안내하지 말 것.
+- 사용자 보고상 Work 모드 오류가 발생했었음. 새 작업이 실제로 실행되었는지는 GitHub 커밋·Actions를 확인할 것.
+- 신규 Android 앱 버전이 준비되기 전에는 기존 개인용 앱을 삭제하지 말 것. 반드시 별도 JSON 백업.
+
+## 소스 이전 검증
+
+이번 저장소의 초기 소스는 `newwonwoo/saju` 브랜치 `app/offline-vault`의 지정 SHA에서 복사했습니다. Git 히스토리와 이전 저장소의 GitHub Actions 워크플로는 혼동 방지를 위해 가져오지 않았습니다. 각 소스 파일의 Git blob SHA로 누락/변경을 검증할 수 있습니다.

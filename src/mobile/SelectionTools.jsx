@@ -1,0 +1,13 @@
+import React,{useState} from 'react';
+import {rememberSelection,saveSelectionPreset,removeSelectionPreset,integrated} from '../vault/integrated-actions.js';
+export default function SelectionTools({entry,selection,onSelect,change,busy,vault}) {
+ const [date,setDate]=useState(selection.date),[time,setTime]=useState(`${String(selection.hour).padStart(2,'0')}:${String(selection.minute).padStart(2,'0')}`),[name,setName]=useState(''),[error,setError]=useState('');
+ const presets=(vault?integrated(vault).presets||[]:[]).filter(p=>p.entryId===entry.id);
+ const current=()=>{const [hour,minute]=time.split(':').map(Number);return {entryId:entry.id,date,hour,minute};};
+ const save=async e=>{e.preventDefault();setError('');try{const next=current();if(await change(s=>rememberSelection(s,next),'운 선택을 저장했습니다.'))onSelect(next);}catch(f){setError(f.message);}};
+ const add=async()=>{setError('');try{const next=current(),ok=await change(s=>saveSelectionPreset(s,entry.id,name,next),'운 즐겨찾기를 저장했습니다.');if(ok)setName('');}catch(f){setError(f.message);}};
+ const apply=async preset=>{setError('');const next={entryId:entry.id,...preset.selection};if(await change(s=>rememberSelection(s,next),'즐겨찾기한 운을 불러왔습니다.'))onSelect(next);};
+ return <section className="integration-selection-wrapper"><form className="integration-selection" onSubmit={save}><div className="integration-grid2"><label>선택일<input type="date" aria-label="운 선택일" required min="1900-01-01" max="2050-12-31" value={date} onChange={e=>setDate(e.target.value)}/></label><label>선택시각<input type="time" aria-label="운 선택시각" required value={time} onChange={e=>setTime(e.target.value)}/></label></div><button type="submit" disabled={busy} className="rr-primary-action">일·시운 적용 및 저장</button></form>
+ <details className="integration-presets"><summary>운 선택 즐겨찾기 ({presets.length})</summary><p className="rr-subnote">선택한 날짜·시각만 저장합니다. 출생시각이나 명식을 바꾸지 않습니다.</p><div className="integration-preset-add"><input aria-label="운 즐겨찾기 이름" maxLength={60} value={name} onChange={e=>setName(e.target.value)} placeholder="예: 올해 중요한 날"/><button type="button" disabled={busy||!name.trim()} onClick={add}>현재 선택 저장</button></div><ul>{presets.map(p=><li key={p.id}><button type="button" disabled={busy} onClick={()=>apply(p)}><strong>{p.name}</strong><small>{p.selection.date} {String(p.selection.hour).padStart(2,'0')}:{String(p.selection.minute).padStart(2,'0')}</small></button><button type="button" disabled={busy} aria-label={p.name+' 운 즐겨찾기 삭제'} onClick={()=>change(s=>removeSelectionPreset(s,p.id),'운 즐겨찾기를 삭제했습니다.')}>삭제</button></li>)}</ul>{error&&<p role="alert">{error}</p>}</details>
+ </section>;
+}

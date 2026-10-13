@@ -1,0 +1,154 @@
+{
+  "zone": "Asia/Seoul",
+  "source": "IANA tzdb",
+  "generatedFrom": "# version 2025b",
+  "validFrom": 1899,
+  "validUntil": 2051,
+  "transitions": [
+    {
+      "at": -2240524800000,
+      "offsetSeconds": 30472,
+      "dstSeconds": 0
+    },
+    {
+      "at": -1948782472000,
+      "offsetSeconds": 30600,
+      "dstSeconds": 0
+    },
+    {
+      "at": -1830414600000,
+      "offsetSeconds": 32400,
+      "dstSeconds": 0
+    },
+    {
+      "at": -681210000000,
+      "offsetSeconds": 36000,
+      "dstSeconds": 3600
+    },
+    {
+      "at": -672228000000,
+      "offsetSeconds": 32400,
+      "dstSeconds": 0
+    },
+    {
+      "at": -654771600000,
+      "offsetSeconds": 36000,
+      "dstSeconds": 3600
+    },
+    {
+      "at": -640864800000,
+      "offsetSeconds": 32400,
+      "dstSeconds": 0
+    },
+    {
+      "at": -623408400000,
+      "offsetSeconds": 36000,
+      "dstSeconds": 3600
+    },
+    {
+      "at": -609415200000,
+      "offsetSeconds": 32400,
+      "dstSeconds": 0
+    },
+    {
+      "at": -588848400000,
+      "offsetSeconds": 36000,
+      "dstSeconds": 3600
+    },
+    {
+      "at": -577965600000,
+      "offsetSeconds": 32400,
+      "dstSeconds": 0
+    },
+    {
+      "at": -498128400000,
+      "offsetSeconds": 30600,
+      "dstSeconds": 0
+    },
+    {
+      "at": -462702600000,
+      "offsetSeconds": 34200,
+      "dstSeconds": 3600
+    },
+    {
+      "at": -451733400000,
+      "offsetSeconds": 30600,
+      "dstSeconds": 0
+    },
+    {
+      "at": -429784200000,
+      "offsetSeconds": 34200,
+      "dstSeconds": 3600
+    },
+    {
+      "at": -418296600000,
+      "offsetSeconds": 30600,
+      "dstSeconds": 0
+    },
+    {
+      "at": -399544200000,
+      "offsetSeconds": 34200,
+      "dstSeconds": 3600
+    },
+    {
+      "at": -387451800000,
+      "offsetSeconds": 30600,
+      "dstSeconds": 0
+    },
+    {
+      "at": -368094600000,
+      "offsetSeconds": 34200,
+      "dstSeconds": 3600
+    },
+    {
+      "at": -356002200000,
+      "offsetSeconds": 30600,
+      "dstSeconds": 0
+    },
+    {
+      "at": -336645000000,
+      "offsetSeconds": 34200,
+      "dstSeconds": 3600
+    },
+    {
+      "at": -324552600000,
+      "offsetSeconds": 30600,
+      "dstSeconds": 0
+    },
+    {
+      "at": -305195400000,
+      "offsetSeconds": 34200,
+      "dstSeconds": 3600
+    },
+    {
+      "at": -293103000000,
+      "offsetSeconds": 30600,
+      "dstSeconds": 0
+    },
+    {
+      "at": -264933000000,
+      "offsetSeconds": 32400,
+      "dstSeconds": 0
+    },
+    {
+      "at": 547578000000,
+      "offsetSeconds": 36000,
+      "dstSeconds": 3600
+    },
+    {
+      "at": 560883600000,
+      "offsetSeconds": 32400,
+      "dstSeconds": 0
+    },
+    {
+      "at": 579027600000,
+      "offsetSeconds": 36000,
+      "dstSeconds": 3600
+    },
+    {
+      "at": 592333200000,
+      "offsetSeconds": 32400,
+      "dstSeconds": 0
+    }
+  ]
+}

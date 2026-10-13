@@ -1,9 +1,74 @@
-# palja — 개인용 오프라인 사주보관함 (Android)
+# palja — 오프라인 사주보관함 Android 앱
 
-> 이 저장소는 기존 `newwonwoo/saju`의 `app/offline-vault`에서 분리한 **Android 앱 전용 프로젝트**입니다.
+**이 저장소가 모바일 앱의 단일 개발 기준입니다.** 기존 웹사이트는 별도 저장소 [newwonwoo/saju](https://github.com/newwonwoo/saju)의 `main`으로 계속 유지합니다.
 
-**원본 웹 프로젝트는** [newwonwoo/saju](https://github.com/newwonwoo/saju)에서 유지합니다. 이 저장소의 `main`은 모바일 앱 전용으로 사용합니다.
+- **현재 앱 버전:** 1.1.2 (versionCode 12), `com.newwonwoo.saju`
+- **모바일 앱의 새 기본 브랜치:** `main` (이 저장소)
+- **원본 개발 통합 소스:** `newwonwoo/saju` → `app/offline-vault` @ `3459207e30fd9b5589cb9e09260bf9c9f572b0a3`
+- **필독:** [새 저장소 인수인계](docs/PALJA_HANDOFF.md) · [기능 완료 추적표](docs/full-feature-scope.md)
 
-마이그레이션 기준 소스: `newwonwoo/saju@3459207e30fd9b5589cb9e09260bf9c9f572b0a3` (앱 통합 브랜치, 버전 1.1.2).
+이 저장소는 **공개(Public)** 로 만들어졌습니다. **개인 명식·실제 출생정보·인증서 개인키·APK 서명키·개인 APK는 저장소나 Actions에 올리지 마세요.** 사용자가 별도로 비공개로 전환할 수 있습니다.
 
-개인 명식, 원본 APK, APK 서명키는 GitHub 저장소/CI에 포함하지 않습니다.
+---
+
+# 사주 보관함
+
+기존 React/Vite 사주 계산기를 바탕으로 만든 **개인용 오프라인 Android 명식 보관함**입니다. 앱에 화면과 계산 코드를 함께 넣고, 명식은 기기 내부에 저장합니다. 개발용 APK 빌드와 자동 검증을 수행했으며, 실제 휴대폰 설치 검증은 아직 하지 않았습니다. [검증 기록](docs/verification.md)에 범위와 결과를 정리했습니다.
+
+## 보관함과 데이터
+
+- 내 명식, 즐겨찾기, 친구, 최근 열람을 구분하고 명식 추가·수정·삭제·복원을 지원합니다. 이름이 같아도 다른 저장 ID이면 별도 기록으로 유지합니다.
+- Android는 내부 **SQLite**, 브라우저 개발 화면은 **IndexedDB**를 사용합니다. 저장 중 이전 상태가 바뀌면 덮어쓰지 않고 충돌을 반환합니다.
+- JSON 가져오기·내보내기로 백업합니다. 백업에는 삭제된 기록과 원본 출처도 포함되며, 복원 시 충돌하는 항목은 현재 기기의 값을 유지합니다. 파일·상태 크기 제한은 UTF-8 기준 8 MiB입니다.
+- 같은 출처의 같은 자료를 다시 가져오면 중복 추가하지 않습니다. 가져온 뒤 수정하거나 삭제한 기록도 재가져오기 때문에 원래대로 돌아가지 않습니다. 같은 출처 ID에 다른 원문이 들어오면 충돌로 처리합니다.
+- 원문 기호·색·날짜·시각·보정 표시를 보존합니다. 성별, 양력·음력, 윤달 여부는 미확인 상태로 둘 수 있으며, 사용자가 기호 확인을 적용하면 아직 비어 있는 값만 채웁니다. 이미 확인한 값은 유지합니다.
+
+시간 모름과 화면이 잘려 확인할 수 없는 시간은 별도 상태입니다. 빈 시각을 임의의 00:00으로 채우지 않습니다. 원래 입력과 계산에 쓰는 양력 변환 결과를 구분하며, 원문의 보정 분 수를 재현한 것으로 간주하지 않습니다. 보정 표시가 있는 기록은 기존 계산 기준 적용을 직접 확인해야 계산합니다. 계약은 [보관함 모델](src/vault/model.js), [저장 계층](src/vault/persistence.js), [계산 연결부](src/mobile/engine.js)에 있습니다.
+
+## 실행과 빌드
+
+Node.js 22 이상이 필요합니다. 저장소에서 `npm ci`를 실행한 뒤 사용합니다.
+
+| 명령 | 용도 |
+| --- | --- |
+| `npm run dev` | 기존 사주 웹 화면 개발 |
+| `npm run dev:mobile` | 명식 보관함 화면을 브라우저에서 개발 |
+| `npm test` | 모델·계산 연결부 등의 합성 회귀 테스트 |
+| `npm run build:mobile` | 오프라인 앱용 프런트 번들을 `dist-mobile`에 생성 |
+| `npm run android:sync` | 모바일 빌드 후 Android 프로젝트에 자산·플러그인 동기화 |
+
+`build:mobile`과 `android:sync`는 APK 생성 명령이 아닙니다. APK 빌드는 JDK 21, Android SDK 36·build-tools 36.0.0을 준비한 뒤 `./scripts/android-build.sh`를 사용합니다. Windows는 `./scripts/android-build.ps1`을 사용합니다. 자세한 설정과 네이티브 테스트는 [Android 안내](android/README.md)를 참고하세요. 빌드 도구 설치·의존성 다운로드에는 인터넷이 필요할 수 있지만, 개인용 앱의 저장·계산 경로는 외부 서버 없이 구성합니다.
+
+## 개인 자료를 포함한 로컬 빌드
+
+개인 JSON은 **저장소 밖에 두고** `SAJU_SEED_FILE`로 경로만 전달합니다. `saju-vault-screenshot-import` 형식의 자료를 모바일 빌드에만 포함하며, 빈 보관함의 최초 초기화 때 가져옵니다. 평소에는 앱의 JSON 가져오기를 사용할 수 있습니다.
+
+```sh
+# 경로는 본인의 로컬 파일로 바꿉니다.
+SAJU_SEED_FILE=/absolute/private/saju_vault.json npm run android:sync
+./scripts/android-build.sh --skip-web-sync
+```
+
+Windows PowerShell에서는 다음과 같습니다.
+
+```powershell
+$env:SAJU_SEED_FILE = "C:\private\saju_vault.json"
+npm run android:sync
+.\scripts\android-build.ps1 -SkipWebSync
+Remove-Item Env:SAJU_SEED_FILE
+```
+
+개인 자료는 `dist-mobile/private/initial-vault.json`과 동기화된 Android 자산에 들어갑니다. 원본 JSON·스크린샷·개인 APK를 Git에 추가하지 마세요. 빌드 산출물과 네이티브 자산은 `.gitignore` 대상이지만, 임의 위치에 둔 개인 JSON 전체를 자동으로 제외하는 것은 아닙니다. `SAJU_SEED_FILE`은 개발 서버와 일반 웹 빌드에는 적용되지 않습니다.
+
+## 계산 범위와 확인할 점
+
+[기존 계산식](src/App.jsx)을 유지하며, 연결부의 계산 버전은 `legacy-saju-6389ec7-v1`입니다. 아래 제한도 함께 남아 있습니다.
+
+- 계산 범위는 **1900~2030년**입니다. 범위 밖 기록도 보관할 수 있으나 계산은 제한합니다.
+- 년주·월주의 절입일 판정과 대운 계산에는 출생 시·분이 전달되지 않습니다. 절입 시각 전후의 결과를 정밀하게 보장하지 않습니다.
+- 시주 구간은 기존 **23:30 자시 기준**을 사용합니다. 원본 앱의 경도·균시차·역사적 표준시·서머타임 보정을 재현했다고 볼 수 없습니다.
+- 기존 대운 산식에서는 일부 연말 입력의 대운 목록이 빈 값이 될 수 있습니다.
+- 1900년 설 이전 날짜는 기존 음력 자료 범위 밖이어서 음력 표시를 따로 확인해야 합니다.
+- 미확인 역법·윤달은 확인을 요청하고, 미상 시각은 시주와 시각이 필요한 분석을 생략합니다. 성별을 확인하지 않으면 대운 방향을 계산하지 않습니다.
+
+이 테스트들은 보존한 계산 동작과 데이터 회귀를 확인하는 용도입니다. 역법·명리 계산의 전반적인 정확성이나 **8자어때와의 결과 일치**를 보증하지 않습니다. APK 설치 후 실제 기기에서 재실행 저장 유지, 백업·복원, 비행기 모드 사용을 별도로 확인해야 합니다. REA로 확인한 공식 공개 웹의 범위와 미확인 사항은 [REA 분석 기록](docs/rea-analysis.md)에 정리했습니다.
