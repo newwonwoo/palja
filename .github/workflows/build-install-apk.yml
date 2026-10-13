@@ -1,0 +1,68 @@
+name: Build Palja 1.1.4 fresh-install APK
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/build-install-apk.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  apk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Prepare Android SDK
+        shell: bash
+        run: |
+          set -euo pipefail
+          sdkmanager_bin="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)"
+          "$sdkmanager_bin" --install "platforms;android-36" "build-tools;36.0.0"
+      - name: Build and run Android tests (no personal records)
+        shell: bash
+        run: |
+          set -euo pipefail
+          test ! -d public/private
+          npm ci --no-audit --no-fund
+          npm test
+          npm run android:sync
+          cd android
+          chmod +x gradlew
+          ./gradlew --no-daemon testDebugUnitTest assembleDebug
+      - name: Verify APK and create download
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p delivery
+          test ! -d public/private
+          cp android/app/build/outputs/apk/debug/app-debug.apk delivery/Palja_1.1.4_First_Install_Debug.apk
+          test -s delivery/Palja_1.1.4_First_Install_Debug.apk
+          sha256sum delivery/*.apk > delivery/SHA256SUMS.txt
+          cat > delivery/INSTALL_README.txt <<'EOF'
+          Palja 1.1.4 (versionCode 14) - FRESH INSTALL DEBUG APK ONLY
+          - Does not contain anyone's personal birth data.
+          - First-time installation on a device that does not have Palja or com.newwonwoo.saju installed.
+          - Install and open Settings > Backup and import your local private JSON file (163-record import package).
+          - NOT COMPATIBLE with the existing privately signed v1.1.2 app as an in-place update.
+          - DO NOT uninstall or wipe your existing app to try to apply this build.
+          - A true update requires a new APK signed with the same private certificate/key as the current installation.
+          EOF
+          echo "Validated APK $(du -h delivery/*.apk)"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Palja-1.1.4-First-Install-Only
+          path: delivery/*
+          if-no-files-found: error
+          retention-days: 30
