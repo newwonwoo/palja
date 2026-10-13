@@ -29,6 +29,38 @@ jobs:
           npm run build
           npm run build:mobile
 
+
+  browser-exit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Build Android web assets without any personal seed
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build:mobile
+      - name: Install isolated Chromium for exit-button interaction
+        shell: bash
+        run: |
+          npm install --prefix /tmp/palja-browser playwright@1.51.1 --no-audit --no-fund
+          /tmp/palja-browser/node_modules/.bin/playwright install chromium --with-deps --only-shell
+      - name: Click vault X and assert supported browser behavior
+        shell: bash
+        env:
+          PLAYWRIGHT_MODULE: /tmp/palja-browser/node_modules/playwright
+          QA_URL: http://127.0.0.1:8765/
+        run: |
+          set -euo pipefail
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory dist-mobile >/tmp/palja-http.log 2>&1 &
+          server=$!
+          trap 'kill "$server" || true' EXIT
+          for i in $(seq 1 25); do if curl -fsS "$QA_URL" >/dev/null; then break; fi; sleep 1; done
+          node tests/browser/app-exit.cjs
+
   android:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
