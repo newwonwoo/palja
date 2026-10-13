@@ -45,6 +45,23 @@ public final class SajuVaultPlugin extends Plugin {
         });
     }
 
+    /** Only the explicit vault X action exits. Never clear SQLite or reset the task data. */
+    @PluginMethod public void exitApp(PluginCall call) {
+        if (documentBusy.get()) {
+            call.reject("파일 작업 중에는 앱을 종료할 수 없습니다.", "DOCUMENT_BUSY");
+            return;
+        }
+        Activity activity = getActivity();
+        if (activity == null || activity.isFinishing()) {
+            call.reject("앱 종료 화면을 찾지 못했습니다.", "ACTIVITY_UNAVAILABLE");
+            return;
+        }
+        activity.runOnUiThread(() -> {
+            call.resolve();
+            activity.finish();
+        });
+    }
+
     @PluginMethod public void loadState(PluginCall call) {
         runIo(call, () -> {
             VaultStateStore.State state = store.load();
