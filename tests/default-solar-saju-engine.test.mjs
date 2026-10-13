@@ -88,3 +88,19 @@ test('explicit old data cannot be rewritten when choosing a different calendar f
   m.calculateEntry(entry);
   assert.equal(JSON.stringify(entry),before);
 });
+
+
+test('1984/01/30 15:00 screenshot record computes natal columns from saju engine with default solar and no inferred sex',()=>{
+  const entry=fixture({input_year:1984,input_month:1,input_day:30,input_hour:15,input_minute:0,
+    sex:null,calendar_type:null,calendar_symbol_raw:'+',correction_raw:"(-3' -13')"});
+  const original=JSON.stringify(entry);
+  const result=m.calculateEntry(entry);
+  assert.equal(result.status,'ready',result.message);
+  assert.equal(result.assumedSolar,true);
+  assert.equal(result.correctionUnapplied,true);
+  assert.equal(result.saju.pillars.length,4);
+  for (const pillar of result.saju.pillars) assert.ok(!pillar.unknown && pillar.stem && pillar.branch,JSON.stringify(pillar));
+  assert.deepEqual(result.daeun,[],'sex not recorded; do not fabricate decade direction');
+  assert.match(m.referenceBirthLabel(entry),/양력\\(기본\\)/);
+  assert.equal(JSON.stringify(entry),original,'screenshot-import raw data must remain unchanged');
+});
