@@ -9,6 +9,13 @@ let bootstrapPromise;
 export const isAndroid = () => Capacitor.getPlatform() === 'android';
 export const storageLabel = () => isAndroid() ? '기기 내부 SQLite' : '이 브라우저의 저장 공간';
 
+/** Close the native Android activity. Browser tabs cannot be programmatically closed. */
+export async function exitApplication() {
+  if (!isAndroid()) return false;
+  await NativeVault.exitApp();
+  return true;
+}
+
 function checkSize(text) {
   if (typeof text !== 'string' || new TextEncoder().encode(text).length > LIMIT) {
     throw new Error('파일은 8MB 이하의 JSON이어야 합니다.');
