@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { chmodSync, cpSync, existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -30,22 +30,22 @@ case "$(basename "$0")" in
     echo "  SHA256: $KEY_CERT"
     ;;
   aapt)
-    case "${@: -1}" in
+    case "\${@: -1}" in
       *original.apk) echo "package: name='com.newwonwoo.saju' versionCode='12' versionName='1.1.2'" ;;
       *) echo "package: name='com.newwonwoo.saju' versionCode='14' versionName='1.1.4'" ;;
     esac
     ;;
   apksigner)
     if [[ "$1" == 'verify' ]]; then
-      case "${@: -1}" in
+      case "\${@: -1}" in
         *unsigned*) exit 1 ;;
         *) echo "Signer #1 certificate SHA-256 digest: $SIGNING_CERT" ;;
       esac
     elif [[ "$1" == 'sign' ]]; then
       args=("$@")
-      for ((i=0;i<${#args[@]};i++)); do
-        if [[ "${args[i]}" == '--out' ]]; then
-          cp "${args[-1]}" "${args[i+1]}"
+      for ((i=0;i<\${#args[@]};i++)); do
+        if [[ "\${args[i]}" == '--out' ]]; then
+          cp "\${args[-1]}" "\${args[i+1]}"
           exit 0
         fi
       done
