@@ -81,7 +81,7 @@ function EntryForm({ entry, vault, change, navigate, busy, seedBirth, candidateN
   const [pending, setPending] = useState(null);
   const [form, setForm] = useState(() => {
     const birth = entry?.birth || seedBirth || {};
-    return { name: entry?.name || '', memo: entry?.memo || '', year: birth.input_year ?? '', month: birth.input_month ?? '', day: birth.input_day ?? '', hour: birth.input_hour ?? '', minute: birth.input_minute ?? '', calendar: entry ? birth.calendar_type || '' : birth.calendar_type || 'solar', leap: birth.lunar_leap_month === true ? 'true' : birth.lunar_leap_month === false ? 'false' : '', time: birth.time_status || 'unknown', sex: birth.sex || '', policy:birth.calculation_policy||null, correction: birth.correction_settings?.legacy_confirmed === true };
+    return { name: entry?.name || '', memo: entry?.memo || '', year: birth.input_year ?? '', month: birth.input_month ?? '', day: birth.input_day ?? '', hour: birth.input_hour ?? '', minute: birth.input_minute ?? '', calendar: birth.calendar_type || 'solar', leap: birth.lunar_leap_month === true ? 'true' : birth.lunar_leap_month === false ? 'false' : '', time: birth.time_status || 'unknown', sex: birth.sex || '', policy:birth.calculation_policy||null, correction: birth.correction_settings?.legacy_confirmed === true };
   });
   const update = (key, value) => setForm(current => ({ ...current, [key]: value }));
   const number = value => value === '' ? null : Number(value);
