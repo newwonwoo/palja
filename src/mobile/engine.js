@@ -1,4 +1,5 @@
 import {manualDaeun} from '../vault/manual-daewoon.js';
+import { birthForCalculation, isDefaultSolar } from './birth-defaults.js';
 import {preciseEntryBase} from '../calendar/precise.js';
 import { assertPillarInput, isManualBirth, manualBirthLabel } from '../vault/pillar-input.js';
 import {
@@ -39,19 +40,21 @@ export function solarDate(birth) {
 }
 
 export function calculateEntry(entry) {
-  const birth = entry.birth;
+  const sourceBirth = entry.birth;
+  // Read the saju App.jsx calculation engine with a solar default for historical imported rows.
+  // The underlying saved birth record and its original +/- symbol remain unchanged.
+  const birth = birthForCalculation(sourceBirth);
+  const assumedSolar = isDefaultSolar(sourceBirth);
+  const correctionUnapplied = Boolean(sourceBirth?.correction_raw);
   try {
     if (isManualBirth(birth)) return calculateManualEntry(entry);
     if(birth.calculation_policy?.engine==='astronomical-v1') {
       const {saju,daeun,partial}=preciseEntryBase(birth);
       const complete=!partial&&saju.pillars.every(p=>!p.unknown);
       const tcpa=complete?calcTCPA(saju.pillars):null;
-      return {status:complete?'ready':'partial',origin:'astronomical',saju,daeun,tcpa,strength:complete?calcStrengthDetail(saju.pillars):null,yongsin:complete?calcYongsin(saju.pillars,tcpa.sBase):null,legacyForm:null,message:partial?'시각 미상: 날짜 안에서 변할 수 있는 기둥은 표시하지 않습니다.':'독립 절입·시각 계산 · 원본 8자어때 산식 동일성은 미검증'};
+      return {status:complete?'ready':'partial',origin:'astronomical',assumedSolar,correctionUnapplied,saju,daeun,tcpa,strength:complete?calcStrengthDetail(saju.pillars):null,yongsin:complete?calcYongsin(saju.pillars,tcpa.sBase):null,legacyForm:null,message:[partial?'시각 미상: 날짜 안에서 변할 수 있는 기둥은 표시하지 않습니다.':'독립 절입·시각 계산',assumedSolar?'역법 미지정: 기본 양력으로 계산(원본 유지).':'',correctionUnapplied?'원본에 시각 보정 표기가 있으나 자동 적용하지 않았습니다.':''].filter(Boolean).join(' ')};
     }
     const solar = solarDate(birth);
-    if (birth.correction_raw && !birth.correction_settings?.legacy_confirmed) {
-      throw new Error('원본에 시각 보정표시가 있습니다. 수정 화면에서 적용할 계산 기준을 확인해 주세요.');
-    }
     const hasTime = birth.time_status === 'known';
     if (hasTime && (!Number.isInteger(birth.input_hour) || !Number.isInteger(birth.input_minute) || birth.input_hour < 0 || birth.input_hour > 23 || birth.input_minute < 0 || birth.input_minute > 59)) {
       throw new Error('출생 시각을 확인해 주세요.');
@@ -69,8 +72,8 @@ export function calculateEntry(entry) {
     const tcpa = hasTime ? calcTCPA(saju.pillars) : null;
     const yongsin = hasTime ? calcYongsin(saju.pillars, tcpa.sBase) : null;
     return {
-      status: hasTime ? 'ready' : 'partial', saju, daeun, strength, yongsin, tcpa,
-      message: !hasTime ? '출생시각 미상 · 시주와 시각이 필요한 분석은 표시하지 않습니다.' : !hasSex ? '성별 미확인 · 대운 방향은 확인 후 계산합니다.' : '',
+      status: hasTime ? 'ready' : 'partial', assumedSolar, correctionUnapplied, saju, daeun, strength, yongsin, tcpa,
+      message: [!hasTime?'출생시각 미상 · 시주와 시각이 필요한 분석은 표시하지 않습니다.':!hasSex?'성별 미확인 · 대운 방향은 확인 후 계산합니다.':'', assumedSolar?'입력된 역법이 없어 기본 양력으로 계산합니다. 원본은 수정하지 않습니다.':'',correctionUnapplied?'원본 시각 보정 표기는 보존하되 자동 반영하지 않았습니다.':''].filter(Boolean).join(' '),
       legacyForm: hasTime ? { name: entry.name, year: String(solar.year), month: String(solar.month), day: String(solar.day), hour: String(birth.input_hour), minute: String(birth.input_minute), gender: birth.sex || '' } : null,
     };
   } catch (error) {
@@ -110,7 +113,7 @@ export function referenceDay(entry) {
 export function birthSummary(birth) {
   if (isManualBirth(birth)) return manualBirthLabel(birth);
   const date = birth.date_raw || [birth.input_year, birth.input_month, birth.input_day].filter(x => x != null).join('/');
-  const calendar = birth.calendar_type === 'solar' ? '양력' : birth.calendar_type === 'lunar' ? `음력${birth.lunar_leap_month === true ? ' 윤달' : ''}` : birth.calendar_symbol_raw || '달력 미확인';
+  const calendar = birth.calendar_type === 'solar' ? '양력' : birth.calendar_type === 'lunar' ? `음력${birth.lunar_leap_month === true ? ' 윤달' : ''}` : '양력(기본)';
   const time = birth.time_status === 'unknown' ? '시간 모름' : birth.time_status === 'not_visible' ? '시간 미확인' : birth.time_raw || `${String(birth.input_hour).padStart(2, '0')}:${String(birth.input_minute).padStart(2, '0')}`;
   return `${calendar} ${date || '생년월일 미확인'} · ${time}`;
 }
