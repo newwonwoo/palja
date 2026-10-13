@@ -1,0 +1,65 @@
+name: Build unsigned Palja release for ORIGINAL personal signer
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/sign-personal-update.sh'
+      - '.github/workflows/unsigned-personal-update.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Prepare Android SDK
+        run: |
+          set -euo pipefail
+          sdkmanager_bin="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)"
+          test -x "$sdkmanager_bin"
+          "$sdkmanager_bin" --install "platforms;android-36" "build-tools;36.0.0"
+      - name: Verify dependencies, tests, and mobile assets
+        run: |
+          npm ci --no-audit --no-fund
+          npm test
+          npm run android:sync
+      - name: Build release package WITHOUT any signing key or private data
+        working-directory: android
+        run: |
+          set -euo pipefail
+          chmod +x gradlew
+          ./gradlew --no-daemon testDebugUnitTest assembleRelease
+          test -f app/build/outputs/apk/release/app-release-unsigned.apk
+          test ! -e ../public/private/initial-vault.json
+          test ! -d ../public/private
+      - name: Confirm package and version and refusal to pass a signed APK
+        run: |
+          set -euo pipefail
+          sdk="$ANDROID_HOME/build-tools/36.0.0"
+          apk=android/app/build/outputs/apk/release/app-release-unsigned.apk
+          "$sdk/aapt" dump badging "$apk" | grep -m 1 "^package: name='com.newwonwoo.saju' versionCode='14' versionName='1.1.4'"
+          if "$sdk/apksigner" verify "$apk" >/dev/null 2>&1; then
+            echo "Unexpected signed APK. Refuse to release."
+            exit 1
+          fi
+          echo "Unsigned only; DO NOT install as an update to the existing personal app."
+      - name: Export release for OFFLINE local signing only
+        uses: actions/upload-artifact@v4
+        with:
+          name: palja-1.1.4-release-UNSIGNED-NEEDS-ORIGINAL-KEY
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          retention-days: 5
+          if-no-files-found: error
