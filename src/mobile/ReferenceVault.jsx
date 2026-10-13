@@ -53,7 +53,7 @@ function ComparisonPanel({ selections, entries, open, close }) {
   </div>;
 }
 
-export default function ReferenceVault({ vault, navigate, open, favorite, busy, change }) {
+export default function ReferenceVault({ vault, navigate, open, favorite, busy, change, onExit }) {
   const [tab, setTab] = useState('friends');
   const [search, setSearch] = useState('');
   const { sort, compact } = readPreferences(vault);
@@ -89,7 +89,7 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
   const select = id => setSelection(current => current.includes(id) ? current.filter(x => x !== id) : current.length >= 2 ? [current[1], id] : [...current, id]);
   return <div className="reference-vault" data-testid="reference-vault">
     <div className="ref-fixed">
-      <header className="ref-topbar"><button className="ref-toolbar-button" title="목록 맨 위로" aria-label="목록 맨 위로" onClick={() => window.scrollTo({top:0,behavior:'smooth'})}><RefIcon name="close" size={23} /></button><span className="ref-mobile-title">명식 보관함</span><div className="ref-right-icons"><button className="ref-toolbar-button" aria-label="명식 추가" onClick={() => navigate({name:'form'})}><RefIcon name="personAdd" size={25} /></button><button className="ref-toolbar-button" aria-label="명식 관리" onClick={() => navigate({name:'settings'})}><RefIcon name="edit" size={25} /></button></div></header>
+      <header className="ref-topbar"><button type="button" className="ref-toolbar-button" title="앱 종료" aria-label="앱 종료" disabled={busy} onClick={onExit}><RefIcon name="close" size={23} /></button><span className="ref-mobile-title">명식 보관함</span><div className="ref-right-icons"><button className="ref-toolbar-button" aria-label="명식 추가" onClick={() => navigate({name:'form'})}><RefIcon name="personAdd" size={25} /></button><button className="ref-toolbar-button" aria-label="명식 관리" onClick={() => navigate({name:'settings'})}><RefIcon name="edit" size={25} /></button></div></header>
       <div className="ref-quick-links" aria-label="바로가기">
         {[{key:'custom',icon:'vault',title:'커스텀',action:()=>navigate({name:'form',mode:'pillars'})},{key:'compare',icon:'heart',title:'궁합 모드',action:toggleCompare},{key:'settings',icon:'gear',title:'설정',action:()=>navigate({name:'settings'})}].map(x=><button type="button" key={x.key} className={x.key==='compare'&&compare?'active':''} onClick={x.action}><span className="ref-shortcut-icon"><RefIcon name={x.icon} size={24} fill={x.key==='compare'} /></span><span>{x.title}</span></button>)}
       </div>
