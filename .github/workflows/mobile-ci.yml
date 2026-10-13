@@ -1,0 +1,68 @@
+name: Palja mobile / Android regression
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  web-mobile:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install locked dependencies
+        run: npm ci --no-audit --no-fund
+      - name: JavaScript regression
+        run: npm test
+      - name: Verify web and mobile production bundles
+        run: |
+          npm run build
+          npm run build:mobile
+
+  android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install Android SDK 36
+        shell: bash
+        run: |
+          set -euo pipefail
+          sdkmanager_bin="$(find "$ANDROID_HOME/cmdline-tools" -type f -name sdkmanager -print -quit)"
+          test -x "$sdkmanager_bin"
+          "$sdkmanager_bin" --install "platforms;android-36" "build-tools;36.0.0"
+      - name: Sync offline web bundle to native app
+        run: |
+          npm ci --no-audit --no-fund
+          npm run android:sync
+      - name: Native JVM regression and no-private-data debug build
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon testDebugUnitTest assembleDebug
+      - name: Check package and do not publish personal APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f android/app/build/outputs/apk/debug/app-debug.apk
+          grep -q 'applicationId "com.newwonwoo.saju"' android/app/build.gradle
+          test ! -d public/private
+          echo 'Debug APK compiled; NOT signed with the private personal update key and NOT suitable for updating existing personal installs.'
