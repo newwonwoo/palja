@@ -229,13 +229,18 @@ test('confirmed solar adapter results preserve every original calculation result
   assert.match(engine.ENGINE_VERSION, /6389ec7/);
 });
 
-test('unconfirmed calendar types cannot be inferred from a raw plus sign', () => {
-  for (const calendar_type of [null, undefined, 'unverified']) {
-    const result = engine.calculateEntry(entry({ calendar_type, calendar_symbol_raw: '+' }));
-    assert.equal(result.status, 'needs_confirmation');
-    assert.match(result.message, /양력·음력/);
-    assert.equal(result.saju, undefined);
+test('user solar default fills previously unspecified calendar without deriving it from a raw symbol', () => {
+  for (const calendar_type of [null, undefined]) {
+    const birthRecord=entry({ calendar_type, calendar_symbol_raw: '-' });
+    const result=engine.calculateEntry(birthRecord);
+    assert.equal(result.status,'ready',JSON.stringify(result));
+    assert.equal(result.assumedSolar,true);
+    assert.deepEqual(result.saju,engine.calculateEntry(entry({calendar_type:'solar'})).saju);
+    assert.equal(birthRecord.birth.calendar_type,calendar_type);
+    assert.equal(birthRecord.birth.calendar_symbol_raw,'-');
   }
+  const invalid=engine.calculateEntry(entry({calendar_type:'unverified'}));
+  assert.equal(invalid.status,'needs_confirmation');
 });
 
 test('unknown or unseen time stays null and does not create an hour pillar or noon form', () => {
@@ -282,19 +287,16 @@ test('explicit male and female values retain the original opposite daeun directi
   assert.deepEqual(female.daeun[0], { stem: '丁', branch: '丑', stemIdx: 3, branchIdx: 1, startAge: 8, startYear: 2008 });
 });
 
-test('a recorded correction blocks calculation until legacy settings are confirmed', () => {
-  for (const correction_settings of [null, {}, { legacy_confirmed: false }]) {
-    const result = engine.calculateEntry(entry({ correction_raw: "(-5' -11')", correction_settings }));
-    assert.equal(result.status, 'needs_confirmation');
-    assert.match(result.message, /보정/);
-    assert.equal(result.saju, undefined);
+test('a recorded correction is never guessed or applied, but does not conceal calculable pillars', () => {
+  for (const correction_settings of [null, {}, { legacy_confirmed: false }, { legacy_confirmed:true }]) {
+    const input=freezeEntry(entry({correction_raw:"(-5' -11')",correction_settings}));
+    const result=engine.calculateEntry(input);
+    assert.equal(result.status,'ready',result.message);
+    assert.equal(result.correctionUnapplied,true);
+    assert.deepEqual(result.saju,engine.calculateEntry(entry()).saju);
+    assert.equal(input.birth.correction_raw,"(-5' -11')");
+    assert.match(result.message,/보정/);
   }
-  const input = freezeEntry(entry({ correction_raw: "(-5' -11')", correction_settings: { legacy_confirmed: true } }));
-  const result = engine.calculateEntry(input);
-  assert.equal(result.status, 'ready');
-  // Confirmation selects the unchanged legacy engine; it does not decode or apply this raw notation.
-  assert.deepEqual(result.saju, engine.calculateEntry(entry()).saju);
-  assert.equal(input.birth.correction_raw, "(-5' -11')");
 });
 
 test('invalid solar dates, noninteger fields, and unsupported years are rejected before calculation', () => {
