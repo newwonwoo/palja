@@ -26,9 +26,7 @@ export function dateCandidates(value) {
 }
 export function unknownTimeCandidates(birth) {
   if (isManualBirth(birth)) throw new Error('간지 입력에는 확정된 날짜가 없습니다. 먼저 네 기둥 역검색을 사용하세요.');
-  if (birth?.correction_raw && !birth.correction_settings?.legacy_confirmed) {
-    throw new Error('보정 기준이 미확인입니다. 출생정보에서 적용할 기준을 먼저 확인해 주세요.');
-  }
+  // Imported correction notation is retained, never applied to candidate times.
   const { year, month, day } = solarDate(birth);
   return dateCandidates(dateKey(year, month, day));
 }

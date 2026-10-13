@@ -37,6 +37,10 @@ export function displayCertainty(entry, result) {
       body: result.message || '입력정보를 먼저 확인해 주세요. 저장한 원본 정보는 그대로 유지됩니다.',
     };
   }
+  if (result?.assumedSolar || result?.correctionUnapplied) return {
+    title: '양력 기본 계산 · 원본 정보 보존', tone: 'neutral',
+    body: '역법이 지정되지 않아 사용자 설정에 따라 양력으로 계산했습니다. 원본 입력·보정 표시는 그대로 보존하며, 보정 분수는 자동 적용하지 않습니다. 음력인 명식은 입력정보 수정에서 변경하세요.' + (result?.message ? ' ' + result.message : ''),
+  };
   if (result?.status === 'partial') return {
     title: '부분 명식', tone: 'warning',
     body: '출생시각을 확인하기 전에는 시주와 시각을 사용하는 해석을 표시하지 않습니다.',

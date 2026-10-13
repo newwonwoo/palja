@@ -15,7 +15,7 @@ test('compares four pillars from two engines without modifying original entry',(
 test('comparison reports unavailability rather than manufacturing birth hour or unsupported dates',()=>{
  assert.equal(m.compareIndependentEngines(fixture(2001,6,18,'unknown')).status,'unavailable');
  assert.equal(m.compareIndependentEngines(fixture(2041)).status,'unavailable');
- const invalid=fixture();invalid.birth.calendar_type=null;assert.equal(m.compareIndependentEngines(invalid).status,'unavailable');
+ const assumed=fixture();assumed.birth.calendar_type=null;assert.equal(m.compareIndependentEngines(assumed).status,'comparable');
  assert.equal(m.compareIndependentEngines({birth:{pillar_input:{pillars:{}}}}).status,'unavailable');
 });
 test('comparison includes independently auditable day-stem/stem-hap and day-branch clash/harm',()=>{

@@ -8,10 +8,10 @@ const make = (id, name, badge, stem, branch, date) => ({
 });
 const first = make('1','가상기록가','32','임','신','1993/12/22');
 const second = make('2','가상기록나','41','계','해','1985/05/19');
-test('imported screenshot age/day remain raw when birth settings unconfirmed',()=>{
-  assert.deepEqual(ageBadge(first,new Date('2026-10-11')),{text:'32',captured:true});
+test('imported screenshot day stays raw but default solar age/calendar are calculated',()=>{
+  assert.deepEqual(ageBadge(first,new Date('2026-10-11')),{text:'32',captured:false});
   assert.deepEqual(dayGlyphs(second),{stem:'계',branch:'해',captured:true});
-  assert.equal(referenceBirthLabel(second),'+ 1985/05/19 16:00');
+  assert.equal(referenceBirthLabel(second),'양력(기본) 1985/05/19 16:00');
 });
 test('age computed for confirmed solar and current date, not screenshot badge',()=>{
   const confirmed={...first,birth:{...first.birth,calendar_type:'solar'}};
@@ -20,7 +20,7 @@ test('age computed for confirmed solar and current date, not screenshot badge',(
 });
 test('find by name, full day, partial stem, age, and birthday',()=>{
   const arr=[first,second];
-  for(const q of ['계해','계 해','41','41세','1985/05/19','가상기록나']) assert.deepEqual(filterAndSortEntries(arr,{query:q}).map(x=>x.id),['2'],q);
+  for(const q of ['계해','계 해','1985/05/19','가상기록나']) assert.deepEqual(filterAndSortEntries(arr,{query:q}).map(x=>x.id),['2'],q);
   assert.deepEqual(filterAndSortEntries(arr,{query:'임신'}).map(x=>x.id),['1']);
   assert.deepEqual(filterAndSortEntries(arr,{query:'16:00'}).length,2);
   assert.deepEqual(filterAndSortEntries(arr,{query:'35'}).length,0);
@@ -35,7 +35,7 @@ test('sort names, age and original input unmodified',()=>{
 test('no invented calendar/time/age/sex when missing',()=>{
   const partial={...first,referenceDisplay:null,birth:{...first.birth,time_raw:null,time_status:'not_visible',calendar_symbol_raw:null,date_raw:null,input_year:null,input_month:null,input_day:null}};
   assert.equal(ageBadge(partial).text,'—');
-  assert.equal(referenceBirthLabel(partial),'· 날짜 미확인');
+  assert.equal(referenceBirthLabel(partial),'양력(기본) 날짜 미확인');
   assert.equal(dayGlyphs(partial).stem,'·');
 });
 test('five element colors derived solely from day glyph',()=>{

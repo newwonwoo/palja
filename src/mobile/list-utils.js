@@ -1,4 +1,5 @@
 import { isManualBirth, manualBirthLabel } from '../vault/pillar-input.js';
+import { isDefaultSolar, effectiveCalendar } from './birth-defaults.js';
 // UI-only projection for the offline vault. Never infer sex or calendar from badge colors.
 export const LIST_SORT_OPTIONS = Object.freeze([
   ['name', '가나다순'],
@@ -24,7 +25,7 @@ export function ageBadge(entry, today = new Date()) {
   const birth = entry.birth || {};
   if (isManualBirth(birth)) return { text: '—', captured: false };
   const birthday = [birth.input_year, birth.input_month, birth.input_day];
-  if (birth.calendar_type === 'solar' && birthday.every(Number.isInteger) &&
+  if (effectiveCalendar(birth) === 'solar' && birthday.every(Number.isInteger) &&
       birth.input_month >= 1 && birth.input_month <= 12 && birth.input_day >= 1 && birth.input_day <= 31) {
     const age = today.getFullYear() - birth.input_year -
       (today.getMonth() + 1 < birth.input_month ||
@@ -49,7 +50,8 @@ export function referenceBirthLabel(entry) {
   const time = b.time_status === 'unknown' ? '--:--'
     : b.time_raw || (b.time_status === 'known' && Number.isInteger(b.input_hour) && Number.isInteger(b.input_minute)
       ? `${String(b.input_hour).padStart(2, '0')}:${String(b.input_minute).padStart(2, '0')}` : '');
-  return [symbol, date, time, b.correction_raw].filter(Boolean).join(' ');
+  // The user's app default is solar. A captured '-' remains source metadata, not proof of lunar.
+  return [isDefaultSolar(b) ? '양력(기본)' : symbol, date, time, b.correction_raw].filter(Boolean).join(' ');
 }
 
 export const branchColor = glyph => ELEMENT_BY_BRANCH[glyph] || 'unknown';

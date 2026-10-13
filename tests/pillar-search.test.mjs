@@ -74,8 +74,13 @@ test('candidates: read-only generation preserves unknown birth state', () => {
   const b=birth(),before=JSON.stringify(b);const c=m.unknownTimeCandidates(b);assert.equal(c.length,13);assert.equal(JSON.stringify(b),before);
   assert.ok(c.every(w=>w.certainty==='candidate'));
 });
-test('candidates: unconfirmed calendar, lunar leap and correction settings block comparison', () => {
-  for(const patch of [{calendar_type:null},{calendar_type:'lunar',lunar_leap_month:null},{correction_raw:'-30'},{input_year:null}])assert.throws(()=>m.unknownTimeCandidates({...birth(),...patch}));
+test('candidates: solar defaults and raw corrections remain read-only; invalid dates still block', () => {
+  for(const patch of [{calendar_type:null},{correction_raw:'-30'}]) {
+    const b={...birth(),...patch},original=JSON.stringify(b),options=m.unknownTimeCandidates(b);
+    assert.equal(options.length,13);
+    assert.equal(JSON.stringify(b),original);
+  }
+  for(const patch of [{calendar_type:'lunar',lunar_leap_month:null},{input_year:null}])assert.throws(()=>m.unknownTimeCandidates({...birth(),...patch}));
   assert.throws(()=>m.unknownTimeCandidates(m.manualBirth(inputFrom(fixture()))));
 });
 test('candidates: date handoff never marks the representative minute as a birth time', () => {
