@@ -107,3 +107,12 @@ jobs:
           grep -q 'applicationId "com.newwonwoo.saju"' android/app/build.gradle
           test ! -d public/private
           echo 'Debug APK compiled; NOT signed with the private personal update key and NOT suitable for updating existing personal installs.'
+
+      - name: Upload clean debug APK for first-install diagnostics only
+        uses: actions/upload-artifact@v4
+        with:
+          name: palja-1.1.4-debug-no-personal-data
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 3
+
