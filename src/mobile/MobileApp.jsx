@@ -8,7 +8,7 @@ import {
   importScreenshotPackage, createBackup, restoreBackup, applyImportMappings,
 } from '../vault/model.js';
 import {
-  initializeVault, loadState, saveState, isAndroid, importNativeFile,
+  initializeVault, loadState, saveState, isAndroid, exitApplication, importNativeFile,
   exportBackupFile, parseImportText,
 } from '../vault/persistence.js';
 import { calculateEntry } from './engine.js';
@@ -184,7 +184,7 @@ function Settings({ vault, change, busy, setError, notify, navigate }) {
     {vault.sources.length > 0 && <ImportMappings vault={vault} change={change} busy={busy} />}
     <details className="panel trash-panel"><summary>휴지통 <span>{trash.length}</span></summary>{trash.length ? <ul>{trash.map(entry => <li key={entry.id}><span><strong>{entry.name}</strong><small>{dateLabel(entry.deletedAt)} 삭제</small></span><button className="small-button" disabled={busy} onClick={() => change(state => restoreEntry(state, entry.id), '명식을 복원했습니다.')}>복원</button></li>)}</ul> : <p className="muted">삭제한 명식이 없습니다.</p>}</details>
     <details className="panel engine-notes"><summary>계산 기준과 지원 범위</summary><p>모든 계산과 저장은 기기 안에서 수행합니다. 기존 명식의 계산 기준은 자동으로 바꾸지 않습니다.</p><ul><li>기존 역법: 1900~2030년, 자시 23:30 기준. 년·월주는 날짜 경계 중심이며 별도의 출생지·역사적 시각 보정은 적용하지 않습니다.</li><li>독립 절입·시각 계산: 출생정보 수정에서 직접 선택합니다. 1900~2050년 한국 음력·윤달, 태양 황경에 따른 절입, 역사적 한국 시간대·서머타임, 경도 및 근사 균시차를 적용합니다.</li><li>자시 날짜 경계는 자정/23시, 연주는 입춘/1월 1일 중 선택합니다. 원본 자오해사 옵션 전체와 동일한 것은 아닙니다. 대운은 10개를 표시하지만 시작일은 근사값입니다.</li><li>출생시각 미상은 하루 중 달라질 수 있는 기둥과 관련 해석을 보류합니다. 원본 8자어때와 계산 결과 동일성은 미검증입니다.</li><li>궁성·지장간·선택운 사용자 비중은 오행·음양에 적용됩니다. 합화 자동 성립 판정과 용신·격국·신강약의 새로운 가중치 판정은 연결하지 않았습니다.</li><li>네 기둥 역검색·시각 후보 비교는 기존 역법 기준입니다. 독립 역법의 정확한 경계 검색과 혼동하지 마세요.</li><li>날짜별 메모·사진·그림·수정 이력은 전체 8MiB 저장/백업 한도에 포함됩니다. 새 백업은 구버전 앱으로 가져오지 마세요.</li></ul></details>
-    <div className="app-signature"><span>命</span><p>사주 보관함 <b>1.1.2</b></p><small>나의 기록, 나의 기기에.</small></div>
+    <div className="app-signature"><span>命</span><p>사주 보관함 <b>1.1.3</b></p><small>나의 기록, 나의 기기에.</small></div>
     {preview && <Dialog title="가져오기 확인" onClose={() => setPreview(null)} busy={busy}><p>파일을 확인했습니다. 기존 기록은 보존하면서 병합합니다.</p><div className="import-counts"><div><strong>{preview.stats.added}</strong><span>추가할 명식</span></div><div><strong>{preview.stats.skipped}</strong><span>이미 있는 명식</span></div></div>{preview.stats.conflicts.length > 0 && <p className="notice">내용이 다른 {preview.stats.conflicts.length}개 항목은 현재 기기의 기록을 우선합니다.</p>}<div className="button-row"><button className="secondary" disabled={busy} onClick={() => setPreview(null)}>취소</button><button className="primary" disabled={busy} onClick={async () => { const result = await change(state => importOperation(state, preview.payload)); if (result) { setPreview(null); notify('가져오기 완료 · 추가 ' + result.result.stats.added + '개'); } }}>가져오기</button></div></Dialog>}
   </>;
 }
@@ -245,6 +245,13 @@ export default function MobileApp() {
       setError(errorText(failure)); return null;
     } finally { busyRef.current = false; setBusy(false); }
   };
+  const exitVault = async () => {
+    if (busyRef.current) return;
+    // Android exit must finish the Activity; a WebView cannot close itself with window.close().
+    if (!isAndroid()) { notify('브라우저에서는 이 탭을 직접 닫아 주세요.'); return; }
+    try { await exitApplication(); }
+    catch (failure) { setError(errorText(failure)); }
+  };
   const open = async id => { if (await change(state => recordOpen(state, id))) navigate({ name: 'details', id }); };
   const entry = vault?.entries.find(item => item.id === route.id && !item.deletedAt);
   const page = ['details', 'analysis', 'hour-candidates'].includes(route.name) && !entry ? 'vault' : route.name === 'analysis' && !calculateEntry(entry).legacyForm ? 'details' : route.name;
@@ -255,7 +262,7 @@ export default function MobileApp() {
   return <div className={'mobile-root ' + (page === 'analysis' ? 'analysis-page reference-light-page' : page === 'vault' ? 'reference-vault-page' : 'reference-light-page ' + page + '-page' + (page === 'details' ? ' reader-page' : ''))}>
     {page !== 'vault' && page !== 'details' && <header className="app-header"><div>{canBack ? <button className="icon-button" aria-label="뒤로" onClick={back}><Icon name="back" /></button> : <span className="brand-seal">命</span>}<span className="header-title">{page === 'analysis' ? entry.name + ' · 상세 해석' : '사주 보관함'}</span></div><span className="offline-label"><i />{busy ? '저장 중' : '오프라인'}</span></header>}
     {!vault ? <main className="mobile-main"><section className="empty-state"><Icon name="vault" size={40} /><h1>{error ? '보관함을 열지 못했어요' : '보관함을 열고 있어요'}</h1>{error && <button className="primary" onClick={() => window.location.reload()}>다시 시도</button>}</section></main> : page === 'analysis' && analysis?.legacyForm ? <div className="legacy-analysis"><AnalysisBoundary key={entry.id} onReturn={back}><LegacyApp initialForm={analysis.legacyForm} onReturn={back} /></AnalysisBoundary></div> : <main className="mobile-main">
-      {page === 'vault' && <ReferenceVault vault={vault} change={change} navigate={navigate} open={open} favorite={id => change(state => toggleFavorite(state, id))} busy={busy} />}
+      {page === 'vault' && <ReferenceVault vault={vault} change={change} navigate={navigate} open={open} onExit={exitVault} favorite={id => change(state => toggleFavorite(state, id))} busy={busy} />}
       {page === 'details' && entry && <ReferenceReader key={entry.id} entry={entry} vault={vault} navigate={navigate} change={change} busy={busy} />}
       {page === 'tools' && <ManseTools key={JSON.stringify([route.tab, route.pillarInput])} navigate={navigate} initialTab={route.tab} pillarInput={route.pillarInput} />}
       {page === 'groups' && <GroupsPage vault={vault} change={change} busy={busy} />}
