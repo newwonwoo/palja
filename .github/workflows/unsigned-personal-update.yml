@@ -56,6 +56,24 @@ jobs:
             exit 1
           fi
           echo "Unsigned only; DO NOT install as an update to the existing personal app."
+      - name: Prepare local-only Android signing utilities (no keys or personal data)
+        shell: bash
+        run: |
+          set -euo pipefail
+          sdk="$ANDROID_HOME/build-tools/36.0.0"
+          tools=/tmp/palja-local-signing-tools
+          mkdir -p "$tools/lib" "$tools/lib64"
+          cp "$sdk/apksigner" "$sdk/aapt" "$sdk/zipalign" "$tools/"
+          cp "$sdk/lib/apksigner.jar" "$tools/lib/"
+          if [ -d "$sdk/lib64" ]; then cp -a "$sdk/lib64/." "$tools/lib64/"; fi
+          echo 'Android SDK local helpers only; no keystores and no private files.'
+      - name: Transfer local signing helpers as temporary CI artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: palja-local-android-sdk-signing-helpers-NO-KEY
+          path: /tmp/palja-local-signing-tools/
+          retention-days: 1
+          if-no-files-found: error
       - name: Export release for OFFLINE local signing only
         uses: actions/upload-artifact@v4
         with:
