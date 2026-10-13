@@ -92,7 +92,7 @@ export default function ReferenceReader({entry,vault,navigate,change,busy}) {
   const selectMonth=key=>{setSelectedMonth(key);setYear(Number(key.split('-')[0]));setSelection(s=>({...s,date:key+'-15'}));};
   const toggleYear=d=>{setYearDraft(String(year));setDialog({kind:'options',title:'명식 보기 설정'});};
   const saveMemo=async()=>{if(journalWorking||busy)return null;const ok=await change(state=>{const next=memo!==entry.memo?upsertEntry(state,{id:entry.id,memo}):state;return journalDraft?saveNote(next,entry.id,journalDraft):next;},'메모를 저장했습니다.');if(ok)setJournalDraft(null);return ok;};
-  const showWarning=result.origin==='manual'||result.status!=='ready'||mismatch;
+  const showWarning=result.origin==='manual'||result.status!=='ready'||mismatch||result.assumedSolar||result.correctionUnapplied;
   const selectedLabel=`${view.year}년 ${view.annual?view.annual.stem+view.annual.branch:''}`;
   return <div className={'reference-reader '+(large?'rr-readable':'')} data-testid="reference-reader">
     {screen==='reading'?<div className="rr-topbar"><div role="tablist" aria-label="풀이 분류">{PANELS.map(([key,label],i)=><button type="button" key={key} id={'rr-tab-'+key} role="tab" aria-selected={panel===key} aria-controls="rr-reading-content" tabIndex={panel===key?0:-1} onClick={()=>{setPanel(key);window.scrollTo(0,0)}} onKeyDown={e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?3:(i+(e.key==='ArrowRight'?1:3))%4;setPanel(PANELS[next][0]);document.getElementById('rr-tab-'+PANELS[next][0])?.focus();}}}>{label}</button>)}</div><button type="button" aria-label="명식 보기 설정" onClick={toggleYear}><ReaderIcon name="menu"/></button></div>
