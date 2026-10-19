@@ -1,4 +1,4 @@
-name: Build Palja 1.1.4 fresh-install APK
+name: Build Palja 1.1.5 fresh-install APK
 
 on:
   push:
@@ -47,11 +47,11 @@ jobs:
           set -euo pipefail
           mkdir -p delivery
           test ! -d public/private
-          cp android/app/build/outputs/apk/debug/app-debug.apk delivery/Palja_1.1.4_First_Install_Debug.apk
-          test -s delivery/Palja_1.1.4_First_Install_Debug.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk delivery/Palja_1.1.5_First_Install_Debug.apk
+          test -s delivery/Palja_1.1.5_First_Install_Debug.apk
           sha256sum delivery/*.apk > delivery/SHA256SUMS.txt
           cat > delivery/INSTALL_README.txt <<'EOF'
-          Palja 1.1.4 (versionCode 14) - FRESH INSTALL DEBUG APK ONLY
+          Palja 1.1.5 (versionCode 15) - FRESH INSTALL DEBUG APK ONLY
           - Does not contain anyone's personal birth data.
           - First-time installation on a device that does not have Palja or com.newwonwoo.saju installed.
           - Install and open Settings > Backup and import your local private JSON file (163-record import package).
@@ -62,7 +62,7 @@ jobs:
           echo "Validated APK $(du -h delivery/*.apk)"
       - uses: actions/upload-artifact@v4
         with:
-          name: Palja-1.1.4-First-Install-Only
+          name: Palja-1.1.5-First-Install-Only
           path: delivery/*
           if-no-files-found: error
           retention-days: 30

@@ -1284,7 +1284,7 @@
       "title": "십성·지장간·운성·납음·신살 표시 설정",
       "implementation": "partial",
       "referenceBehavior": "unverified",
-      "gap": "한자/큰운 목록만 연결",
+      "gap": "1.1.5: 명식표 십성·지장간·12운성 개별 표시 설정 및 재열기·백업 연결. 한자/큰운 목록 유지. 납음·신살 표시 설정은 남음.",
       "apkEvidence": [
         "package:how8ja/features/setting/presentation/manse_view_setting_page/manse_view_setting_card.dart",
         "package:how8ja/features/setting/presentation/manse_view_setting_page/manse_view_setting_page.dart"
@@ -1296,15 +1296,19 @@
       "id": "settings.design",
       "area": "settings",
       "title": "색·글자·명식 디자인",
-      "implementation": "not_implemented",
+      "implementation": "implemented",
       "referenceBehavior": "unverified",
-      "gap": "고정 팔레트만 제공하며 색·글꼴·명식 카드의 사용자 지정 편집은 아직 지원하지 않음",
+      "gap": "1.1.5: 강조 색 직접 선택·시스템 고딕/명조·3단계 글자·명식 카드 3종·미리보기·초기화. 기기 저장/재열기/백업 복원/오프라인 검증. 시스템에 설치된 글꼴만 사용; 실기기 시각 검증은 별도.",
       "apkEvidence": [
         "package:how8ja/features/setting/presentation/design_settings/design_settings_screen.dart",
         "package:how8ja/features/setting/presentation/design_settings/design_settings_screen_provider.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "independentVerification": "not_applicable_presentation",
+      "implementationEvidence": [
+        "tests/appearance.test.mjs",
+        "tests/browser/appearance.cjs"
+      ]
     },
     {
       "id": "settings.age",
