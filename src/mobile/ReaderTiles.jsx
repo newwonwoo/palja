@@ -24,16 +24,17 @@ export function Rune({column,part='stem',hanja=true,active=false,onInspect,small
   return onInspect?<button type="button" className={className} data-tone={tone} aria-label={`${column.label} ${part==='stem'?'천간':'지지'} ${glyph.ko}`} onClick={()=>onInspect(column,part)}>{content}</button>
     :<span className={className} data-tone={tone}>{content}</span>;
 }
-export function SixPillars({columns,dayStem,onInspect,hanja=true,compact=false}) {
+export function SixPillars({columns,dayStem,onInspect,hanja=true,compact=false,appearance}) {
   const labels=columns.map(c=>pillarLabels(c,dayStem));
   return <table className={`rr-six ${compact?'rr-six-compact':''}`} aria-label="세운 대운 시주 일주 월주 연주 명식표"><colgroup>{columns.map(c=><col key={c.key} className={c.index<2?'rr-luck-col':''}/>)}</colgroup>
     <thead><tr>{columns.map(c=><th key={c.key} scope="col">{c.label}</th>)}</tr></thead>
     <tbody>
-      {!compact&&<tr className="rr-gods">{columns.map((c,i)=><td key={c.key} className={c.key==='day'?'rr-self-god':''}>{labels[i].stem}</td>)}</tr>}
+      {!compact&&appearance?.tenGods!==false&&<tr className="rr-gods">{columns.map((c,i)=><td key={c.key} className={c.key==='day'?'rr-self-god':''}>{labels[i].stem}</td>)}</tr>}
       <tr>{columns.map(c=><td key={c.key}><Rune column={c} part="stem" hanja={hanja} onInspect={onInspect}/></td>)}</tr>
       <tr>{columns.map(c=><td key={c.key}><Rune column={c} part="branch" hanja={hanja} onInspect={onInspect}/></td>)}</tr>
-      <tr className="rr-hidden">{columns.map((c,i)=><td key={c.key}>{labels[i].hidden.length?labels[i].hidden.map((h,n)=><span key={h.hanja} data-tone={h.tone} className={n===labels[i].hidden.length-1?'rr-main-hidden':''}>{h.ko}</span>):'—'}</td>)}</tr>
-      {!compact&&<><tr className="rr-gods rr-branch-gods">{columns.map((c,i)=><td key={c.key}>{labels[i].branch}</td>)}</tr><tr className="rr-growth">{columns.map((c,i)=><td key={c.key} data-stage={labels[i].growth}>{labels[i].growth}</td>)}</tr></>}
+      {appearance?.hiddenStems!==false&&<tr className="rr-hidden">{columns.map((c,i)=><td key={c.key}>{labels[i].hidden.length?labels[i].hidden.map((h,n)=><span key={h.hanja} data-tone={h.tone} className={n===labels[i].hidden.length-1?'rr-main-hidden':''}>{h.ko}</span>):'—'}</td>)}</tr>}
+      {!compact&&appearance?.tenGods!==false&&<tr className="rr-gods rr-branch-gods">{columns.map((c,i)=><td key={c.key}>{labels[i].branch}</td>)}</tr>}
+      {!compact&&appearance?.growth!==false&&<tr className="rr-growth">{columns.map((c,i)=><td key={c.key} data-stage={labels[i].growth}>{labels[i].growth}</td>)}</tr>}
     </tbody></table>;
 }
 function LuckTile({item,kind,dayStem,selected,onSelect,birthYear}) {

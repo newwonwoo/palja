@@ -1,7 +1,9 @@
 import {validateIntegrated,mergeIntegrated} from './integrated-schema.js';
+import {DEFAULT_APPEARANCE, appearanceErrors} from './appearance.js';
 /** Optional v1 namespace for groups and display preferences. No birth data is modified. */
 export const DEFAULT_PREFERENCES = Object.freeze({
   sort: 'name', compact: false, hanja: true, large: false, includeLuck: true,
+  appearance: DEFAULT_APPEARANCE,
 });
 export const SORT_KEYS = ['name', 'newest', 'age-asc', 'age-desc', 'day'];
 const keys = ['sort', 'compact', 'hanja', 'large', 'includeLuck'];
@@ -9,7 +11,8 @@ const plain = x => x !== null && typeof x === 'object' && !Array.isArray(x)
   && (Object.getPrototypeOf(x) === Object.prototype || Object.getPrototypeOf(x) === null);
 const iso = x => typeof x === 'string' && Number.isFinite(Date.parse(x)) && new Date(x).toISOString() === x;
 export const normalizedGroupName = name => typeof name === 'string' ? name.normalize('NFKC').trim().toLocaleLowerCase('ko') : '';
-export const readPreferences = state => ({ ...DEFAULT_PREFERENCES, ...state.workspace?.preferences });
+export const readPreferences = state => ({ ...DEFAULT_PREFERENCES, ...state.workspace?.preferences,
+  appearance: {...DEFAULT_APPEARANCE, ...state.workspace?.preferences?.appearance} });
 export const activeGroups = state => (state.workspace?.groups || []).filter(group => !group.deletedAt);
 export function emptyWorkspace() {
   return { version: 1, groups: [], preferences: { ...DEFAULT_PREFERENCES } };
@@ -22,9 +25,10 @@ export function validateWorkspace(workspace, entryIds) {
   if (Object.keys(workspace).some(k => !['version', 'groups', 'preferences', 'integrated'].includes(k)) || workspace.version !== 1) add('unsupported field or version');
   if (!plain(workspace.preferences)) add('invalid preferences');
   else {
-    if (Object.keys(workspace.preferences).length !== keys.length || Object.keys(workspace.preferences).some(k => !keys.includes(k))) add('invalid preference keys');
+    if (keys.some(k => !Object.hasOwn(workspace.preferences, k)) || Object.keys(workspace.preferences).some(k => ![...keys, 'appearance'].includes(k))) add('invalid preference keys');
     if (!SORT_KEYS.includes(workspace.preferences.sort)) add('invalid sort');
     for (const k of keys.slice(1)) if (typeof workspace.preferences[k] !== 'boolean') add('invalid ' + k);
+    if (Object.hasOwn(workspace.preferences, 'appearance')) for (const error of appearanceErrors(workspace.preferences.appearance)) add(error);
   }
   if (!Array.isArray(workspace.groups) || workspace.groups.length > 500) add('groups must be an array of at most 500');
   else {

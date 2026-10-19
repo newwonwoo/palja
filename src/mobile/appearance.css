@@ -1,0 +1,41 @@
+/* Personal settings affect presentation; five-element colors keep their meaning. */
+.mobile-root[data-personal-font], .mobile-root[data-personal-font] :is(.reference-vault,.reference-reader,.reference-detail,.rr-dialog,.vault-dialog) { font-family:var(--personal-font); }
+.mobile-root[data-personal-font] .rr-rune strong { font-family:var(--personal-font); }
+.mobile-root.mobile-root[data-text-size] { font-size:var(--personal-size); }
+.mobile-root[data-text-size] .reference-reader { font-size:var(--personal-reader-size); }
+.mobile-root[data-text-size=comfortable] :is(.rr-gods td,.rr-growth td,.rr-hidden td) { font-size:14px; }
+.mobile-root[data-text-size=large] :is(.rr-gods td,.rr-growth td,.rr-hidden td) { font-size:16px; }
+.mobile-root[data-text-size=comfortable] :is(.ref-person-info strong,.ref-tabs button) { font-size:18px; }
+.mobile-root[data-text-size=large] :is(.ref-person-info strong,.ref-tabs button) { font-size:20px; }
+.mobile-root[data-text-size=comfortable] .ref-birth { font-size:13px; }
+.mobile-root[data-text-size=large] .ref-birth { font-size:14px; }
+.mobile-root[data-text-size=large] .ref-person { min-height:82px; }
+.mobile-root[data-card-style] .ref-tabs button.active { border-color:var(--personal-accent); box-shadow:inset 0 0 0 .4px var(--personal-accent); }
+.mobile-root[data-card-style] .rr-topbar [role=tab][aria-selected=true] { border-bottom-color:var(--personal-accent); }
+.mobile-root[data-card-style] .rr-luck-tile.selected { outline-color:var(--personal-accent); background:var(--personal-tint); }
+.mobile-root[data-card-style] .rr-luck-tile.selected :is(.rr-luck-date,.rr-luck-age) { background:var(--personal-accent); color:var(--personal-on-accent); }
+.mobile-root[data-card-style] :is(.rr-bottom-nav button.active,.bottom-nav button.active) { color:var(--personal-accent); }
+.mobile-root[data-card-style] :focus-visible { outline-color:var(--personal-accent); }
+.mobile-root[data-card-style=outline] :is(.ref-row,.rr-compare-card) { border:1px solid var(--personal-accent); border-radius:8px; margin:6px 8px; }
+.mobile-root[data-card-style=outline] .rr-six { border:1px solid var(--personal-accent); border-radius:8px; padding:6px 0; }
+.mobile-root[data-card-style=plain] :is(.ref-row,.rr-compare-card) { border-radius:0; box-shadow:none; background:#fff; }
+.mobile-root[data-card-style=plain] .rr-six .rr-rune { background:transparent; border-radius:0; }
+.mobile-root[data-card-style=plain] .rr-six .rr-rune[data-tone=wood] { color:#137a64; }
+.mobile-root[data-card-style=plain] .rr-six .rr-rune[data-tone=fire] { color:#b22849; }
+.mobile-root[data-card-style=plain] .rr-six .rr-rune[data-tone=earth] { color:#755e00; }
+.mobile-root[data-card-style=plain] .rr-six .rr-rune[data-tone=metal] { color:#526b76; }
+.mobile-root[data-card-style=plain] .rr-six .rr-rune[data-tone=water] { color:#263740; }
+.personal-settings fieldset { min-width:0; margin:0; padding:0; border:0; }
+.personal-settings h3 { font-size:1em; margin:20px 0 8px; }
+.personal-fields { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:12px; }
+.personal-fields label { min-width:0; }
+.personal-fields select { width:100%; }
+.personal-color { display:flex; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px; }
+.personal-color input[type=color] { flex:0 0 58px; width:58px; height:42px; padding:3px; cursor:pointer; border:1px solid #cbd3de; background:#fff; border-radius:8px; }
+.personal-color span { font-family:monospace; font-size:13px; }
+.personal-preview { display:flex; flex-direction:column; gap:4px; margin:18px 0 8px; padding:18px; border:1px solid var(--personal-accent); border-radius:12px; background:var(--personal-tint); color:#344052; }
+.personal-preview strong { font-family:var(--personal-font); font-size:calc(var(--personal-reader-size) + 9px); }
+.personal-preview small { font-size:var(--personal-size); }
+.mobile-root[data-card-style=plain] .personal-preview { background:#fff; border-radius:0; border-width:0 0 1px; }
+.mobile-root[data-card-style=outline] .personal-preview { background:#fff; border-radius:8px; }
+@media(max-width:360px) { .personal-fields { grid-template-columns:1fr; } }

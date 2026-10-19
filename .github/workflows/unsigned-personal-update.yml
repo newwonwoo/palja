@@ -2,6 +2,8 @@ name: Build unsigned Palja release for ORIGINAL personal signer
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
     paths:
@@ -50,7 +52,7 @@ jobs:
           set -euo pipefail
           sdk="$ANDROID_HOME/build-tools/36.0.0"
           apk=android/app/build/outputs/apk/release/app-release-unsigned.apk
-          "$sdk/aapt" dump badging "$apk" | grep -m 1 "^package: name='com.newwonwoo.saju' versionCode='14' versionName='1.1.4'"
+          "$sdk/aapt" dump badging "$apk" | grep -m 1 "^package: name='com.newwonwoo.saju' versionCode='15' versionName='1.1.5'"
           if "$sdk/apksigner" verify "$apk" >/dev/null 2>&1; then
             echo "Unexpected signed APK. Refuse to release."
             exit 1
@@ -77,7 +79,7 @@ jobs:
       - name: Export release for OFFLINE local signing only
         uses: actions/upload-artifact@v4
         with:
-          name: palja-1.1.4-release-UNSIGNED-NEEDS-ORIGINAL-KEY
+          name: palja-1.1.5-release-UNSIGNED-NEEDS-ORIGINAL-KEY
           path: android/app/build/outputs/apk/release/app-release-unsigned.apk
           retention-days: 5
           if-no-files-found: error

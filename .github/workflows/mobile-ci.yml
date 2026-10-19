@@ -60,6 +60,7 @@ jobs:
           trap 'kill "$server" || true' EXIT
           for i in $(seq 1 25); do if curl -fsS "$QA_URL" >/dev/null; then break; fi; sleep 1; done
           node tests/browser/app-exit.cjs
+          node tests/browser/appearance.cjs
 
   android:
     runs-on: ubuntu-24.04
@@ -94,7 +95,7 @@ jobs:
       - name: Publish clean first-install debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: palja-1.1.4-fresh-install-DEBUG-not-update
+          name: palja-1.1.5-fresh-install-DEBUG-not-update
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 7
@@ -111,7 +112,7 @@ jobs:
       - name: Upload clean debug APK for first-install diagnostics only
         uses: actions/upload-artifact@v4
         with:
-          name: palja-1.1.4-debug-no-personal-data
+          name: palja-1.1.5-debug-no-personal-data
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 3
