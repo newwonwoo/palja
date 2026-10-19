@@ -5,12 +5,12 @@
     "package": "com.mansecalendar8.mansecalendar8.lite",
     "libappSha256": "a5e4c25d119466c2c46b870509c5b1f59395b59b034b73ffa3e6658a6e4b1d9d",
     "modulePathCount": 1015,
-    "scope": "개인용 오프라인 명리 앱의 전체 사용자 기능·UI·UX. 타 앱의 내부 동작 재현이 아닌 별도 엔진 검증과 사용자 기능 완성을 목표로 한다.",
+    "scope": "개인용 오프라인 명리 앱의 전체 사용자 기능·UI·UX. 원본 APK의 실제 화면·동작·결과와 직접 대조하고, 계산의 독립 검증도 병행한다.",
     "limitations": [
       "모듈 경로는 기능 단서이며 런타임/위젯 좌표/산식 증명이 아니다.",
       "미노출 기능이 있을 수 있어 이 목록을 원본 전체의 확정 명세라고 부르지 않는다.",
       "독립 구현과 원본 결과 동일성 검증을 분리한다.",
-      "2026-10-13 정책: 원본 8자어때와 결과를 직접 대조하지 않으며 독립 산식·조견표와 경계값 테스트로 검증한다."
+      "2026-10-19 사용자 목표: 원본 8자어때 APK의 실제 화면·동작·결과와 직접 대조한다. 원본 APK를 확보하지 못한 항목은 일치한다고 판정하지 않으며 독립 산식·조견표와 경계값 테스트를 병행한다."
     ]
   },
   "completionRule": {
@@ -21,6 +21,7 @@
       "persistenceWhenApplicable",
       "offline",
       "regression",
+      "originalApkBehaviorComparison",
       "independentEngineOrPublishedReferenceWhenApplicable"
     ],
     "informationOnlyButtonsCountAsImplemented": false,
