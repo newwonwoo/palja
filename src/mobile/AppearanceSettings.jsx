@@ -1,11 +1,20 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import {DEFAULT_APPEARANCE, FONT_OPTIONS, TEXT_SIZE_OPTIONS, CARD_STYLE_OPTIONS} from '../vault/appearance.js';
 import {savePreferences} from '../vault/workspace-actions.js';
 import {readPreferences} from '../vault/workspace.js';
 
 export default function AppearanceSettings({preferences, change, busy}) {
-  const a = preferences.appearance;
-  const set = patch => change(state => savePreferences(state, {appearance: {...readPreferences(state).appearance, ...patch}}));
+  const [draft, setDraft] = useState(null);
+  const a = draft || preferences.appearance;
+  const pending = useRef(Promise.resolve());
+  const pendingCount = useRef(0);
+  const enqueue = update => {
+    setDraft(current => update(current || preferences.appearance));
+    pendingCount.current++;
+    pending.current = pending.current.then(() => change(state => savePreferences(state, {appearance: update(readPreferences(state).appearance)})))
+      .finally(() => { if (--pendingCount.current === 0) setDraft(null); });
+  };
+  const set = patch => enqueue(current => ({...current, ...patch}));
   return <section className="panel personal-settings" aria-labelledby="appearance-title">
     <h2 id="appearance-title">나의 화면</h2>
     <p className="muted">선택하면 바로 저장됩니다. 기기를 바꿀 때 백업으로 옮길 수 있습니다.</p>
@@ -16,7 +25,7 @@ export default function AppearanceSettings({preferences, change, busy}) {
       <h3>명식표 표시</h3>
       {[['tenGods', '십성 표시'], ['hiddenStems', '지장간 표시'], ['growth', '12운성 표시']].map(([key,label]) => <label className="checkbox-line" key={key}><input type="checkbox" checked={a[key]} onChange={e => set({[key]: e.target.checked})}/><span>{label}</span></label>)}
       <p className="field-hint">명식표의 표시만 바뀝니다. 계산 결과와 설명은 유지됩니다.</p>
-      <button type="button" className="secondary" onClick={() => change(state => savePreferences(state, {appearance: {...DEFAULT_APPEARANCE}}))}>화면 설정 초기화</button>
+      <button type="button" className="secondary" onClick={() => enqueue(() => ({...DEFAULT_APPEARANCE}))}>화면 설정 초기화</button>
     </fieldset>
   </section>;
 }

@@ -20,7 +20,7 @@ async function openChart(p){await p.getByRole('button',{name:'보관함',exact:t
  const browser=await chromium.launch({args:['--no-sandbox']});
  try{
   const p=await browser.newPage({viewport:{width:390,height:844},locale:'ko-KR'});
-  p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error'&&!m.text().includes('favicon'))errors.push(m.text())});
+  p.on('pageerror',e=>errors.push(e.message));p.on('console',m=>{if(m.type()==='error'&&!m.location().url.includes('favicon'))errors.push(m.text()+' '+m.location().url)});
   await p.goto(url);await settings(p);await importFile(p,dir+'/legacy.json');
   check('legacy backup loads default design',await p.getByLabel('글꼴',{exact:true}).inputValue()==='sans');
   await p.getByLabel('강조 색상',{exact:true}).fill('#8357a9');await settled(p);
@@ -52,7 +52,7 @@ async function openChart(p){await p.getByRole('button',{name:'보관함',exact:t
   check('reset retains original entries',JSON.stringify((await state(p)).entries)===JSON.stringify(legacy.entries));
   const fresh=await browser.newPage({viewport:{width:390,height:844}});await fresh.goto(url);await settings(fresh);await importFile(fresh,dir+'/backup.json');
   check('backup restores presentation in a fresh store',(await state(fresh)).workspace.preferences.appearance.accent==='#8357a9');
-  check('no runtime errors',errors.length===0);
+  assert.deepEqual(errors,[]);check('no runtime errors',true);
   fs.writeFileSync(dir+'/results.json',JSON.stringify({checks,errors,environment:{url,viewports:[320,390,800],browser:'Playwright Chromium',fallback:'Browser extension tool absent; CUA cloud localhost connection refused'}},null,2));
   console.log('PASS appearance:',checks.length);
  }finally{await browser.close()}
