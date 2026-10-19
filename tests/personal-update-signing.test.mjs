@@ -31,8 +31,8 @@ case "$(basename "$0")" in
     ;;
   aapt)
     case "\${@: -1}" in
-      *original.apk) echo "package: name='com.newwonwoo.saju' versionCode='12' versionName='1.1.2'" ;;
-      *) echo "package: name='com.newwonwoo.saju' versionCode='14' versionName='1.1.4'" ;;
+      *original.apk) echo "package: name='com.newwonwoo.saju' versionCode='12' versionName='1.1.2' platformBuildVersionName='16' compileSdkVersionCodename='16'" ;;
+      *) echo "package: name='com.newwonwoo.saju' versionCode='15' versionName='1.1.5' platformBuildVersionName='16' compileSdkVersionCodename='16'" ;;
     esac
     ;;
   apksigner)
@@ -73,6 +73,7 @@ esac
     const approved={...env,KEY_CERT:signer};
     const status=execFileSync('bash',[script,original,unsigned,key,out],{env:approved,encoding:'utf8'});
     assert.match(status,/VERIFIED update APK/);
+    assert.match(status,/versionCode 12 -> 15/);
     assert.equal(existsSync(out),true);
     assert.equal(readFileSync(out,'utf8'),'synthetic-non-apk-fixture');
   } finally {rmSync(dir,{recursive:true,force:true});}

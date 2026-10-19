@@ -72,7 +72,7 @@ get_badging(){ "$aapt" dump badging "$1" | sed -n '1p'; }
 installed_info=$(get_badging "$original")
 unsigned_info=$(get_badging "$unsigned")
 extract(){
-  sed -nE "s/.*$2='([^']+)'.*/\\1/p" <<< "$1"
+  sed -nE "s/.*[[:space:]]$2='([^']+)'.*/\\1/p" <<< "$1"
 }
 installed_package=$(extract "$installed_info" name)
 unsigned_package=$(extract "$unsigned_info" name)
