@@ -16,19 +16,22 @@
         "signatureV2V3Passed": true
       },
       "splitArchive": {
-        "verified": false,
+        "verified": true,
         "expectedSha256": "8b2977069ae037dfb960f13d67cc423dab484f767d1938a1071e0a63148f1b1c",
-        "receivedSha256": "d38947bb8219de4f82d4ae1b647c1b723227f07c8d9f800036b1bc2e44f9b8e5",
+        "receivedSha256": "8b2977069ae037dfb960f13d67cc423dab484f767d1938a1071e0a63148f1b1c",
         "expectedSizeBytes": 100896783,
-        "receivedSizeBytes": 100934491,
-        "blockedBy": "006.txt에 줄바꿈 변환 흔적이 있다. 변환 전 006 조각을 실제 ZIP으로 압축해 다시 확보해야 한다."
+        "receivedSizeBytes": 100896783,
+        "previousTextDownloadSha256": "d38947bb8219de4f82d4ae1b647c1b723227f07c8d9f800036b1bc2e44f9b8e5",
+        "previousTextDownloadSizeBytes": 100934491,
+        "resolvedBy": "직접 첨부 경로의 006 조각으로 조립해 원본 해시와 전체 ZIP CRC 검증 통과. 다운로드 경로의 텍스트 정규화로 이전 바이트가 달랐음을 재현."
       },
       "arm64Libapp": {
-        "verified": false,
-        "availablePrefixBytes": 14108617,
-        "expectedSizeBytes": 15532944
+        "verified": true,
+        "sizeBytes": 15532944,
+        "sha256": "a5e4c25d119466c2c46b870509c5b1f59395b59b034b73ffa3e6658a6e4b1d9d"
       },
-      "report": "original-apk-analysis-2026-10-20.md"
+      "report": "original-apk-analysis-2026-10-20.md",
+      "manifestApkHashesMatched": 4
     },
     "scope": "개인용 오프라인 명리 앱의 전체 사용자 기능·UI·UX. 원본 APK의 실제 화면·동작·결과와 직접 대조하고, 계산의 독립 검증도 병행한다.",
     "limitations": [
