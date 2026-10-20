@@ -929,15 +929,16 @@
       "area": "analysis",
       "title": "십이신살·길신·흉살 전체",
       "implementation": "partial",
-      "referenceBehavior": "unverified",
-      "gap": "명시된 십이신살표/일부 5종만 연결",
+      "referenceBehavior": "partial",
+      "gap": "독립 십이신살 144조합이 원본 정적 산식과 일치. 원본 명식표 명칭 도화·육액 및 년주/일주 기준 행 연결. 기존 길흉살 5종 외 전체 규칙·원본 실행 대조 필요.",
       "apkEvidence": [
         "package:how8ja/core/domains/manse_analysis/sinsal/gil_sin_calculator.dart",
         "package:how8ja/core/domains/manse_analysis/sinsal/hyoong_sal_calculator.dart",
         "package:how8ja/core/domains/manse_analysis/sinsal/enums/sip_i_sinsal.dart"
       ],
-      "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "evidenceLimit": "십이신살 인덱스 산식·enum 순서·명식표 명칭을 AOT로 확인하고 144조합을 대조. 길신·흉살 전체 및 원본 실행 대조는 미완료.",
+      "independentVerification": "pending",
+      "originalComparisonEvidence": "docs/original-apk-display-options.md"
     },
     {
       "id": "analysis.gongmang",
@@ -1323,12 +1324,12 @@
       "title": "십성·지장간·운성·납음·신살 표시 설정",
       "implementation": "partial",
       "referenceBehavior": "partial",
-      "gap": "기존 3종 행 토글을 보존하고 원본 기본 꺼짐인 지장간 십신·납음 옵션을 별도로 저장·복원·표시. 남은 주간/일간·년주/일주 기준, 5종 프리셋과 원본 실행 대조 필요.",
+      "gap": "원본 8개 기준별 표시 필드와 5종 프리셋을 명식표·저장·백업에 연결. 기존 3종 행 표시 설정 보존. 정적 십이신살 144조합·지장간 12배열 대조, 원본 실행의 배치·색상·화면별 적용 대조는 남음.",
       "apkEvidence": [
         "package:how8ja/features/setting/presentation/manse_view_setting_page/manse_view_setting_card.dart",
         "package:how8ja/features/setting/presentation/manse_view_setting_page/manse_view_setting_page.dart"
       ],
-      "evidenceLimit": "원본 AOT 모델의 기준별 표시 필드 8개와 Provider의 기본 객체 값을 교차 확인. 실제 표시 위젯·화면·프리셋 동작 대조는 남음.",
+      "evidenceLimit": "AOT 모델·기본값·프리셋 상수·위젯 분기와 계산 인자 확인. 정적 입출력 벡터 일부 전수 대조. 원본 앱 실행 화면별 검증은 미완료.",
       "independentVerification": "partial",
       "originalComparisonEvidence": "docs/original-apk-display-options.md"
     },

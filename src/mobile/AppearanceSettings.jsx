@@ -11,7 +11,14 @@ export default function AppearanceSettings({preferences, change, busy}) {
   const enqueue = update => {
     setDraft(current => update(current || preferences.appearance));
     pendingCount.current++;
-    pending.current = pending.current.then(() => change(state => savePreferences(state, {appearance: update(readPreferences(state).appearance)})))
+    pending.current = pending.current.then(() => change(state => {
+      const prefs=readPreferences(state),appearance=update(prefs.appearance),details={...prefs.manseDetails};
+      // Turning a legacy row switch back on after “all off” must show a row.
+      // Otherwise preserve detailed selections behind the master row switches.
+      if(appearance.tenGods&&!prefs.appearance.tenGods&&!details.dayStemGods&&!details.columnStemGods)details.dayStemGods=true;
+      if(appearance.growth&&!prefs.appearance.growth&&!details.dayGrowth&&!details.columnGrowth)details.dayGrowth=true;
+      return savePreferences(state,{appearance,manseDetails:details});
+    }))
       .finally(() => { if (--pendingCount.current === 0) setDraft(null); });
   };
   const set = patch => enqueue(current => ({...current, ...patch}));

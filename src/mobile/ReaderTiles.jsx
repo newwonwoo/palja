@@ -1,6 +1,6 @@
 import React from 'react';
 import { stemColor, branchColor } from './list-utils.js';
-import { glyphInfo, pillarLabels } from './reader-model.js';
+import { glyphInfo, pillarLabels, chartTwelveShinsal, validPillar } from './reader-model.js';
 import {nayinOf} from './traditional-reference.js';
 
 export function ReaderIcon({name,size=24,filled=false}) {
@@ -27,15 +27,19 @@ export function Rune({column,part='stem',hanja=true,active=false,onInspect,small
 }
 export function SixPillars({columns,dayStem,onInspect,hanja=true,compact=false,appearance,manseDetails}) {
   const labels=columns.map(c=>pillarLabels(c,dayStem));
+  const basis=key=>{const c=columns.find(c=>c.key===key);return c?.kind==='calculated'&&validPillar(c.pillar)?c.pillar.branch:null;};
   return <table className={`rr-six ${compact?'rr-six-compact':''}`} aria-label="세운 대운 시주 일주 월주 연주 명식표"><colgroup>{columns.map(c=><col key={c.key} className={c.index<2?'rr-luck-col':''}/>)}</colgroup>
     <thead><tr>{columns.map(c=><th key={c.key} scope="col">{c.label}</th>)}</tr></thead>
     <tbody>
-      {!compact&&appearance?.tenGods!==false&&<tr className="rr-gods">{columns.map((c,i)=><td key={c.key} className={c.key==='day'?'rr-self-god':''}>{labels[i].stem}</td>)}</tr>}
+      {!compact&&appearance?.tenGods!==false&&manseDetails?.dayStemGods!==false&&<tr className="rr-gods" aria-label="일간 기준 천간 십신">{columns.map((c,i)=><td key={c.key} className={c.key==='day'?'rr-self-god':''}>{labels[i].stem}</td>)}</tr>}
       <tr>{columns.map(c=><td key={c.key}><Rune column={c} part="stem" hanja={hanja} onInspect={onInspect}/></td>)}</tr>
       <tr>{columns.map(c=><td key={c.key}><Rune column={c} part="branch" hanja={hanja} onInspect={onInspect}/></td>)}</tr>
       {appearance?.hiddenStems!==false&&<tr className={`rr-hidden ${manseDetails?.hiddenStemGods?'rr-hidden-with-gods':''}`} aria-label="지장간">{columns.map((c,i)=><td key={c.key}>{labels[i].hidden.length?labels[i].hidden.map((h,n)=><span key={h.hanja} data-tone={h.tone} className={n===labels[i].hidden.length-1?'rr-main-hidden':''}>{h.ko}{manseDetails?.hiddenStemGods&&<small aria-label={`${c.label} 지장간 ${h.ko} 십신`}>{h.god}</small>}</span>):'—'}</td>)}</tr>}
-      {!compact&&appearance?.tenGods!==false&&<tr className="rr-gods rr-branch-gods">{columns.map((c,i)=><td key={c.key}>{labels[i].branch}</td>)}</tr>}
-      {!compact&&appearance?.growth!==false&&<tr className="rr-growth">{columns.map((c,i)=><td key={c.key} data-stage={labels[i].growth}>{labels[i].growth}</td>)}</tr>}
+      {!compact&&appearance?.tenGods!==false&&manseDetails?.dayStemGods!==false&&<tr className="rr-gods rr-branch-gods" aria-label="일간 기준 지지 십신">{columns.map((c,i)=><td key={c.key}>{labels[i].branch}</td>)}</tr>}
+      {!compact&&appearance?.tenGods!==false&&manseDetails?.columnStemGods&&<tr className="rr-gods rr-branch-gods" aria-label="각 기둥 천간 기준 지지 십신">{columns.map((c,i)=><td key={c.key} title="각 기둥 천간 기준">{labels[i].branchSelf||'—'}</td>)}</tr>}
+      {!compact&&appearance?.growth!==false&&manseDetails?.dayGrowth!==false&&<tr className="rr-growth" aria-label="일간 기준 십이운성">{columns.map((c,i)=><td key={c.key} data-stage={labels[i].growth}>{labels[i].growth}</td>)}</tr>}
+      {!compact&&appearance?.growth!==false&&manseDetails?.columnGrowth&&<tr className="rr-growth" aria-label="각 기둥 천간 기준 십이운성">{columns.map((c,i)=><td key={c.key} data-stage={labels[i].growthSelf} title="각 기둥 천간 기준">{labels[i].growthSelf||'—'}</td>)}</tr>}
+      {!compact&&[['yearShinsal','birthYear','연주 기준 십이신살'],['dayShinsal','day','일주 기준 십이신살']].map(([flag,key,title])=>manseDetails?.[flag]?<tr key={flag} className="rr-twelve-shinsal" aria-label={title}>{columns.map(c=><td key={c.key} title={title}>{c.kind==='calculated'&&validPillar(c.pillar)?chartTwelveShinsal(basis(key),c.pillar.branch)||'—':'—'}</td>)}</tr>:null)}
       {manseDetails?.nayin&&<tr className="rr-nayin" aria-label="납음오행">{columns.map(c=>{const n=c.kind==='calculated'?nayinOf(c.pillar):null;return <td key={c.key} title={n?.hanja}>{n?.name||'—'}</td>;})}</tr>}
     </tbody></table>;
 }

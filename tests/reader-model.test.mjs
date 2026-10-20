@@ -28,6 +28,32 @@ test('each hidden stem has its own day-stem relation and unknown inputs stay unk
   }
   assert.deepEqual(m.pillarLabels({kind:'unknown'},r.saju.dayStem).hidden,[]);
 });
+test('column-based branch gods and growth use the column stem independently of the day stem',()=>{
+  for(const column of c.filter(c=>c.kind==='calculated')){
+    const labels=m.pillarLabels(column,null),p=column.pillar;
+    assert.equal(labels.branchSelf,old.getSS(p.stem,old.EBH[p.branch].bon[0]));
+    assert.equal(labels.growthSelf,old.getUnsung(p.stem,p.branch));
+    assert.equal(labels.stem,'—');assert.equal(labels.growth,'—');
+  }
+});
+test('all 144 twelve-shinsal pairs match the original AOT index arithmetic and chart labels',()=>{
+  // Independently recovered 0x73d274..0x73d2f4 and object pool 0x11460.
+  // Production uses a traditional group-start lookup, not this expression.
+  const branches=[...'子丑寅卯辰巳午未申酉戌亥'];
+  const originalNames=['겁살','재살','천살','지살','도화','월살','망신','장성','반안','역마','육액','화개'];
+  branches.forEach((basis,i)=>branches.forEach((target,j)=>{
+    assert.equal(m.chartTwelveShinsal(basis,target),originalNames[(j+3*(i&3)+7)%12],basis+target);
+  }));
+  for(const bad of [null,'','—','丙'])assert.equal(m.chartTwelveShinsal(bad,'子'),null);
+});
+test('all twelve hidden-stem sequences match the recovered original object-pool vectors',()=>{
+  // Semantic input/output vectors from PP 0x11370; no original executable code.
+  const rows={子:'壬癸',丑:'癸辛己',寅:'戊丙甲',卯:'甲乙',辰:'乙癸戊',巳:'戊庚丙',午:'丙己丁',未:'丁乙己',申:'戊壬庚',酉:'庚辛',戌:'辛丁戊',亥:'戊甲壬'};
+  Object.entries(rows).forEach(([branch,expected],branchIdx)=>{
+    const stemIdx=branchIdx%2,column={kind:'calculated',key:'fixture',pillar:{stemIdx,branchIdx,stem:['甲','乙'][stemIdx],branch}};
+    assert.equal(m.pillarLabels(column,'甲').hidden.map(h=>h.hanja).join(''),expected,branch);
+  });
+});
 test('relationship lines combine repeated stems but retain all endpoints',()=>{const p=(s,b)=>({stem:s,branch:b,stemIdx:old.HS.indexOf(s),branchIdx:old.EB.indexOf(b)});const cols=['丁','癸','癸'].map((s,i)=>({key:'x'+i,index:i,label:'명식'+i,kind:'calculated',pillar:p(s,'亥')}));const matches=m.relations(cols,'stem');assert.equal(matches.length,1);assert.deepEqual(matches[0].indices,[0,1,2]);assert.equal(matches[0].label,'정계충');assert.equal(m.relations(cols,'stem','hap').length,0);});
 test('unknown display columns never join relation lines',()=>{const changed=c.map((x,i)=>i===2?{...x,kind:'reference'}:x);for(const rel of m.relations(changed,'branch'))assert.ok(!rel.indices.includes(2));});
 test('selection exclusion leaves natal evidence intact',()=>{const cols=m.sixColumns(e,r,v,false);assert.equal(cols[0].kind,'unknown');assert.equal(cols[1].kind,'unknown');assert.deepEqual(cols.slice(2),c.slice(2));const climate=m.climateView(r,v,false);assert.equal(climate.temperature,climate.temperatureBase);assert.equal(climate.humidity,climate.humidityBase);});

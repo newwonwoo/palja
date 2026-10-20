@@ -49,6 +49,7 @@ export function pillarLabels(column, dayStem) {
   if(column.kind!=='calculated'||!validPillar(p))return{stem:'—',branch:'—',growth:'—',hidden:[]};
   const hasDay=HS.includes(dayStem);
   return {stem:hasDay?(column.key==='day'?'본원':getSS(dayStem,p.stem)):'—',
+    branchSelf:getSS(p.stem,EBH[p.branch]?.bon?.[0]),growthSelf:getUnsung(p.stem,p.branch),
     branch:hasDay?getSS(dayStem,EBH[p.branch]?.bon?.[0]):'—',growth:hasDay?getUnsung(dayStem,p.branch):'—',
     hidden:['yo','jung','bon'].map(k=>EBH[p.branch]?.[k]?.[0]).filter(Boolean).map(h=>({hanja:h,ko:STEM_KO[HS.indexOf(h)],tone:TONES[HS_EL[HS.indexOf(h)]],god:hasDay?getSS(dayStem,h):'—'}))};
 }
@@ -122,6 +123,11 @@ const TWELVE_START=Object.freeze({申:5,子:5,辰:5,寅:11,午:11,戌:11,巳:2,�
 export function twelveShinsal(basis,target) {
   if(!Object.hasOwn(TWELVE_START,basis)||!EB.includes(target))return null;
   return TWELVE_NAMES[mod(EB.indexOf(target)-TWELVE_START[basis],12)];
+}
+/** Original chart labels differ from the independent reference panel's aliases. */
+export function chartTwelveShinsal(basis,target) {
+  const name=twelveShinsal(basis,target);
+  return name==='년살'?'도화':name==='육해'?'육액':name;
 }
 const CHEONUL={甲:['丑','未'],戊:['丑','未'],庚:['丑','未'],乙:['子','申'],己:['子','申'],丙:['亥','酉'],丁:['亥','酉'],辛:['寅','午'],壬:['卯','巳'],癸:['卯','巳']};
 const YANGIN={甲:'卯',丙:'午',戊:'午',庚:'酉',壬:'子'};
