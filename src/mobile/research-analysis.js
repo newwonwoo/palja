@@ -63,13 +63,15 @@ export function researchAnalysis(result,luck=[],weights=DEFAULT_WEIGHTS,rules=DE
  const strength={name:support>=.6?'신강 경향':support<=.4?'신약 경향':'중화 구간',ratio:support,deukRyeong:month===null?null:season,deukJi:roots.length>0,deukSe:support>=.5,roots,basis:'신강/약: 비겁+인성의 상대 비중 ≥60% / ≤40%, 중간은 중화. 득령: 월지 오행이 비겁/인성. 득지: 원국 지장간에 일간 동오행. 득세: 비겁+인성 50% 이상. 이 임계값은 설명 가능한 제품 규칙.'};
  const eobbu=support>.6?GENERATES[dayElement]:support<.4?resource:null;
  const dominant=ELEMENTS.reduce((a,b)=>scores[a]>=scores[b]?a:b),byeong=scores[dominant]/total>=.4?dominant:null,yak=byeong?CONTROLLED_BY[byeong]:null;
- const climate=multiLayerClimate(result,luck,weights),johu=climate?(climate.temperature<=-6?'火':climate.temperature>=6?'水':null):null,tongwan=result.yongsin?.tongwan?.primary||null,pattern=patternCandidates(result,rules),patternElement=pattern?el(pattern.inner.stem):null;
+ const climate=multiLayerClimate(result,luck,weights),johu=climate?(climate.temperature<=-6?'火':climate.temperature>=6?'水':null):null;
+ const bridgePair=[['木','土','火'],['火','金','土'],['土','水','金'],['金','木','水'],['水','火','木']].find(([a,b])=>scores[a]/total>=.2&&scores[b]/total>=.2&&(scores[a]+scores[b])/total>=.55);
+ const tongwan=bridgePair?.[2]||null,pattern=patternCandidates(result,rules),patternElement=pattern?el(pattern.inner.stem):null;
  const yong=eobbu||johu||tongwan;
  const roles=ELEMENTS.map(e=>({element:e,role:!yong?'판정 보류':e===yong?'용':GENERATES[e]===yong?'희':CONTROLS[e]===yong?'기':CONTROLS[yong]===e?'구':'한',ratio:scores[e]/total}));
  const command=pattern?.command;
  const trueStems=command?.current?command.table.filter(t=>t.stem===command.current&&t.positions.length).map(t=>t.stem):[];
  const falseStems=command?.current?command.table.filter(t=>t.stem!==command.current&&t.positions.length).map(t=>t.stem):[];
  return {status:'ready',partial:p.some(v=>!validPillar(v)),base,current,scores,total,strength,pattern,climate,
-  cheYong:{body:day.stem,monthCommand:command?.main,current:command?.current,trueStems,falseStems},
-  methods:[{name:'억부',element:eobbu,reason:`비겁+인성 ${(support*100).toFixed(1)}%: 60% 초과는 식상, 40% 미만은 인성, 중간은 보류`},{name:'조후',element:johu,reason:climate?`5계층 증분형 한난 ${climate.temperature}: 기존 ±6 문턱으로 火/水 후보 분류`:'완전한 원국이 없어 조후 보류'},{name:'통관',element:tongwan,reason:result.yongsin?.tongwan?.reason||'기존 통관 조합 없음'},{name:'병약',element:yak,reason:byeong?`${byeong} ${(scores[byeong]/total*100).toFixed(1)}% 집중(40% 이상) → 이를 극하는 ${yak}를 약 후보로 분류`:'40% 이상 집중 오행이 없어 보류'},{name:'용격',element:patternElement,reason:pattern?.inner.reason||'월주 미확인'}],roles,convention:'palja-research-v1: 설정 가능한 독립 규칙. 기존 엔진 판정과 병기하며 학파 전체의 합의나 원본 앱 산식을 뜻하지 않음.'};
+  cheYong:{body:day.stem,use:yong,monthCommand:command?.main,current:command?.current,trueStems,falseStems},
+  methods:[{name:'억부',element:eobbu,reason:`비겁+인성 ${(support*100).toFixed(1)}%: 60% 초과는 식상, 40% 미만은 인성, 중간은 보류`},{name:'조후',element:johu,reason:climate?`5계층 증분형 한난 ${climate.temperature}: 기존 ±6 문턱으로 火/水 후보 분류`:'완전한 원국이 없어 조후 보류'},{name:'통관',element:tongwan,reason:bridgePair?`${bridgePair[0]}·${bridgePair[1]} 각각 20% 이상·합계 55% 이상 → ${bridgePair[0]}生${tongwan}生${bridgePair[1]}. 조건이 겹치면 木土→火金→土水→金木→水火 순서`:'현재 5계층 오행 비중에서 통관 문턱을 충족하는 쌍 없음'},{name:'병약',element:yak,reason:byeong?`${byeong} ${(scores[byeong]/total*100).toFixed(1)}% 집중(40% 이상) → 이를 극하는 ${yak}를 약 후보로 분류`:'40% 이상 집중 오행이 없어 보류'},{name:'용격',element:patternElement,reason:pattern?.inner.reason||'월주 미확인'}],roles,convention:'palja-research-v1: 설정 가능한 독립 규칙. 기존 엔진 판정과 병기하며 학파 전체의 합의나 원본 앱 산식을 뜻하지 않음.'};
 }

@@ -554,7 +554,7 @@
       ]
     },
     "analysis.che-yong": {
-      "note": "일간 체·월령 본기·절입 후 30일 배당 사령·사령 일치/불일치 투간 구현. 진신/가신 전체 학파 규칙은 미완료.",
+      "note": "일간 체·용 후보·월령 본기·절입 후 30일 배당 사령·사령 일치/불일치 투간을 실제 계산하고 근거를 표시. 명시한 배당표 규칙이며 고급 판정의 독립 검증은 별도 게이트.",
       "evidence": [
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
@@ -595,7 +595,7 @@
       ]
     },
     "analysis.yongsin": {
-      "note": "억부/조후/통관 및 집중도 기반 병약·월령 격신 후보·희기구한 연결. 정밀 병약/용격 전체 규칙은 미완료.",
+      "note": "현재 5계층 오행 비중에서 억부/통관/집중도 병약, 5계층 조후, 월령 격신을 5방법으로 계산하고 희기구한 분류. 수치 문턱과 충돌 순서를 명시한 독립 연구 규칙; 근거 검증은 별도 게이트.",
       "evidence": [
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
@@ -1053,9 +1053,9 @@
       ]
     },
     "fortune.lucky": {
-      "note": "용신 후보의 색·방향·계절 대응표 제공. 검증된 행운 선택 판정이나 임의 숫자로 대체하지 않음.",
+      "note": "5용신 방법 중 기준을 명시적으로 선택·저장하고 후보 오행의 색/방향/계절/하도 고정 대응수를 조회. 무작위 수나 성과 확률을 만들지 않음.",
       "evidence": [
-        "src/mobile/ResearchPanel.jsx",
+        "src/mobile/lucky-choice.js",
         "tests/completion-extension.test.mjs",
         "docs/completion-20261020.md"
       ],
@@ -1085,7 +1085,7 @@
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "tests/completion-extension.test.mjs"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
@@ -1179,7 +1179,7 @@
       ]
     },
     "match.scores": {
-      "note": "구조 유사도 0~100과 유형별 관계 구성 비율·비중 저장 구현. 실제 궁합 성패 점수/가중치는 근거 미확정으로 미구현.",
+      "note": "동일 위치 글자 비율에 따른 구조 궁합 점수 0~100, 관계유형 구성 비율과 4비중 편집/저장 구현. 계산식을 명시하고 감정·성패 확률로 표현하지 않음.",
       "evidence": [
         "src/mobile/compatibility-model.js",
         "tests/completion-extension.test.mjs",
