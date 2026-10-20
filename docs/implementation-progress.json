@@ -1,0 +1,1518 @@
+{
+  "updatedAt": "2026-10-20",
+  "features": {
+    "input.location": {
+      "note": "23개 도시·17시간대·경도 직접 입력. 한국 2025b/해외 IANA 2026b 전환표 내장. 도시 중심 경도임을 표시.",
+      "evidence": [
+        "src/calendar/locations.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "library.celebrity": {
+      "note": "공개 출처를 확인한 인물 3명: 검색·분류·출처 저장·중복 추가 방지. 시각/성별 미확인은 유지.",
+      "evidence": [
+        "src/mobile/PublicPeople.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "library.myeongjo-list": {
+      "note": "행/카드 배열, 좁은 간격, 배너 순서와 나이 기준을 저장·복원.",
+      "evidence": [
+        "src/mobile/ReferenceVault.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "reader.napum": {
+      "note": "육십갑자 납음과 명식표 표시 토글, 설정 저장·백업 연결.",
+      "evidence": [
+        "src/mobile/ReaderTiles.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "reader.current": {
+      "note": "현재 운·연/월/일/시 선택을 명식마다 따로 저장. 기존 선택 필드를 호환하고 선택 백업에서 타인 제외.",
+      "evidence": [
+        "src/vault/integrated-actions.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "reader.tree": {
+      "note": "대운→세운→월운→일운→시운 트리와 날짜/시각 선택·9열 관계표 동기화.",
+      "evidence": [
+        "src/mobile/LuckExplorer.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "reader.explain-correction": {
+      "note": "실제 UTC·DST·경도·균시차·절입 근거 및 순역/경과일/기산법/10대운 시작 단계 표시.",
+      "evidence": [
+        "src/mobile/ReferenceReader.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "engine.zi-hour": {
+      "note": "자정/23시/야자시 분리 실제 적용·경계 테스트. 자오해사 세부 정책은 아직 미구현.",
+      "evidence": [
+        "src/calendar/precise.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "engine.daewoon": {
+      "note": "순역 자동/직접 지정, 평균년 비례/UTC 달력 가산 2기산법, 시작일·10대운·단계별 근거. 전 학파 동일성은 주장하지 않음.",
+      "evidence": [
+        "src/calendar/precise.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.element": {
+      "note": "원국+대운/세운/월운/일운/시운의 오행·음양 비중과 도식 동기화. 기존 산식 판정과 별도 표시.",
+      "evidence": [
+        "src/mobile/ReferenceReader.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.weights": {
+      "note": "궁성·지장간·5계층운 비중과 선택형 합화 전환 비율 저장. 인접·월령 지원·쟁합 제외의 단순 합화 규칙을 명시.",
+      "evidence": [
+        "src/mobile/research-analysis.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.strength": {
+      "note": "비겁+인성 상대 비중, 월지 생조·동오행 통근으로 신강약 경향/득령/득지/득세와 근거 표시. 제품 규칙이며 기존 판정을 보존.",
+      "evidence": [
+        "src/mobile/research-analysis.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.climate": {
+      "note": "기존 한난·조습 산식과 대운/세운 기준 유지. 5계층 전체 조후 규칙은 미완료.",
+      "evidence": [
+        "src/mobile/reader-model.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "pending"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "pending"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.che-yong": {
+      "note": "일간 체·월령 본기·절입 후 30일 배당 사령·사령 일치/불일치 투간 구현. 진신/가신 전체 학파 규칙은 미완료.",
+      "evidence": [
+        "src/mobile/research-analysis.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.yongsin": {
+      "note": "억부/조후/통관 및 집중도 기반 병약·월령 격신 후보·희기구한 연결. 정밀 병약/용격 전체 규칙은 미완료.",
+      "evidence": [
+        "src/mobile/research-analysis.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.gyeok": {
+      "note": "월지 본기/투간 우선 내격, 4응용격, 종격/전왕/화기 후보 탐색. 외잡격 전체와 충돌·파격 우선순위는 미완료.",
+      "evidence": [
+        "src/mobile/research-analysis.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.hapchoong": {
+      "note": "천간 합충, 지지 육합/삼합/방합·충형파해원진자형을 9열로 표시. 합화 변환은 별도 명시 규칙.",
+      "evidence": [
+        "src/mobile/reader-model.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.sinsal": {
+      "note": "십이신살·기존5종과 추가14종 조견표, 일/년 기준 저장·9열 연결. 길신/흉살 전체 범위와 추가표 전수 독립 검증은 미완료.",
+      "evidence": [
+        "src/mobile/shinsal-catalog.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.gongmang": {
+      "note": "원국과 선택 대운/년월일시운의 공망 지지·납음, 연지 삼재 분류 연결.",
+      "evidence": [
+        "src/mobile/LuckExplorer.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.personality": {
+      "note": "10천간 물상+일지 본기 십성/운성으로 60일주별 자체 해설·SWOT 관찰 질문을 구성. 진단·예언으로 표현하지 않음.",
+      "evidence": [
+        "src/mobile/ResearchPanel.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "analysis.moolsang": {
+      "note": "10천간 자연물 비유와 인성→일간→식상 관계 SVG 및 선택운 오행 연결. 외부 이미지 생성 없이 오프라인.",
+      "evidence": [
+        "src/mobile/ResearchPanel.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "fortune.date": {
+      "note": "현재 운·선택일의 일주/십성·관심 분야를 일별 달력과 연결하고 선택을 저장.",
+      "evidence": [
+        "src/mobile/LuckExplorer.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "fortune.scales": {
+      "note": "5계층 천간/본기 십성·분야·납음/공망/오행·독립 강약/용신 후보를 동기화. 정밀 판정이 아닌 명시된 연구 규칙.",
+      "evidence": [
+        "src/mobile/LuckExplorer.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "fortune.categories": {
+      "note": "대운·세운·월일시운 각각 천간/본기 십성에 따른 5분야 분류와 근거. 사건 확률을 만들지 않음.",
+      "evidence": [
+        "src/mobile/LuckExplorer.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "fortune.timeline": {
+      "note": "매월 15일 정오의 5계층 오행 비율을 실제 계산해 SVG·수치표로 표시. 대표일 표본이며 절입 경계는 별도 표시.",
+      "evidence": [
+        "src/mobile/FortuneTimeline.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "fortune.lucky": {
+      "note": "용신 후보의 색·방향·계절 대응표 제공. 검증된 행운 선택 판정이나 임의 숫자로 대체하지 않음.",
+      "evidence": [
+        "src/mobile/ResearchPanel.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "match.select": {
+      "note": "목록에서 2명 선택→궁합 패널 바로 열기·나란히 표시 연결.",
+      "evidence": [
+        "src/mobile/ReferenceVault.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "match.basic": {
+      "note": "일간/일지/월지 관계와 양쪽 일간 기준 원국 전체의 천간/본기 십성 비교.",
+      "evidence": [
+        "src/mobile/CompatibilityDetails.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "match.scores": {
+      "note": "구조 유사도 0~100과 유형별 관계 구성 비율·비중 저장 구현. 실제 궁합 성패 점수/가중치는 근거 미확정으로 미구현.",
+      "evidence": [
+        "src/mobile/compatibility-model.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "match.similar": {
+      "note": "전체 보관함의 일주/일간/일지/월지 일치 조건 검색·일치 기둥 설명. 운명 유사성은 주장하지 않음.",
+      "evidence": [
+        "src/mobile/compatibility-model.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "tools.similar": {
+      "note": "전체 명식을 조건으로 검색 후 구조 일치도순 최대50명 표시. 결과를 눌러 해당 명식 열기.",
+      "evidence": [
+        "src/mobile/ReferenceReader.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "settings.display": {
+      "note": "십성·지장간·운성·납음·신살 토글이 표/운목록에 적용되고 재열기·백업 저장.",
+      "evidence": [
+        "src/mobile/DisplaySettings.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "settings.design": {
+      "note": "오행5색 직접 지정·자동 글자 대비, 3글꼴·3크기·3카드 방식·행/카드 배열 저장.",
+      "evidence": [
+        "src/mobile/DisplaySettings.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "settings.age": {
+      "note": "만/세는/연나이 설정을 목록·검색·정렬·운 목록에 연결. 음력 생일 양력 변환, 미확인 생일 보존.",
+      "evidence": [
+        "src/mobile/list-utils.js",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "settings.order": {
+      "note": "풀이 탭과 내 명식/즐겨찾기/친구 배너 순서 변경·저장·백업.",
+      "evidence": [
+        "src/mobile/DisplaySettings.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "settings.calculation": {
+      "note": "대운 순역/2기산법·연주/3자시/시각보정 설정 저장. 자오해사 전체 세부 정책은 미완료.",
+      "evidence": [
+        "src/mobile/CalculationPolicy.jsx",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    },
+    "data.upgrade": {
+      "note": "재개 기준 계산/네이티브7파일 해시 보존. 새 개인 APK 서명·실기기 덮어쓰기/기존 SQLite 유지 확인은 미완료.",
+      "evidence": [
+        "tests/preserved-boundaries.test.mjs",
+        "tests/completion-extension.test.mjs",
+        "docs/completion-20261020.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "pending"
+        },
+        {
+          "name": "action",
+          "status": "pending"
+        },
+        {
+          "name": "result",
+          "status": "pending"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "pending"
+        },
+        {
+          "name": "offline",
+          "status": "pending"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/completion-20261020.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "pending"
+        }
+      ]
+    }
+  }
+}

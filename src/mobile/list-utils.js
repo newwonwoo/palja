@@ -1,5 +1,6 @@
 import { isManualBirth, manualBirthLabel } from '../vault/pillar-input.js';
 import { isDefaultSolar, effectiveCalendar } from './birth-defaults.js';
+import {solarInput} from '../calendar/precise.js';
 // UI-only projection for the offline vault. Never infer sex or calendar from badge colors.
 export const LIST_SORT_OPTIONS = Object.freeze([
   ['name', '가나다순'],
@@ -21,13 +22,14 @@ export function dayGlyphs(entry, computedDay = null) {
   return { stem: '·', branch: '·', captured: false };
 }
 
-export function ageBadge(entry, today = new Date()) {
-  const birth = entry.birth || {};
+export function ageBadge(entry, today = new Date(), mode='full') {
+  let birth = entry.birth || {};
   if (isManualBirth(birth)) return { text: '—', captured: false };
+  if(effectiveCalendar(birth)==='lunar'){try {const d=solarInput({...birth,calendar_type:'lunar'});birth={...birth,calendar_type:'solar',input_year:d.year,input_month:d.month,input_day:d.day};}catch { /* Unconfirmed dates remain source-only. */ }}
   const birthday = [birth.input_year, birth.input_month, birth.input_day];
   if (effectiveCalendar(birth) === 'solar' && birthday.every(Number.isInteger) &&
       birth.input_month >= 1 && birth.input_month <= 12 && birth.input_day >= 1 && birth.input_day <= 31) {
-    const age = today.getFullYear() - birth.input_year -
+    const age = mode==='counting'?today.getFullYear()-birth.input_year+1:mode==='year'?today.getFullYear()-birth.input_year:today.getFullYear() - birth.input_year -
       (today.getMonth() + 1 < birth.input_month ||
        (today.getMonth() + 1 === birth.input_month && today.getDate() < birth.input_day) ? 1 : 0);
     return Number.isInteger(age) && age >= 0 && age <= 130 ? { text: String(age), captured: false } : { text: '—', captured: false };
@@ -57,17 +59,17 @@ export function referenceBirthLabel(entry) {
 export const branchColor = glyph => ELEMENT_BY_BRANCH[glyph] || 'unknown';
 export const stemColor = glyph => ELEMENT_BY_STEM[glyph] || 'unknown';
 
-export function filterAndSortEntries(entries, { query = '', sort = 'name', now = new Date(), dayOf = () => null } = {}) {
+export function filterAndSortEntries(entries, { query = '', sort = 'name', now = new Date(), dayOf = () => null, ageMode='full', sex='', minAge=null, maxAge=null, favoriteOnly=false } = {}) {
   const text = String(query || '').toLocaleLowerCase('ko').trim().replace(/\s+/g, ' ');
   const tokens = text.split(' ').filter(Boolean);
   const data = entries.filter(e => !e.deletedAt).map((entry, index) => {
-    const age = ageBadge(entry, now).text;
+    const age = ageBadge(entry, now, ageMode).text;
     const day = dayGlyphs(entry, dayOf(entry));
     const searchable = [entry.name, referenceBirthLabel(entry), entry.memo || '', age === '—' ? '' : age,
       `${age}세`, day.stem + day.branch, `${day.stem} ${day.branch}`, day.stem, day.branch].join(' ').toLocaleLowerCase('ko');
     return { entry, index, age, day, searchable };
   });
-  const matching = data.filter(x => tokens.every(t => x.searchable.includes(t)));
+  const matching = data.filter(x => tokens.every(t => x.searchable.includes(t))&&(!sex||(sex==='unknown'?!x.entry.birth.sex:x.entry.birth.sex===sex))&&(!favoriteOnly||x.entry.favorite)&&(minAge===null||(x.age!=='—'&&Number(x.age)>=minAge))&&(maxAge===null||(x.age!=='—'&&Number(x.age)<=maxAge)));
   const byName = (a,b) => a.entry.name.localeCompare(b.entry.name, 'ko') || a.index - b.index;
   const byAge = (a,b) => (Number.isFinite(Number(a.age)) ? Number(a.age) : 999) -
     (Number.isFinite(Number(b.age)) ? Number(b.age) : 999) || byName(a,b);

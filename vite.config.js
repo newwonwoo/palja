@@ -8,6 +8,7 @@ export default defineConfig(({ mode, command }) => {
   return {
     base: mobile ? "./" : "/",
     define: { __HAS_BUNDLED_VAULT__: JSON.stringify(Boolean(seedFile)) },
+    build: {rollupOptions:{output:{manualChunks(id){if(id.endsWith('/calendar/foreign-transitions.json'))return 'timezone-data';}}}},
     plugins: [react(), {
       name: "private-offline-app-assets",
       transformIndexHtml(html) {

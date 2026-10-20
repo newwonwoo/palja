@@ -24,6 +24,11 @@ jobs:
         run: npm ci --no-audit --no-fund
       - name: JavaScript regression
         run: npm test
+      - name: Check feature ledger and preserved calculation/storage files
+        run: |
+          npm run checklist:check
+          node scripts/check-full-feature-scope.mjs
+          node scripts/verify-integrated-boundaries.mjs
       - name: Verify web and mobile production bundles
         run: |
           npm run build
@@ -43,7 +48,7 @@ jobs:
         run: |
           npm ci --no-audit --no-fund
           npm run build:mobile
-      - name: Install isolated Chromium for exit-button interaction
+      - name: Install isolated Chromium for mobile interaction regression
         shell: bash
         run: |
           npm install --prefix /tmp/palja-browser playwright@1.51.1 --no-audit --no-fund
@@ -60,6 +65,30 @@ jobs:
           trap 'kill "$server" || true' EXIT
           for i in $(seq 1 25); do if curl -fsS "$QA_URL" >/dev/null; then break; fi; sleep 1; done
           node tests/browser/app-exit.cjs
+      - name: Verify extended settings, analysis, selections, public bios and offline backup
+        shell: bash
+        env:
+          PLAYWRIGHT_MODULE: /tmp/palja-browser/node_modules/playwright
+          QA_URL: http://127.0.0.1:8765/
+          QA_DIR: /tmp/palja-completion-qa
+        run: |
+          set -euo pipefail
+          node scripts/generate-integration-fixture.mjs "$QA_DIR"
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory dist-mobile >/tmp/palja-completion-http.log 2>&1 &
+          server=$!
+          trap 'kill "$server" || true' EXIT
+          for i in $(seq 1 25); do if curl -fsS "$QA_URL" >/dev/null; then break; fi; sleep 1; done
+          node tests/browser/completion-extension.cjs
+      - name: Upload synthetic browser evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: palja-feature-checklist-browser-evidence
+          path: |
+            /tmp/palja-completion-qa/*.png
+            /tmp/palja-completion-qa/completion-results.json
+          if-no-files-found: ignore
+          retention-days: 7
 
   android:
     runs-on: ubuntu-24.04

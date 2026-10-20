@@ -1,5 +1,7 @@
 # palja — Android 앱 전용 개발 인수인계
 
+현재 진행은 [79개 기능 체크리스트](IMPLEMENTATION_CHECKLIST.md)와 [2026-10-20 작업 기록](completion-20261020.md)을 우선 확인한다. 초기 1.1.2 구현 수는 아래에 역사적 기준으로 남긴다.
+
 ## 변경된 단일 개발 기준
 
 - **이제 `newwonwoo/palja`의 `main`이 Android 앱 정식 개발 브랜치**입니다.

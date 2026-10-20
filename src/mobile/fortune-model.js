@@ -5,6 +5,9 @@ import {getSS,HS,HS_EL} from './engine.js';
 import {selectedPillars} from './selection-model.js';
 import {validPillar} from './reader-model.js';
 import {branchPairTypes} from './traditional-reference.js';
+import {researchAnalysis} from './research-analysis.js';
+import {DEFAULT_WEIGHTS} from '../vault/integrated-schema.js';
+import {DEFAULT_RULES} from '../vault/analysis-rules.js';
 
 export const FORTUNE_AREAS=Object.freeze([
   {id:'wealth',label:'재물·관리',tags:['편재','정재'],explanation:'재성은 일간이 극하는 오행과 관련된 전통 분류입니다. 돈의 증가나 손실을 예측하지 않습니다.'},
@@ -31,3 +34,13 @@ export function fortuneMonthTimeline(result,year,policy){
  return {status:'ready',year,months,explanation:'각 양력 월 15일 12:00의 월주 표본입니다. 절입 전후에는 월주가 달라집니다. 분야 이름은 십성의 전통 분류이며 길흉·성과·확률·점수가 아닙니다.'};
 }
 export function areaMonths(timeline,id){if(timeline.status!=='ready')return [];return timeline.months.filter(m=>!m.error&&m.focusId===id);}
+export function elementMonthTimeline(result,year,policy,weights=DEFAULT_WEIGHTS,rules=DEFAULT_RULES){
+ if(!Number.isInteger(year)||year<1900||year>2050)return [];
+ return Array.from({length:12},(_,i)=>{
+  const date=`${year}-${String(i+1).padStart(2,'0')}-15`,s=selectedPillars({date,hour:12,minute:0},policy);
+  if(s.error)return {month:i+1,error:s.error};
+  const decade=(result.daeun||[]).find(d=>d.startInstant?s.instant>=d.startInstant&&s.instant<d.startInstant+10*365.2425*86400000:year>=d.startYear&&year<d.startYear+10);
+  const a=researchAnalysis(result,[decade,s.year,s.month,s.day,s.hour],weights,rules);
+  return a.status==='ready'?{month:i+1,date,ratios:Object.fromEntries(Object.entries(a.scores).map(([e,n])=>[e,n/a.total])),strength:a.strength.name}:{month:i+1,error:a.reason};
+ });
+}

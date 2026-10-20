@@ -1,0 +1,13 @@
+{
+  "commit": "db273b0cbc15175faffbc6cfd09562f12f450e4e",
+  "reason": "Resumed baseline includes already-merged PNG export and exit support. Historical 1.1.0 hashes are retained separately.",
+  "files": {
+    "src/App.jsx": "f9906132c540f0010029f27d14ebc851debb68350e0a2550349591ade52e1907",
+    "android/app/src/main/java/com/newwonwoo/saju/MainActivity.java": "b21adcc81b72b8a536332b98fa58e9037bf0b7ddc669393e05f931ffd0d0a6a8",
+    "android/app/src/main/java/com/newwonwoo/saju/OfflineUrlPolicy.java": "5ed3e0d11a1d5be4d645e7860a58ce7dfcd6ed44d923d57850662e6eedb7013a",
+    "android/app/src/main/java/com/newwonwoo/saju/SajuVaultPlugin.java": "70bb02468b14e5db2bd6e1cb0f4d800da53050fbadcf961ed67d66f4966a49f5",
+    "android/app/src/main/java/com/newwonwoo/saju/VaultException.java": "ab4af4837a4b60b93c60c283ab66999d8db257b31d078f04e71503eae1d9a11a",
+    "android/app/src/main/java/com/newwonwoo/saju/VaultPayload.java": "d569092b1f9eb53a80d81baa86f491b7687eddfa8b34d51c1644d76003fd5fb9",
+    "android/app/src/main/java/com/newwonwoo/saju/VaultStateStore.java": "c3a16ef0ebde494276558bc051c5c41902edea9f18214ea81dbe9c5b349c3c0c"
+  }
+}

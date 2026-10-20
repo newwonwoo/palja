@@ -3,6 +3,8 @@
  */
 import { branchPairTypes } from './traditional-reference.js';
 import { validPillar } from './reader-model.js';
+import {HS,EBH,getSS} from './engine.js';
+import {DEFAULT_RULES} from '../vault/analysis-rules.js';
 const STEM_HAP={甲:'己',己:'甲',乙:'庚',庚:'乙',丙:'辛',辛:'丙',丁:'壬',壬:'丁',戊:'癸',癸:'戊'};
 const STEM_CHUNG={甲:'庚',庚:'甲',乙:'辛',辛:'乙',丙:'壬',壬:'丙',丁:'癸',癸:'丁'};
 const BRANCH_HAP={子:'丑',丑:'子',寅:'亥',亥:'寅',卯:'戌',戌:'卯',辰:'酉',酉:'辰',巳:'申',申:'巳',午:'未',未:'午'};
@@ -31,7 +33,7 @@ export function compareChartFacts(a,b){
     note:'동일 기둥 개수는 형태 비교용이며 궁합 점수·좋고 나쁨·사건 확률을 뜻하지 않습니다.'};
 }
 /** Offline structural similarity: explicitly ranked by matching known glyphs, not fortune. */
-export function similarChartFacts(source,entries,calculate,limit=10){
+export function similarChartFacts(source,entries,calculate,limit=10,{condition='any'}={}){
   if(!source||!validPillar(source.saju?.pillars?.[1]))return [];
   const s=source.saju.pillars;
   return entries.map(entry=>{
@@ -43,5 +45,17 @@ export function similarChartFacts(source,entries,calculate,limit=10){
     const completePairs=[0,1,2,3].filter(i=>validPillar(p[i])&&validPillar(s[i]));
     const equalPillars=completePairs.filter(i=>p[i].stem===s[i].stem&&p[i].branch===s[i].branch).length;
     return {entryId:entry.id,name:entry.name,daySame,stemSame,branchSame,monthSame,equalPillars,compared:completePairs.length,sortScore:Number(daySame)*16+Number(stemSame)*8+Number(branchSame)*4+Number(monthSame)*2+equalPillars};
-  }).filter(Boolean).sort((a,b)=>b.sortScore-a.sortScore||a.name.localeCompare(b.name,'ko')||a.entryId.localeCompare(b.entryId)).slice(0,Math.max(0,Math.min(50,limit)));
+  }).filter(item=>item&&(condition==='any'||['daySame','stemSame','branchSame','monthSame'].includes(condition)&&item[condition])).sort((a,b)=>b.sortScore-a.sortScore||a.name.localeCompare(b.name,'ko')||a.entryId.localeCompare(b.entryId)).slice(0,Math.max(0,Math.min(50,limit)));
+}
+/** Counts and normalised composition, not a score of relationship success. */
+export function compatibilityComposition(a,b,weights=DEFAULT_RULES.matchWeights){
+ if(!weights||['same','combine','clash','other'].some(k=>!Number.isFinite(weights[k])||weights[k]<0||weights[k]>10))throw new Error('궁합 비중은 0~10');
+ const facts=compareChartFacts(a,b);if(facts.status!=='ready')return facts;
+ const left=a.saju.pillars,right=b.saju.pillars,comparable=[0,1,2,3].filter(i=>validPillar(left[i])&&validPillar(right[i]));
+ const glyphs=comparable.length*2,equalGlyphs=comparable.reduce((n,i)=>n+Number(left[i].stem===right[i].stem)+Number(left[i].branch===right[i].branch),0);
+ const counts={same:0,combine:0,clash:0,other:0};
+ for(const f of facts.facts)counts[f.type==='identity'?'same':f.type==='combine'?'combine':f.type==='clash'?'clash':'other']++;
+ const total=Object.entries(counts).reduce((n,[k,v])=>n+v*weights[k],0);
+ const directional=[['왼쪽→오른쪽',left[1].stem,right],['오른쪽→왼쪽',right[1].stem,left]].map(([label,day,ps])=>({label,stemGods:ps.map(p=>validPillar(p)?getSS(day,p.stem):null),branchGods:ps.map(p=>validPillar(p)?getSS(day,EBH[p.branch]?.bon[0]):null)}));
+ return {status:'ready',glyphs,equalGlyphs,structuralSimilarity:glyphs?equalGlyphs/glyphs*100:null,counts,composition:Object.fromEntries(Object.entries(counts).map(([k,v])=>[k,total?v*weights[k]/total:null])),directional,note:'구조 유사도=같은 위치의 같은 글자/비교 가능한 글자×100. 관계 구성=유형별 조합 수×사용자 비중을 정규화. 궁합 성패·사건·감정의 점수가 아님.'};
 }

@@ -1,3 +1,4 @@
+import {extraShinsal} from './shinsal-catalog.js';
 /** Display adapter for the existing calculator. No writes to the vault and no new calendar engine.
  * Relation/hidden-stem rules below are the existing App.jsx lookup rules, not recovered 8ja rules.
  * Unsupported original controls are not substituted with fabricated scores.
@@ -142,9 +143,11 @@ export function shinsalView(columns,bases=['day','birthYear']) {
     if(day&&bases.includes('day')&&YANGIN[day.pillar.stem]===p.branch)r.caution.push({name:'양인',basis:'日'});
     if(BAEKHO.includes(p.stem+p.branch))r.caution.push({name:'백호',basis:'柱'});
     if(GOEGANG.includes(p.stem+p.branch))r.caution.push({name:'괴강',basis:'柱'});
+    const year=known.find(c=>c.key==='birthYear'),month=known.find(c=>c.key==='month');
+    for(const star of extraShinsal(p,{dayStem:day?.pillar.stem,yearStem:year?.pillar.stem,yearBranch:year?.pillar.branch,monthBranch:month?.pillar.branch,basis:bases.includes('day')&&bases.includes('birthYear')?'both':bases.includes('day')?'day':'year',natalBranches:known.filter(n=>['hour','day','month','birthYear'].includes(n.key)&&n.index!==c.index).map(n=>n.pillar.branch)}))if(bases.length)r[star.type].push(star);
   }
   // Preserve the original distance rule on natal pillars only. Do not reinterpret it on a reordered 6-column table.
-  const natal=known.filter(c=>c.index>=2);
+  const natal=known.filter(c=>['hour','day','month','birthYear'].includes(c.key));
   for(const pair of WONJIN)for(const a of natal.filter(c=>c.pillar.branch===pair[0]))for(const b of natal.filter(c=>c.pillar.branch===pair[1])){
     if(Math.abs(a.index-b.index)<=2){for(const c of [a,b])if(!records[c.index].caution.some(v=>v.name==='원진'))records[c.index].caution.push({name:'원진',basis:'柱'});}
   }

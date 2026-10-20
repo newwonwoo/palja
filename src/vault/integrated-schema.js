@@ -21,9 +21,13 @@ export function noteContentErrors(n) {
  return e;
 }
 export function validateIntegrated(x,entryIds) {
- if(!plain(x)||x.version!==1||Object.keys(x).some(k=>!['version','weights','notes','selection','presets'].includes(k)))return ['통합 저장 버전 오류'];
+ if(!plain(x)||x.version!==1||Object.keys(x).some(k=>!['version','weights','notes','selection','presets','rules','selections'].includes(k)))return ['통합 저장 버전 오류'];
  const errors=weightErrors(x.weights);
+ if(x.rules!==undefined)errors.push(...ruleErrors(x.rules));
  if(x.selection!==null&&(!validSelection(x.selection)||!entryIds.has(x.selection.entryId)))errors.push('운 선택 오류');
+ if(x.selections!==undefined){
+  if(!Array.isArray(x.selections)||x.selections.length>2000||new Set(x.selections.map(s=>s?.entryId)).size!==x.selections.length||x.selections.some(s=>!validSelection(s)||!entryIds.has(s.entryId)))errors.push('명식별 운 선택 오류');
+ }
  if(x.presets!==undefined){
   if(!Array.isArray(x.presets)||x.presets.length>30)errors.push('운 선택 즐겨찾기는 최대 30개입니다.');
   else {
@@ -50,12 +54,16 @@ export function validateIntegrated(x,entryIds) {
  return errors;
 }
 export function mergeIntegrated(a,b,ids,conflicts) {
- if(!b)return a;if(!a)return {...b,notes:b.notes.filter(n=>ids.has(n.entryId)),selection:b.selection&&ids.has(b.selection.entryId)?b.selection:null,presets:(b.presets||[]).filter(p=>ids.has(p.entryId))};
+ if(!b)return a;if(!a)return {...b,notes:b.notes.filter(n=>ids.has(n.entryId)),selection:b.selection&&ids.has(b.selection.entryId)?b.selection:null,selections:(b.selections||[]).filter(s=>ids.has(s.entryId)),presets:(b.presets||[]).filter(p=>ids.has(p.entryId))};
  const notes=[...a.notes];for(const n of b.notes){if(!ids.has(n.entryId))continue;const old=notes.find(m=>m.id===n.id);if(!old)notes.push(n);else if(JSON.stringify(old)!==JSON.stringify(n))conflicts.push({kind:'note',id:n.id,reason:'local_note_kept'});}
  const presets=[...(a.presets||[])];
  for(const p of b.presets||[]){if(!ids.has(p.entryId))continue;const old=presets.find(q=>q.id===p.id);if(old){if(JSON.stringify(old)!==JSON.stringify(p))conflicts.push({kind:'preset',id:p.id,reason:'local_preset_kept'});continue;}
   if(presets.some(q=>q.entryId===p.entryId&&q.name.normalize('NFKC').toLocaleLowerCase('ko')===p.name.normalize('NFKC').toLocaleLowerCase('ko'))){conflicts.push({kind:'preset',id:p.id,reason:'name_conflict_local_kept'});continue;}
   if(presets.length<30)presets.push(p);
  }
- return {...a,notes,presets};
+ const selections=[...(a.selections||[])];
+ if(a.selection&&!selections.some(s=>s.entryId===a.selection.entryId))selections.push(a.selection);
+ for(const s of [...(b.selections||[]),...(b.selection?[b.selection]:[])])if(ids.has(s.entryId)&&!selections.some(t=>t.entryId===s.entryId))selections.push(s);
+ return {...a,notes,presets,selections,...(!a.rules&&b.rules?{rules:b.rules}:{})};
 }
+import {ruleErrors} from './analysis-rules.js';

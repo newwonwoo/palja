@@ -8,7 +8,10 @@
     "dev:mobile": "vite --mode mobile --host 0.0.0.0",
     "build:mobile": "vite build --mode mobile --outDir dist-mobile",
     "android:sync": "npm run build:mobile && cap sync android",
-    "test": "node --test tests/*.test.mjs"
+    "test": "node --test tests/*.test.mjs",
+    "checklist": "node scripts/update-checklist.mjs",
+    "checklist:check": "node scripts/update-checklist.mjs --check",
+    "checklist:complete": "node scripts/update-checklist.mjs --check --require-complete"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.3",
