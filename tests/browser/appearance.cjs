@@ -34,7 +34,7 @@ async function openChart(p){await p.getByRole('button',{name:'보관함',exact:t
   await p.reload();await p.getByRole('heading',{name:'나의 화면'}).waitFor();
   check('design survives full reopen',await p.getByLabel('글꼴',{exact:true}).inputValue()==='serif'&&await p.getByLabel('글자 크기',{exact:true}).inputValue()==='large');
   for(const width of [320,390,800]){await p.setViewportSize({width,height:900});check('settings fits '+width,await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
-  await p.setViewportSize({width:390,height:844});await p.locator('.personal-settings').screenshot({path:dir+'/settings.png'});
+  await p.setViewportSize({width:390,height:844});await p.locator('[aria-labelledby="appearance-title"]').screenshot({path:dir+'/settings.png'});
   const download=p.waitForEvent('download');await p.getByRole('button',{name:/백업 내보내기/}).first().click();await (await download).saveAs(dir+'/backup.json');
   await openChart(p);check('display switches hide only requested rows',await p.locator('.rr-six .rr-hidden,.rr-six .rr-growth,.rr-six .rr-gods').count()===0);
   check('four natal stem and branch glyphs remain',await p.locator('.rr-six .rr-rune').count()>=8);

@@ -1,11 +1,13 @@
 import {validateIntegrated,mergeIntegrated} from './integrated-schema.js';
 import {DEFAULT_APPEARANCE, appearanceErrors} from './appearance.js';
 import {AGE_NOTATIONS, DEFAULT_AGE_NOTATION} from './age-notation.js';
+import {DEFAULT_MANSE_DETAILS, manseDetailsErrors} from './manse-details.js';
 /** Optional v1 namespace for groups and display preferences. No birth data is modified. */
 export const DEFAULT_PREFERENCES = Object.freeze({
   sort: 'name', compact: false, hanja: true, large: false, includeLuck: true,
   appearance: DEFAULT_APPEARANCE,
   ageNotation: DEFAULT_AGE_NOTATION,
+  manseDetails: DEFAULT_MANSE_DETAILS,
 });
 export const SORT_KEYS = ['name', 'newest', 'age-asc', 'age-desc', 'day'];
 const keys = ['sort', 'compact', 'hanja', 'large', 'includeLuck'];
@@ -14,6 +16,7 @@ const plain = x => x !== null && typeof x === 'object' && !Array.isArray(x)
 const iso = x => typeof x === 'string' && Number.isFinite(Date.parse(x)) && new Date(x).toISOString() === x;
 export const normalizedGroupName = name => typeof name === 'string' ? name.normalize('NFKC').trim().toLocaleLowerCase('ko') : '';
 export const readPreferences = state => ({ ...DEFAULT_PREFERENCES, ...state.workspace?.preferences,
+  manseDetails: {...DEFAULT_MANSE_DETAILS, ...state.workspace?.preferences?.manseDetails},
   appearance: {...DEFAULT_APPEARANCE, ...state.workspace?.preferences?.appearance} });
 export const activeGroups = state => (state.workspace?.groups || []).filter(group => !group.deletedAt);
 export function emptyWorkspace() {
@@ -27,10 +30,11 @@ export function validateWorkspace(workspace, entryIds) {
   if (Object.keys(workspace).some(k => !['version', 'groups', 'preferences', 'integrated'].includes(k)) || workspace.version !== 1) add('unsupported field or version');
   if (!plain(workspace.preferences)) add('invalid preferences');
   else {
-    if (keys.some(k => !Object.hasOwn(workspace.preferences, k)) || Object.keys(workspace.preferences).some(k => ![...keys, 'appearance', 'ageNotation'].includes(k))) add('invalid preference keys');
+    if (keys.some(k => !Object.hasOwn(workspace.preferences, k)) || Object.keys(workspace.preferences).some(k => ![...keys, 'appearance', 'ageNotation', 'manseDetails'].includes(k))) add('invalid preference keys');
     if (!SORT_KEYS.includes(workspace.preferences.sort)) add('invalid sort');
     for (const k of keys.slice(1)) if (typeof workspace.preferences[k] !== 'boolean') add('invalid ' + k);
     if (Object.hasOwn(workspace.preferences, 'appearance')) for (const error of appearanceErrors(workspace.preferences.appearance)) add(error);
+    if (Object.hasOwn(workspace.preferences, 'manseDetails')) for (const error of manseDetailsErrors(workspace.preferences.manseDetails)) add(error);
     if (Object.hasOwn(workspace.preferences, 'ageNotation') && (typeof workspace.preferences.ageNotation !== 'string' || !Object.hasOwn(AGE_NOTATIONS, workspace.preferences.ageNotation))) add('invalid age notation');
   }
   if (!Array.isArray(workspace.groups) || workspace.groups.length > 500) add('groups must be an array of at most 500');

@@ -50,7 +50,7 @@ export function pillarLabels(column, dayStem) {
   const hasDay=HS.includes(dayStem);
   return {stem:hasDay?(column.key==='day'?'본원':getSS(dayStem,p.stem)):'—',
     branch:hasDay?getSS(dayStem,EBH[p.branch]?.bon?.[0]):'—',growth:hasDay?getUnsung(dayStem,p.branch):'—',
-    hidden:['yo','jung','bon'].map(k=>EBH[p.branch]?.[k]?.[0]).filter(Boolean).map(h=>({hanja:h,ko:STEM_KO[HS.indexOf(h)],tone:TONES[HS_EL[HS.indexOf(h)]]}))};
+    hidden:['yo','jung','bon'].map(k=>EBH[p.branch]?.[k]?.[0]).filter(Boolean).map(h=>({hanja:h,ko:STEM_KO[HS.indexOf(h)],tone:TONES[HS_EL[HS.indexOf(h)]],god:hasDay?getSS(dayStem,h):'—'}))};
 }
 const HAP_STEM={甲:'己',己:'甲',乙:'庚',庚:'乙',丙:'辛',辛:'丙',丁:'壬',壬:'丁',戊:'癸',癸:'戊'};
 const CHUNG_STEM={甲:'庚',庚:'甲',乙:'辛',辛:'乙',丙:'壬',壬:'丙',丁:'癸',癸:'丁'};
