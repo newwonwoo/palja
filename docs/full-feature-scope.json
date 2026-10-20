@@ -538,15 +538,16 @@
       "area": "reader",
       "title": "글자 상세·십성·지장간·운성",
       "implementation": "implemented",
-      "referenceBehavior": "unverified",
-      "gap": "표시 옵션 및 용어 도움말 확장",
+      "referenceBehavior": "partial",
+      "gap": "천간 십신 100/100·운성 120/120 정적 결과 대조 통과. 원본 상세 팝업·용어 도움말·미상 입력·선택운 동작과 UI 대조 필요.",
       "apkEvidence": [
         "package:how8ja/features/myeongjo/application/basis_joo_type_provider.dart",
         "package:how8ja/features/myeongjo/application/custom_widget_options_provider.dart",
         "package:how8ja/features/myeongjo/application/myeongjo_calc_providers.dart"
       ],
-      "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "evidenceLimit": "원본 AOT 함수의 천간 십신 100조합·십이운성 120조합을 의미 입출력 벡터로 대조. 팝업·원본 실제 입력·화면 전체는 미검증.",
+      "independentVerification": "pending",
+      "originalComparisonEvidence": "docs/original-apk-element-relations.md"
     },
     {
       "id": "reader.napum",

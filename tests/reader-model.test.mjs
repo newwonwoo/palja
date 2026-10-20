@@ -54,6 +54,22 @@ test('all twelve hidden-stem sequences match the recovered original object-pool 
     assert.equal(m.pillarLabels(column,'甲').hidden.map(h=>h.hanja).join(''),expected,branch);
   });
 });
+test('all 120 growth pairs match the original AOT map literals',async()=>{
+  const fixture=JSON.parse(await fs.readFile(root+'tests/fixtures/original-18.2.8-growth.json','utf8'));
+  for(const [dayStem,row] of Object.entries(fixture.rows))for(const [branchIdx,expected] of row.entries()){
+    const branch=[...fixture.branchOrder][branchIdx],stemIdx=branchIdx%2;
+    const column={kind:'calculated',key:'fixture',pillar:{stemIdx,branchIdx,stem:['甲','乙'][stemIdx],branch}};
+    assert.equal(m.pillarLabels(column,dayStem).growth,expected,dayStem+branch);
+  }
+});
+test('all 100 heavenly-stem ten-god pairs match the original AOT branch return vectors',async()=>{
+  const fixture=JSON.parse(await fs.readFile(root+'tests/fixtures/original-18.2.8-ten-gods.json','utf8'));
+  for(const [dayStem,row] of Object.entries(fixture.rows))for(const [stemIdx,expected] of row.entries()){
+    const branchIdx=stemIdx%2,stem=[...fixture.targetOrder][stemIdx];
+    const column={kind:'calculated',key:'fixture',pillar:{stemIdx,branchIdx,stem,branch:['子','丑'][branchIdx]}};
+    assert.equal(m.pillarLabels(column,dayStem).stem,expected,dayStem+stem);
+  }
+});
 test('relationship lines combine repeated stems but retain all endpoints',()=>{const p=(s,b)=>({stem:s,branch:b,stemIdx:old.HS.indexOf(s),branchIdx:old.EB.indexOf(b)});const cols=['丁','癸','癸'].map((s,i)=>({key:'x'+i,index:i,label:'명식'+i,kind:'calculated',pillar:p(s,'亥')}));const matches=m.relations(cols,'stem');assert.equal(matches.length,1);assert.deepEqual(matches[0].indices,[0,1,2]);assert.equal(matches[0].label,'정계충');assert.equal(m.relations(cols,'stem','hap').length,0);});
 test('unknown display columns never join relation lines',()=>{const changed=c.map((x,i)=>i===2?{...x,kind:'reference'}:x);for(const rel of m.relations(changed,'branch'))assert.ok(!rel.indices.includes(2));});
 test('selection exclusion leaves natal evidence intact',()=>{const cols=m.sixColumns(e,r,v,false);assert.equal(cols[0].kind,'unknown');assert.equal(cols[1].kind,'unknown');assert.deepEqual(cols.slice(2),c.slice(2));const climate=m.climateView(r,v,false);assert.equal(climate.temperature,climate.temperatureBase);assert.equal(climate.humidity,climate.humidityBase);});
