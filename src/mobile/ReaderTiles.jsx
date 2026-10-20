@@ -28,7 +28,7 @@ export function Rune({column,part='stem',hanja=true,active=false,onInspect,small
 export function SixPillars({columns,dayStem,onInspect,hanja=true,compact=false,appearance,manseDetails}) {
   const labels=columns.map(c=>pillarLabels(c,dayStem));
   const basis=key=>{const c=columns.find(c=>c.key===key);return c?.kind==='calculated'&&validPillar(c.pillar)?c.pillar.branch:null;};
-  return <table className={`rr-six ${compact?'rr-six-compact':''}`} aria-label="세운 대운 시주 일주 월주 연주 명식표"><colgroup>{columns.map(c=><col key={c.key} className={c.index<2?'rr-luck-col':''}/>)}</colgroup>
+  return <table className={`rr-six ${compact?'rr-six-compact':''}`} aria-label={columns.length===4?'시주 일주 월주 연주 원국':'세운 대운 시주 일주 월주 연주 명식표'}><colgroup>{columns.map(c=><col key={c.key} className={c.index<2?'rr-luck-col':''}/>)}</colgroup>
     <thead><tr>{columns.map(c=><th key={c.key} scope="col">{c.label}</th>)}</tr></thead>
     <tbody>
       {!compact&&appearance?.tenGods!==false&&manseDetails?.dayStemGods!==false&&<tr className="rr-gods" aria-label="일간 기준 천간 십신">{columns.map((c,i)=><td key={c.key} className={c.key==='day'?'rr-self-god':''}>{labels[i].stem}</td>)}</tr>}

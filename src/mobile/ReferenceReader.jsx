@@ -3,6 +3,7 @@ import WeightEditor from './WeightEditor.jsx';
 import SelectionTools from './SelectionTools.jsx';
 import FortuneTimeline from './FortuneTimeline.jsx';
 import ChartExport from './ChartExport.jsx';
+import LuckTree from './LuckTree.jsx';
 import {integrated,saveNote,rememberSelection} from '../vault/integrated-actions.js';
 import {selectedPillars,selectionForYear,selectionForNow,preciseLuckView} from './selection-model.js';
 import {weightedAnalysis} from './weighted-analysis.js';
@@ -47,11 +48,12 @@ function ComparePanel({entry,vault,result,onInspect,onOpen,initialOtherId,onPart
     </section>
   </section>;
 }
-export default function ReferenceReader({entry,vault,navigate,change,busy,initialCompareId,initialPanel}) {
+export default function ReferenceReader({entry,vault,navigate,change,busy,initialCompareId,initialPanel,initialScreen,onBack}) {
   const PANELS=readPreferences(vault).readingOrder.map(key=>[key,READING_TABS[key]]);
   const result=useMemo(()=>calculateEntry(entry),[entry.birth,entry.name]);
   const crosscheck=useMemo(()=>compareIndependentEngines(entry),[entry.birth]);
-  const [screen,setScreen]=useState(initialPanel==='compare'?'reading':'chart'),[panel,setPanel]=useState(initialPanel==='compare'?'compare':'overview');
+  const validInitialPanel=Object.hasOwn(READING_TABS,initialPanel);
+  const [screen,setScreen]=useState(['tree','memo'].includes(initialScreen)?initialScreen:validInitialPanel?'reading':'chart'),[panel,setPanel]=useState(validInitialPanel?initialPanel:'overview');
   const [year,setYear]=useState(()=>safeYear(integrated(vault).selection?.entryId===entry.id?Number(integrated(vault).selection.date.slice(0,4)):new Date().getFullYear()));
   const [yearDraft,setYearDraft]=useState(String(year)),[selectedMonth,setSelectedMonth]=useState(null);
   const {hanja,large,includeLuck}=readPreferences(vault);
@@ -91,6 +93,7 @@ export default function ReferenceReader({entry,vault,navigate,change,busy,initia
   const selectYear=y=>{const next=Math.min(2050,safeYear(y,year));setYear(next);setSelectedMonth(null);setSelection(s=>selectionForYear(s,next));};
   const applySelection=next=>{setSelection({...next,entryId:entry.id});setYear(Number(next.date.slice(0,4)));setSelectedMonth(null);};
   const returnToToday=async()=>{try{const next=selectionForNow(entry.id);if(await change(state=>rememberSelection(state,next),'오늘의 운으로 돌아왔습니다.'))applySelection(next);}catch(error){info({title:'오늘의 운',text:error.message});}};
+  const openTree=async()=>{if(await change(state=>rememberSelection(state,{...selection,entryId:entry.id})))external({name:'details',id:entry.id,screen:'tree'});};
   const selectMonth=key=>{setSelectedMonth(key);setYear(Number(key.split('-')[0]));setSelection(s=>({...s,date:key+'-15'}));};
   const toggleYear=d=>{setYearDraft(String(year));setDialog({kind:'options',title:'명식 보기 설정'});};
   const saveMemo=async()=>{if(journalWorking||busy)return null;const ok=await change(state=>{const next=memo!==entry.memo?upsertEntry(state,{id:entry.id,memo}):state;return journalDraft?saveNote(next,entry.id,journalDraft):next;},'메모를 저장했습니다.');if(ok)setJournalDraft(null);return ok;};
@@ -98,7 +101,7 @@ export default function ReferenceReader({entry,vault,navigate,change,busy,initia
   const selectedLabel=`${view.year}년 ${view.annual?view.annual.stem+view.annual.branch:''}`;
   return <div className={'reference-reader '+(large?'rr-readable':'')} data-testid="reference-reader">
     {screen==='reading'?<div className="rr-topbar"><div role="tablist" aria-label="풀이 분류">{PANELS.map(([key,label],i)=><button type="button" key={key} id={'rr-tab-'+key} role="tab" aria-selected={panel===key} aria-controls="rr-reading-content" tabIndex={panel===key?0:-1} onClick={()=>{setPanel(key);window.scrollTo(0,0)}} onKeyDown={e=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?3:(i+(e.key==='ArrowRight'?1:3))%4;setPanel(PANELS[next][0]);document.getElementById('rr-tab-'+PANELS[next][0])?.focus();}}}>{label}</button>)}</div><button type="button" aria-label="명식 보기 설정" onClick={toggleYear}><ReaderIcon name="menu"/></button></div>
-      :<header className="rr-person-header"><button type="button" aria-label="명식 보관함으로" onClick={()=>external({name:'vault'})}><ReaderIcon name="back"/></button><div><h1>{screen==='memo'?'메모 · '+entry.name:entry.name}</h1><p>{referenceBirthLabel(entry)}</p></div><button type="button" aria-label={entry.favorite?'즐겨찾기 해제':'즐겨찾기 추가'} aria-pressed={entry.favorite} disabled={busy} className={entry.favorite?'rr-favorite':''} onClick={()=>change(state=>toggleFavorite(state,entry.id))}><ReaderIcon name="star" filled={entry.favorite}/></button><button type="button" aria-label="명식 보기 설정" onClick={toggleYear}><ReaderIcon name="menu"/></button></header>}
+      :<header className="rr-person-header"><button type="button" aria-label={screen==='tree'?'명식으로 돌아가기':'명식 보관함으로'} onClick={()=>screen==='tree'&&onBack?onBack():external({name:'vault'})}><ReaderIcon name="back"/></button><div><h1>{screen==='memo'?'메모 · '+entry.name:entry.name}</h1><p>{referenceBirthLabel(entry)}</p></div><button type="button" aria-label={entry.favorite?'즐겨찾기 해제':'즐겨찾기 추가'} aria-pressed={entry.favorite} disabled={busy} className={entry.favorite?'rr-favorite':''} onClick={()=>change(state=>toggleFavorite(state,entry.id))}><ReaderIcon name="star" filled={entry.favorite}/></button><button type="button" aria-label="명식 보기 설정" onClick={toggleYear}><ReaderIcon name="menu"/></button></header>}
     {showWarning&&<aside className="rr-warning" role="status"><strong>{mismatch?'원본 일주와 계산값이 다릅니다':status.title}</strong><p>{mismatch?'원본은 보존됩니다. 역법·날짜·시각 기준을 확인해 주세요.':status.body}</p><button type="button" onClick={()=>external({name:'form',id:entry.id})}>입력정보 확인</button></aside>}
     {screen==='chart'&&<div className="rr-chart-page">
       {result.saju?.clock?.audit&&<details className="integration-audit"><summary>계산 근거 · 절입/시각 보정</summary><dl><dt>현지 UTC 차이</dt><dd>{result.saju.clock.audit.offsetMinutes}분</dd><dt>서머타임 제거</dt><dd>{result.saju.clock.audit.dstMinutes}분</dd><dt>경도 보정</dt><dd>{result.saju.clock.audit.longitudeMinutes.toFixed(2)}분</dd><dt>균시차(근사)</dt><dd>{result.saju.clock.audit.equationMinutes.toFixed(2)}분</dd><dt>실제 순간(UTC)</dt><dd>{new Date(result.saju.clock.instant).toISOString()}</dd></dl><p>이전 절기 {result.saju.lastJie?.name} · {result.saju.lastJie?.iso}</p><p className="warn">독립 천문 계산이며 대운 시작일은 근사값입니다. 기존 엔진과의 차이는 교차검증으로 확인합니다.</p></details>}
@@ -110,6 +113,7 @@ export default function ReferenceReader({entry,vault,navigate,change,busy,initia
       <SixPillars manseDetails={readPreferences(vault).manseDetails} appearance={readPreferences(vault).appearance} columns={columns} dayStem={result.saju?.dayStem} onInspect={inspect} hanja={hanja}/><ChartExport entry={entry} columns={columns} year={year} busy={busy}/>
       <LuckRails view={view} dayStem={result.saju?.dayStem} selectedMonth={selectedMonth} onYear={selectYear} onMonth={selectMonth} large={large}/>
       <div className="rr-selection-bar" role="status"><span>선택 {selectedLabel}{view.decade?` · ${view.decade.startAge}세 대운`:''}</span><button type="button" disabled={busy} onClick={returnToToday}>오늘로 돌아가기</button><button type="button" onClick={toggleYear}>연도 변경</button></div>
+      <button type="button" className="rr-secondary-action" disabled={busy} onClick={openTree}>운세 트리 보기</button>
       <button type="button" className="rr-primary-action" onClick={()=>go('reading')}>선택한 명식 풀이 보기 <ReaderIcon name="arrow" size={17}/></button>
       <button type="button" className="rr-calculation-note" onClick={()=>info({title:status.title,text:status.body+' 대운 시작 나이는 근사값입니다. 세운 옆 나이는 세는나이이며 목록의 만나이와 다릅니다.'})}>{result.origin==='manual'?'직접 입력 간지 · 계산 기준 확인':result.origin==='astronomical'?'독립 절입·시각 계산 · 기준 확인':'기존 계산기 산식 · 계산 기준 확인'}</button>
     </div>}
@@ -120,6 +124,7 @@ export default function ReferenceReader({entry,vault,navigate,change,busy,initia
       {panel==='compare'&&<ComparePanel entry={entry} vault={vault} result={result} onInspect={inspect} initialOtherId={initialCompareId} onPartnerChange={compareId=>external({name:'details',id:entry.id,compareId,panel:'compare'},true)} onOpen={id=>external({name:'details',id})}/>}
       <button type="button" className="rr-floating-chart" onClick={()=>go('chart')}><b>명식</b>보기</button>
     </div>}
+    {screen==='tree'&&<LuckTree entry={entry} result={result} selection={selection} selected={selected} vault={vault} change={change} busy={busy} onSelect={applySelection} onToday={returnToToday} onExplain={()=>external({name:'details',id:entry.id,panel:'luck'},true)} onMemo={()=>external({name:'details',id:entry.id,screen:'memo'},true)} onInspect={inspect}/>}
     {screen==='memo'&&<div className="rr-memo-page"><h2>나의 메모</h2><label className="rr-memo-label">기록 {memo.length.toLocaleString()} / 20,000<textarea aria-label="명식 메모" value={memo} disabled={busy} maxLength={20000} rows={7} placeholder="상담과 관찰 내용을 기록하세요" onChange={e=>setMemo(e.target.value)}/></label><button type="button" className="rr-primary-action" disabled={busy||journalWorking||!dirty} onClick={saveMemo}>메모 저장</button>{dirty&&<p role="status">아직 저장하지 않은 내용이 있습니다.</p>}
       <Journal entry={entry} vault={vault} change={change} busy={busy} draft={journalDraft} setDraft={setJournalDraft} working={journalWorking} setWorking={setJournalWorking} selection={{date:selection.date,hour:selection.hour,minute:selection.minute}} onApplySelection={next=>{applySelection(next);setPanel('luck');go('reading');}}/>
       <div className="rr-management-actions"><button type="button" onClick={()=>external({name:'form',id:entry.id})}>출생정보 수정 <ReaderIcon name="arrow" size={18}/></button><button type="button" disabled={busy} onClick={()=>change(state=>setSelf(state,vault.selfId===entry.id?null:entry.id),'내 명식을 변경했습니다.')}>{vault.selfId===entry.id?'내 명식 해제':'내 명식 지정'} <ReaderIcon name="arrow" size={18}/></button><button type="button" onClick={()=>info({title:'원본과 수정 이력',text:`원본 일주 ${(entry.referenceDisplay?.day_stem_ko||'—')+(entry.referenceDisplay?.day_branch_ko||'—')} · 보정 ${entry.birth.correction_raw||'표시 없음'}. 출생정보 수정 ${entry.birthRevisions?.length??0}회. 원본은 수정과 분리해 보존됩니다.`})}>원본과 수정 이력 <ReaderIcon name="arrow" size={18}/></button><button type="button" onClick={()=>external({name:'settings'})}>백업·복원 <ReaderIcon name="arrow" size={18}/></button><button type="button" className="rr-danger" disabled={busy||journalWorking} onClick={()=>setDialog({kind:'delete',title:'명식 삭제 확인'})}>휴지통으로 이동 <ReaderIcon name="arrow" size={18}/></button></div>

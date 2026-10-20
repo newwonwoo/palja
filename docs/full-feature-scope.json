@@ -588,14 +588,15 @@
       "id": "reader.tree",
       "area": "reader",
       "title": "운세 트리·다층 운 흐름",
-      "implementation": "not_implemented",
-      "referenceBehavior": "unverified",
-      "gap": "woonse_tree_chart와 선택 동기화",
+      "implementation": "partial",
+      "referenceBehavior": "partial",
+      "gap": "시진·일진·절운·세운·대운과 원국 표시, 날짜/시각 저장·오늘 복귀·운세/메모 연결·교운 시각 비교·백업 검증. 흐름 점수·오행/한난조습 다층 변화·원본 실제 화면/계산 대조는 남음.",
       "apkEvidence": [
         "package:how8ja/features/woonse_tree_chart/presentation/woonse_tree_chart_page.dart"
       ],
-      "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "evidenceLimit": "원본 AOT의 5단 구성·원국·운세/메모 전이와 교운 안내 확인. Palja 자체 경계값·화면 조작 검증이며 원본 실행 결과와 구분.",
+      "independentVerification": "partial",
+      "originalComparisonEvidence": "docs/original-apk-luck-tree.md"
     },
     {
       "id": "reader.explain-correction",
@@ -775,7 +776,7 @@
       "title": "대운 순역·기산·시작일·10대운",
       "implementation": "partial",
       "referenceBehavior": "unverified",
-      "gap": "독립 모드 순역·10대운, 절입 경과일/3 기산 연결. 시작일은 365.2425일/년 근사, 원본 기산법 대조 전.",
+      "gap": "독립 모드 순역·10대운, 절입 경과일/3 기산 연결. 시작일은 365.2425일/년 근사, 원본 기산법 대조 전. 기존 엔진 2000-01-01 남성 입력의 이전 해 절기 탐색 누락으로 대운 배열이 비는 현상 재현; 연도 경계 보완 필요.",
       "apkEvidence": [
         "package:how8ja/core/domains/manse/calculator/dea_joo_calculator.dart",
         "package:how8ja/features/setting/presentation/manse_settings/daewoon_calculation_options.dart"
