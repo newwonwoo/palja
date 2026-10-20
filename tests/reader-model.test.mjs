@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { build } from 'esbuild';
+import {nayinOf} from '../src/mobile/traditional-reference.js';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const bundle=await build({stdin:{contents:`export * from './src/mobile/reader-model.js';export { calculateEntry } from './src/mobile/engine.js';`,resolveDir:root,loader:'js'},bundle:true,write:false,format:'esm',platform:'node',logLevel:'silent',define:{'import.meta.env.VITE_APP_MODE':'"mobile"','import.meta.env.VITE_GEMINI_API_KEY':'""'}});
 const m=await import(`data:text/javascript;base64,${Buffer.from(bundle.outputFiles[0].text).toString('base64')}`);
@@ -68,6 +69,13 @@ test('all 100 heavenly-stem ten-god pairs match the original AOT branch return v
     const branchIdx=stemIdx%2,stem=[...fixture.targetOrder][stemIdx];
     const column={kind:'calculated',key:'fixture',pillar:{stemIdx,branchIdx,stem,branch:['子','丑'][branchIdx]}};
     assert.equal(m.pillarLabels(column,dayStem).stem,expected,dayStem+stem);
+  }
+});
+test('all 60 nayin pillars match the original enum lookup and widget strings',async()=>{
+  const fixture=JSON.parse(await fs.readFile(root+'tests/fixtures/original-18.2.8-nayin.json','utf8'));
+  for(let i=0;i<60;i++){
+    const pillar={stem:[...'甲乙丙丁戊己庚辛壬癸'][i%10],branch:[...'子丑寅卯辰巳午未申酉戌亥'][i%12]};
+    assert.equal(nayinOf(pillar).name,fixture.namesByPair[Math.floor(i/2)],pillar.stem+pillar.branch);
   }
 });
 test('relationship lines combine repeated stems but retain all endpoints',()=>{const p=(s,b)=>({stem:s,branch:b,stemIdx:old.HS.indexOf(s),branchIdx:old.EB.indexOf(b)});const cols=['丁','癸','癸'].map((s,i)=>({key:'x'+i,index:i,label:'명식'+i,kind:'calculated',pillar:p(s,'亥')}));const matches=m.relations(cols,'stem');assert.equal(matches.length,1);assert.deepEqual(matches[0].indices,[0,1,2]);assert.equal(matches[0].label,'정계충');assert.equal(m.relations(cols,'stem','hap').length,0);});
