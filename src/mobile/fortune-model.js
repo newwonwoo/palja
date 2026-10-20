@@ -39,7 +39,8 @@ export function elementMonthTimeline(result,year,policy,weights=DEFAULT_WEIGHTS,
  return Array.from({length:12},(_,i)=>{
   const date=`${year}-${String(i+1).padStart(2,'0')}-15`,s=selectedPillars({date,hour:12,minute:0},policy);
   if(s.error)return {month:i+1,error:s.error};
-  const decade=(result.daeun||[]).find(d=>d.startInstant?s.instant>=d.startInstant&&s.instant<d.startInstant+10*365.2425*86400000:year>=d.startYear&&year<d.startYear+10);
+  const ordered=(result.daeun||[]).filter(d=>Number.isFinite(d.startInstant)).sort((a,b)=>a.startInstant-b.startInstant);
+  const decade=ordered.length?ordered.find((d,i)=>s.instant>=d.startInstant&&s.instant<(ordered[i+1]?.startInstant??d.startInstant+10*365.2425*86400000)):(result.daeun||[]).find(d=>year>=d.startYear&&year<d.startYear+10);
   const a=researchAnalysis(result,[decade,s.year,s.month,s.day,s.hour],weights,rules);
   return a.status==='ready'?{month:i+1,date,ratios:Object.fromEntries(Object.entries(a.scores).map(([e,n])=>[e,n/a.total])),strength:a.strength.name}:{month:i+1,error:a.reason};
  });

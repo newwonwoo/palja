@@ -33,17 +33,17 @@ async function settings(){await page.getByRole('navigation',{name:'명식 주 �
  await display.getByLabel('목록 배열',{exact:true}).selectOption('cards');await saved(s=>s.workspace.presentation.listLayout==='cards');
  await display.getByRole('button',{name:'궁합 위로',exact:true}).click();await saved(s=>s.workspace.presentation.tabOrder[2]==='compare');
  await page.reload();check('presentation survives reload',(await display.getByLabel('오행 색상').inputValue())==='custom');
- await page.screenshot({path:dir+'/settings-390.png'});
- await page.getByRole('button',{name:'보관함',exact:true}).click();check('card layout applied',await page.locator('.ref-card-layout').count()>0);
+ await page.locator('.toast').waitFor({state:'hidden'});await page.screenshot({path:dir+'/settings-390.png'});
+ await page.getByRole('button',{name:'보관함',exact:true}).click();check('card layout applied',await page.locator('.ref-card-layout').count()>0);check('counting age appears in actual list',await page.locator('.ref-person').filter({hasText:'합성 명식 가'}).first().locator('.ref-age').innerText()===String(new Date().getFullYear()-2000+1));
  await page.getByRole('button',{name:/합성 명식 가/}).first().click();check('hidden-stem display toggle applied',await page.locator('.rr-chart-page .rr-hidden').count()===0);
- await reading('분석');await page.getByRole('region',{name:'독립 규칙 상세 분석'}).waitFor();
+ await reading('분석');await page.getByRole('region',{name:'독립 규칙 상세 분석'}).waitFor();check('saved tab order appears in actual navigation',JSON.stringify(await page.getByRole('tab').allTextContents())===JSON.stringify(['분석','사주','궁합','운세']));check('saved font reaches the reader',await page.locator('.reference-reader').evaluate(e=>getComputedStyle(e).fontFamily.includes('serif')));check('custom diagram text contrast',await page.locator('.rr-element-diagram g[data-tone=metal] text').first().evaluate(e=>getComputedStyle(e).fill==='rgb(17, 17, 17)'));
  await page.getByRole('button',{name:'합화 비중',exact:true}).click();
  await page.getByLabel('천간 합화',{exact:true}).selectOption('seasonal');await saved(s=>s.workspace.integrated.rules.combinationMode==='seasonal');
  await page.getByLabel('격국 기준',{exact:true}).selectOption('revealed');await saved(s=>s.workspace.integrated.rules.patternMode==='revealed');
  await page.getByLabel('신살 기준',{exact:true}).selectOption('year');await saved(s=>s.workspace.integrated.rules.sinsalBasis==='year');
  check('nine-column relation table',await page.locator('.rr-relation-columns').first().locator(':scope > div').count()===9);
  await page.screenshot({path:dir+'/research-390.png'});
- await reading('운세');await page.getByLabel('운 선택일',{exact:true}).fill('2024-02-29');await page.getByLabel('운 선택시각',{exact:true}).fill('23:15');await page.getByRole('button',{name:'일·시운 적용 및 저장',exact:true}).click();await saved(s=>s.workspace.integrated.selection.date==='2024-02-29');
+ await reading('운세');await page.getByText('운세 트리에서 날짜·시각 선택',{exact:true}).click();await page.getByRole('region',{name:'운세 트리와 일별 분석'}).locator('.completion-filter button:enabled').first().click();await saved(s=>s.workspace.integrated.selection?.date.endsWith('-07-01'));check('decade click applies its actual start-year selection',true);await page.getByText('운세 트리에서 날짜·시각 선택',{exact:true}).click();await page.getByLabel('운 선택일',{exact:true}).fill('2024-02-29');await page.getByLabel('운 선택시각',{exact:true}).fill('23:15');await page.getByRole('button',{name:'일·시운 적용 및 저장',exact:true}).click();await saved(s=>s.workspace.integrated.selection.date==='2024-02-29');
  await page.getByText('운세 트리에서 날짜·시각 선택',{exact:true}).click();await page.getByLabel('트리 월운',{exact:true}).selectOption('6');await saved(s=>s.workspace.integrated.selection.date==='2024-06-15');
  await page.getByRole('button',{name:'일별 운세 달력 열기',exact:true}).click();check('daily calendar computed',await page.getByRole('region',{name:'운세 트리와 일별 분석'}).getByRole('button',{name:/01일/}).count()===1);
  await page.getByText('월별 오행 비율 타임라인',{exact:true}).click();check('monthly element chart',await page.getByRole('img',{name:'12개월 오행 비율 변화'}).count()===1);
@@ -56,7 +56,7 @@ async function settings(){await page.getByRole('navigation',{name:'명식 주 �
  await settings();const downloadPromise=page.waitForEvent('download');await page.getByRole('button',{name:/백업 내보내기/}).click();const download=await downloadPromise;await download.saveAs(dir+'/backup.json');const backup=JSON.parse(fs.readFileSync(dir+'/backup.json','utf8'));check('full JSON backup includes presentation rules selections and provenance',backup.state.workspace.presentation.palette==='custom'&&backup.state.workspace.integrated.selections.length===2&&backup.state.entries[2].birth.public_profile.id==='turing');
  for(const width of [320,390,800]){await page.setViewportSize({width,height:900});check('settings no page overflow '+width,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
  await page.getByRole('button',{name:'보관함',exact:true}).click();await page.getByRole('button',{name:/합성 명식 가/}).first().click();await reading('분석');
- for(const width of [320,390,800]){await page.setViewportSize({width,height:900});check('analysis contains horizontal tables '+width,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:dir+'/research-'+width+'.png'});}
+ await page.locator('.toast').waitFor({state:'hidden'});for(const width of [320,390,800]){await page.setViewportSize({width,height:900});check('analysis contains horizontal tables '+width,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:dir+'/research-'+width+'.png'});}
  check('no console/runtime errors',errors.length===0);
  fs.writeFileSync(dir+'/completion-results.json',JSON.stringify({checks,errors},null,2));console.log('PASS completion extension',checks.length);await browser.close();
 })().catch(async error=>{console.error(error);fs.writeFileSync(dir+'/completion-results.json',JSON.stringify({checks,errors,error:error.message},null,2));await page?.screenshot({path:dir+'/failure.png'}).catch(()=>{});await browser?.close();process.exitCode=1;});

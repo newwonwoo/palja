@@ -20,7 +20,7 @@ export function ElementDiagram({scores,onInfo}) {
       {points.map(n=><circle key={n.key} cx={n.x} cy={n.y} r={n.r} data-tone={n.tone} className="rr-element-circle"/>)}
       {points.map((a,i)=>{const b=points[(i+1)%5],line=segment(a,b,7);return <line key={'gen'+a.key} {...line} stroke="#daa2b7" strokeWidth=".85" markerEnd={`url(#${uid}gen)`}/>;})}
       {points.map((a,i)=>{const b=points[(i+2)%5],line=segment(a,b,8);return <line key={'ctrl'+a.key} {...line} stroke="#83aabd" strokeWidth="1" markerEnd={`url(#${uid}ctrl)`}/>;})}
-      {points.map(n=><g key={'text'+n.key}><text x={n.x} y={n.y-2} textAnchor="middle" className="rr-element-label">{n.name}</text><text x={n.x} y={n.y+17} textAnchor="middle" className="rr-element-value">{n.percentage}</text></g>)}
+      {points.map(n=><g key={'text'+n.key} data-tone={n.tone}><text x={n.x} y={n.y-2} textAnchor="middle" className="rr-element-label">{n.name}</text><text x={n.x} y={n.y+17} textAnchor="middle" className="rr-element-value">{n.percentage}</text></g>)}
     </svg>
     <div className="rr-element-targets">{points.map(n=><button type="button" key={n.key} style={{left:`${n.x/3.6}%`,top:`${n.y/2.82}%`}} aria-label={`${n.name} 비중 ${n.percentage}% 자세히`} onClick={()=>onInfo({title:`${n.name} 오행`,text:`표시 오행 점수 ${n.score.toFixed(2)}를 백분율로 바꾼 값은 ${n.percentage}%입니다. 원의 크기도 이 비율에 따라 달라집니다. 조견표 값이나 궁합 점수가 아닙니다.`})}/>)}</div>
   </div>;

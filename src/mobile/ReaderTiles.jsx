@@ -51,10 +51,10 @@ function LuckTile({item,kind,dayStem,selected,onSelect,birthYear,birth,ageMode='
     {display.tenGods&&<span className="rr-luck-god">{labels.branch}</span>}{display.growth&&<span className="rr-growth" data-stage={labels.growth}>{labels.growth}</span>}
   </button>;
 }
-export function LuckRails({view,dayStem,selectedMonth,onYear,onMonth,large=false,birth,ageMode='full',display=DISPLAY_DEFAULTS}) {
+export function LuckRails({view,dayStem,selectedMonth,onYear,onMonth,onDecade,large=false,birth,ageMode='full',display=DISPLAY_DEFAULTS}) {
   const month=view.months.find(m=>m.key===selectedMonth);
   return <section className={`rr-luck-rails ${large?'rr-large-rails':''}`} aria-label="대운 세운 월운 선택">
-    {view.decades.length>0?<div className="rr-rail" role="group" aria-label="대운 목록" style={{'--slots':Math.max(view.decades.length,8)}}>{view.decades.map(d=><LuckTile key={d.startYear??d.startAge} item={d} display={display} kind="decade" dayStem={dayStem} selected={view.decade!=null&&view.decade.startYear===d.startYear} onSelect={d=>onYear(d.startYear)}/>)}</div>:<p className="rr-empty">대운은 성별·출생시각과 계산 결과 확인 후 표시합니다.</p>}
+    {view.decades.length>0?<div className="rr-rail" role="group" aria-label="대운 목록" style={{'--slots':Math.max(view.decades.length,8)}}>{view.decades.map(d=><LuckTile key={d.startYear??d.startAge} item={d} display={display} kind="decade" dayStem={dayStem} selected={view.decade!=null&&view.decade.startYear===d.startYear} onSelect={d=>onDecade?onDecade(d):onYear(d.startYear)}/>)}</div>:<p className="rr-empty">대운은 성별·출생시각과 계산 결과 확인 후 표시합니다.</p>}
     {view.decades.some(d=>d.manualBasis)&&<p className="rr-subnote">직접 지정 대운수입니다. 시작 연도 미상 또는 2050년 초과 항목은 연도 선택에 사용하지 않습니다.</p>}
     <div className="rr-rail" role="group" aria-label="세운 목록" style={{'--slots':10}}>{view.years.map(y=><LuckTile key={y.year} item={y} display={display} kind="year" dayStem={dayStem} selected={view.year===y.year} onSelect={y=>onYear(y.year)} birthYear={view.birthYear} birth={birth} ageMode={ageMode}/>)}</div>
     {view.months.length>0&&<><div className="rr-rail rr-month-rail" role="group" aria-label="월운 목록" style={{'--slots':12}}>{view.months.map(m=><LuckTile key={m.key} item={m} display={display} kind="month" dayStem={dayStem} selected={selectedMonth===m.key} onSelect={m=>onMonth(m.key)}/>)}</div>

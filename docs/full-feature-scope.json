@@ -443,18 +443,19 @@
       "id": "library.celebrity",
       "area": "library",
       "title": "공개 인물 명식·분류·근거",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "공개 출처를 확인한 인물 3명: 검색·분류·출처 저장·중복 추가 방지. 시각/성별 미확인은 유지.",
       "apkEvidence": [
         "package:how8ja/features/profile_list/presentation/profile_list_page/celebrity_list_view.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/PublicPeople.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/ci-verification-20261020.md"
       ]
     },
     {

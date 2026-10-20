@@ -15,6 +15,8 @@
 
 ## 검증과 환경 제한
 
+첫 CI에서 Node 241개, 브라우저 확장 21검사, 웹/모바일 빌드, 네이티브 테스트와 debug APK 빌드가 모두 통과했다. [실행 및 증거 기록](ci-verification-20261020.md)을 참고한다. 로컬 환경 제한과 CI의 실제 통과는 구분한다.
+
 - Node 단위·회귀 및 React 서버 렌더링 테스트를 실행했다. 세부 수와 CI 결과는 PR/작업 결과를 참고한다. SSR은 클릭·레이아웃·실기기 검증을 대체하지 않는다.
 - `npm run build`, `npm run build:mobile`, `npm run android:sync`를 실행한다. 동기화 성공은 APK 빌드 성공이 아니다.
 - 로컬 HTTP 서버: `PermissionError: [Errno 1] Operation not permitted`. 로컬 Chromium도 실행되지 않았다. Browser의 제어 도구가 제공되지 않아 저장소 Playwright 검증을 준비했다. **로컬 화면 조작·스크린샷 통과를 주장하지 않는다.**

@@ -9,3 +9,10 @@
 .mobile-root[data-palette=custom] .rr-rune[data-tone=earth],.mobile-root[data-palette=custom] .rr-element-chip[data-tone=earth],.mobile-root[data-palette=custom] .ref-day [data-color=earth]{background:var(--custom-earth);color:var(--custom-earth-text)}.mobile-root[data-palette=custom] .rr-element-circle[data-tone=earth]{fill:var(--custom-earth)}
 .mobile-root[data-palette=custom] .rr-rune[data-tone=metal],.mobile-root[data-palette=custom] .rr-element-chip[data-tone=metal],.mobile-root[data-palette=custom] .ref-day [data-color=metal]{background:var(--custom-metal);color:var(--custom-metal-text)}.mobile-root[data-palette=custom] .rr-element-circle[data-tone=metal]{fill:var(--custom-metal)}
 .mobile-root[data-palette=custom] .rr-rune[data-tone=water],.mobile-root[data-palette=custom] .rr-element-chip[data-tone=water],.mobile-root[data-palette=custom] .ref-day [data-color=water]{background:var(--custom-water);color:var(--custom-water-text)}.mobile-root[data-palette=custom] .rr-element-circle[data-tone=water]{fill:var(--custom-water)}
+
+.completion-filter input[type=color]{width:44px;min-width:44px;height:40px;padding:4px;flex:none}
+.mobile-root[data-palette=custom] .rr-element-diagram g[data-tone=wood] text{fill:var(--custom-wood-text)}
+.mobile-root[data-palette=custom] .rr-element-diagram g[data-tone=fire] text{fill:var(--custom-fire-text)}
+.mobile-root[data-palette=custom] .rr-element-diagram g[data-tone=earth] text{fill:var(--custom-earth-text)}
+.mobile-root[data-palette=custom] .rr-element-diagram g[data-tone=metal] text{fill:var(--custom-metal-text)}
+.mobile-root[data-palette=custom] .rr-element-diagram g[data-tone=water] text{fill:var(--custom-water-text)}

@@ -4,7 +4,7 @@ import {build} from 'esbuild';
 import {fileURLToPath} from 'node:url';
 import {createEmptyVault,upsertEntry,createBackup,restoreBackup,validateVault,deleteEntry} from '../src/vault/model.js';
 import {savePresentation} from '../src/vault/workspace-actions.js';
-import {readPresentation,DISPLAY_DEFAULTS} from '../src/vault/presentation.js';
+import {readPresentation,DISPLAY_DEFAULTS,presentationStyle} from '../src/vault/presentation.js';
 import {rememberSelection,selectionForEntry,selectedBackup,setAnalysisRules} from '../src/vault/integrated-actions.js';
 import {readRules,DEFAULT_RULES} from '../src/vault/analysis-rules.js';
 const root=fileURLToPath(new URL('../',import.meta.url));
@@ -17,15 +17,17 @@ const output=await build({stdin:{contents:`
  export {weightedAnalysis} from './src/mobile/weighted-analysis.js';
  export {elementMonthTimeline} from './src/mobile/fortune-model.js';
  export {extraShinsal} from './src/mobile/shinsal-catalog.js';
- export {nowSelection} from './src/mobile/LuckExplorer.jsx';
+ export {nowSelection,selectionForDecade} from './src/mobile/LuckExplorer.jsx';
  export {ageBadge,filterAndSortEntries} from './src/mobile/list-utils.js';
  export {PUBLIC_PEOPLE,addPublicPerson} from './src/mobile/public-people.js';
  import React from 'react';import {renderToStaticMarkup} from 'react-dom/server';
  import ResearchPanel from './src/mobile/ResearchPanel.jsx';import LuckExplorer from './src/mobile/LuckExplorer.jsx';import DisplaySettings from './src/mobile/DisplaySettings.jsx';
  import CompatibilityDetails from './src/mobile/CompatibilityDetails.jsx';import ReferenceReader from './src/mobile/ReferenceReader.jsx';
  import {luckView} from './src/mobile/reader-model.js';
- export function renderExtension(name,props){return renderToStaticMarkup(React.createElement({ResearchPanel,LuckExplorer,DisplaySettings,CompatibilityDetails,ReferenceReader,RelationSection,ShinsalGrid}[name],props));}
+ import {SixPillars,LuckRails} from './src/mobile/ReaderTiles.jsx';import ReferenceVault from './src/mobile/ReferenceVault.jsx';
+ export function renderExtension(name,props){return renderToStaticMarkup(React.createElement({ResearchPanel,LuckExplorer,DisplaySettings,CompatibilityDetails,ReferenceReader,RelationSection,ShinsalGrid,SixPillars,LuckRails,ReferenceVault}[name],props));}
  export {luckView};
+ export {preciseLuckView} from './src/mobile/selection-model.js';
  export {relations,shinsalView,sixColumns} from './src/mobile/reader-model.js';
  import {RelationSection,ShinsalGrid} from './src/mobile/ReaderAnalysis.jsx';
  `,resolveDir:root},bundle:true,write:false,platform:'node',format:'esm',banner:{js:`import {createRequire} from 'node:module';const require=createRequire(${JSON.stringify(root+'package.json')});`},loader:{'.css':'empty'},define:{'import.meta.env.VITE_APP_MODE':'"mobile"','import.meta.env.VITE_GEMINI_API_KEY':'""'},logLevel:'silent'});
@@ -61,3 +63,10 @@ test('real React extension surfaces render nonblank escaped content without runt
 test('historical London all-year DST is not mistaken for standard time',()=>{const policy=c.locationPolicy(c.DEFAULT_POLICY,'london');const winter=c.zoneAt(Date.parse('1941-01-15T12:00:00Z'),policy),summer=c.zoneAt(Date.parse('1941-07-15T12:00:00Z'),policy);assert.equal(winter.dstSeconds,3600);assert.equal(summer.dstSeconds,7200);const clock=c.correctedClock({year:1941,month:7,day:15,hour:12,minute:0},policy);assert.equal(clock.hour,10);assert.equal(clock.audit.tzdb,'2026b');});
 test('nine-column relations and shinsal retain separate natal/luck indices',()=>{const s=state(),entry=s.entries[0],r=c.calculateEntry(entry),v=c.luckView(r,2026),cols=[...c.sixColumns(entry,r,v),...['selectedMonth','selectedDay','selectedHour'].map((key,i)=>({key,label:['월운','일운','시운'][i],index:6+i,pillar:c.pillar(i*2,i*2),kind:'calculated'}))];assert.equal(c.shinsalView(cols).length,9);assert.ok(c.relations(cols,'branch').every(x=>x.indices.every(i=>i>=0&&i<9)));for(const name of ['RelationSection','ShinsalGrid'])assert.ok(c.renderExtension(name,{columns:cols,part:'branch',dayStem:r.saju.dayStem,onInfo:()=>{}}).includes('시운'));});
 test('custom colors, font and optional older presentations are validated and backed up',()=>{let s=savePresentation(state(),{palette:'custom',fontFamily:'serif',elementColors:{wood:'#000000',fire:'#FFFFFF',earth:'#abcdef',metal:'#123456',water:'#555555'}});assert.equal(readPresentation(restoreBackup(createEmptyVault(),createBackup(s)).state).fontFamily,'serif');assert.throws(()=>savePresentation(s,{elementColors:{wood:'url(x)'}}));assert.throws(()=>savePresentation(s,{fontFamily:'unsafe'}));const older=copy(s);delete older.workspace.presentation.fontFamily;delete older.workspace.presentation.elementColors;assert.equal(validateVault(older).valid,true);assert.equal(readPresentation(older).fontFamily,'system');});
+
+test('every optional chart row can be hidden without removing the two glyph rows',()=>{const s=state(),e=s.entries[0],r=c.calculateEntry(e),v=c.luckView(r,2026),cols=c.sixColumns(e,r,v),props={columns:cols,dayStem:r.saju.dayStem};const shown=c.renderExtension('SixPillars',props),off=c.renderExtension('SixPillars',{...props,display:{...DISPLAY_DEFAULTS,tenGods:false,hidden:false,growth:false,nayin:false}});for(const token of ['rr-gods','rr-hidden','rr-growth','rr-nayin']){assert.ok(shown.includes(token));assert.ok(!off.includes(token));}assert.ok(off.includes('rr-rune'));});
+test('tab-independent banner permutation changes the actual rendered section order',()=>{let s=state();s=upsertEntry(s,{name:'즐겨찾기 합성',birth:B,favorite:true});s.selfId=s.entries[0].id;s=savePresentation(s,{bannerOrder:['friends','favorites','me']});const html=c.renderExtension('ReferenceVault',{vault:s,change:()=>{},navigate:()=>{},open:()=>{},favorite:()=>{},onExit:()=>{}});assert.ok(html.indexOf('section-friends')<html.indexOf('section-favorites'));assert.ok(html.indexOf('section-favorites')<html.indexOf('section-me'));});
+test('custom tone foregrounds follow measured relative luminance endpoints',()=>{const p={...DISPLAY_DEFAULTS,elementColors:{wood:'#000000',fire:'#ffffff',earth:'#ffff00',metal:'#101010',water:'#eeeeee'}},style=presentationStyle(p);assert.equal(style['--custom-wood-text'],'#ffffff');assert.equal(style['--custom-fire-text'],'#111111');assert.equal(style['--custom-earth-text'],'#111111');assert.equal(style['--custom-metal-text'],'#ffffff');});
+
+test('decade choice selects a real start in local time and rounds forward to the next minute',()=>{const policy=c.locationPolicy(c.DEFAULT_POLICY,'newyork'),instant=Date.parse('2024-06-01T03:59:45Z');assert.deepEqual(c.selectionForDecade({startInstant:instant},policy),{date:'2024-06-01',hour:0,minute:0});assert.deepEqual(c.selectionForDecade({startYear:2020},policy),{date:'2020-07-01',hour:12,minute:0});assert.throws(()=>c.selectionForDecade({startYear:null},policy));});
+test('calendar-based decade boundaries use next actual start without an approximate gap',()=>{const a={startInstant:Date.parse('2020-01-01T00:00Z')},b={startInstant:Date.parse('2029-12-31T00:00Z')},base={decades:[b,a],years:[],months:[],year:2029},result={origin:'astronomical'};assert.equal(c.preciseLuckView(base,result,{instant:b.startInstant-1},c.DEFAULT_POLICY).decade,a);assert.equal(c.preciseLuckView(base,result,{instant:b.startInstant},c.DEFAULT_POLICY).decade,b);});
