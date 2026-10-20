@@ -255,3 +255,5 @@
   .reference-vault .ref-sort { width:72px; font-size:12px; }
 }
 @media(prefers-reduced-motion:reduce) { .reference-vault * { animation:none !important;transition:none !important;scroll-behavior:auto !important; } }
+.reference-vault[data-comparing=true] .ref-results{padding-bottom:300px}
+.ref-compare-actions button:disabled{opacity:.5;cursor:not-allowed}

@@ -569,19 +569,20 @@
       "area": "reader",
       "title": "현재 운 바로가기·선택 상태",
       "implementation": "partial",
-      "referenceBehavior": "unverified",
-      "gap": "선택일·시각 명시적 저장과 재열기 연결. 다양한 프리셋과 현재 운 바로가기 추가 필요.",
+      "referenceBehavior": "partial",
+      "gap": "명식/운세 화면에서 현재 기기 날짜·시각으로 복귀·저장·재실행 연결. 지원 범위 밖이면 차단. 원본 월/연 프리셋, 선택 유형과 계산·실제 화면 대조는 남음.",
       "apkEvidence": [
         "package:how8ja/features/myeongjo/application/basis_joo_type_provider.dart",
         "package:how8ja/features/myeongjo/application/custom_widget_options_provider.dart",
         "package:how8ja/features/myeongjo/application/myeongjo_calc_providers.dart"
       ],
-      "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
+      "evidenceLimit": "원본 AOT의 상태 전이·화면 인자·저장 경로 정적 확인 및 Palja 브라우저 조작 검증. 원본 실제 화면·실기기 전체 대조는 미완료.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
         "docs/integrated-release-1.1.0.md"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "partial",
+      "originalComparisonEvidence": "docs/original-apk-navigation-gaps.md"
     },
     {
       "id": "reader.tree",
@@ -1078,15 +1079,16 @@
       "area": "match",
       "title": "두 명식 선택·나란히 보기",
       "implementation": "implemented",
-      "referenceBehavior": "unverified",
-      "gap": "목록 선택에서 비교 화면 바로 연결 필요",
+      "referenceBehavior": "partial",
+      "gap": "목록에서 두 슬롯 선택→궁합 확인→두 명식 직접 비교 연결. 기준 유지·상대 교체·선택 해제·새로고침·상대 변경·뒤로가기·미확인 입력 검증. 원본 실제 화면과 전체 궁합 결과 대조는 남음.",
       "apkEvidence": [
         "package:how8ja/features/match/presentation/match_select_screen/match_select_screen.dart",
         "package:how8ja/features/match/presentation/match_select_screen/models/selected_match_profile_state.dart",
         "package:how8ja/features/match/presentation/match_select_screen/providers/selected_match_profile_provider.dart"
       ],
-      "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "evidenceLimit": "원본 AOT의 상태 전이·화면 인자·저장 경로 정적 확인 및 Palja 브라우저 조작 검증. 원본 실제 화면·실기기 전체 대조는 미완료.",
+      "independentVerification": "partial",
+      "originalComparisonEvidence": "docs/original-apk-navigation-gaps.md"
     },
     {
       "id": "match.basic",
@@ -1370,15 +1372,16 @@
       "id": "settings.order",
       "area": "settings",
       "title": "탭 순서·프로필 배너 순서",
-      "implementation": "not_implemented",
-      "referenceBehavior": "unverified",
-      "gap": "동적 순서 및 저장",
+      "implementation": "partial",
+      "referenceBehavior": "partial",
+      "gap": "풀이 4개 탭의 순서 편집·확인/취소·초기화·저장·백업·방향키 탐색 연결. 원본 드래그 UI 및 프로필 배너 내 명식/현재/생일자 순서·표시는 남음.",
       "apkEvidence": [
         "package:how8ja/features/explanation/presentation/widgets/explanation_tab_reorder_sheet.dart",
         "package:how8ja/features/setting/presentation/general_settings/profile_banner_order_options.dart"
       ],
-      "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "evidenceLimit": "원본 AOT의 상태 전이·화면 인자·저장 경로 정적 확인 및 Palja 브라우저 조작 검증. 원본 실제 화면·실기기 전체 대조는 미완료.",
+      "independentVerification": "partial",
+      "originalComparisonEvidence": "docs/original-apk-navigation-gaps.md"
     },
     {
       "id": "settings.calculation",

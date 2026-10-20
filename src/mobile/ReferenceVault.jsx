@@ -8,6 +8,7 @@ import './reference-vault.css';
 import './workspace.css';
 import { activeGroups, readPreferences } from '../vault/workspace.js';
 import { savePreferences } from '../vault/workspace-actions.js';
+import {EMPTY_MATCH_SELECTION,toggleMatchSelection,matchSelectionEntries} from './match-selection.js';
 
 function RefIcon({ name, size = 23, fill = false }) {
   const paths = {
@@ -43,13 +44,14 @@ function PersonRow({ entry, self = false, open, favorite, busy, compact, compari
   </li>;
 }
 
-function ComparisonPanel({ selections, entries, open, close }) {
-  if (!selections.length) return null;
-  const chosen = selections.map(id => entries.find(e => e.id === id)).filter(Boolean);
+function ComparisonPanel({ selection, entries, open, close, compare }) {
+  const {basis,partner}=matchSelectionEntries(selection,entries);
+  const chosen = [basis,partner].filter(Boolean);
+  if (!chosen.length) return null;
   return <div className="ref-comparison" role="status" aria-live="polite">
     <div className="ref-compare-top"><strong>궁합 비교</strong><span>{chosen.length}/2 선택</span><button type="button" onClick={close}>취소</button></div>
-    <div className="ref-compare-cards">{chosen.map(entry => { const day = dayGlyphs(entry, referenceDay(entry)); return <div key={entry.id}><strong>{entry.name}</strong><span>{day.stem}{day.branch} · {referenceBirthLabel(entry)}</span></div>; })}</div>
-    {chosen.length === 2 ? <div className="ref-compare-actions"><p>두 명식의 입력정보를 먼저 확인하세요. 일주만으로 궁합 점수를 만들지 않습니다.</p>{chosen.map(entry => <button key={entry.id} type="button" onClick={() => open(entry.id)}>{entry.name} 상세 보기 <RefIcon name="chevron" size={15} /></button>)}</div> : <small>비교할 명식을 한 명 더 선택하세요.</small>}
+    <div className="ref-compare-cards">{chosen.map(entry => { const day = dayGlyphs(entry, referenceDay(entry)); return <div key={entry.id}><small>{entry===basis?'기준 명식':'상대 명식'}</small><strong>{entry.name}</strong><span>{day.stem}{day.branch} · {referenceBirthLabel(entry)}</span></div>; })}</div>
+    <div className="ref-compare-actions"><button type="button" disabled={!basis||!partner} onClick={()=>compare(basis.id,partner.id)}>궁합 확인 <RefIcon name="chevron" size={15}/></button>{chosen.length === 2 ? chosen.map(entry => <button key={entry.id} type="button" onClick={() => open(entry.id)}>{entry.name} 상세 보기</button>) : <small>{basis?'상대 명식':'기준 명식'}을 선택하세요.</small>}</div>
   </div>;
 }
 
@@ -63,7 +65,7 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
   const selectedGroup = groups.find(g => g.id === groupId);
   const groupActive = Boolean(selectedGroup) || groupId === 'ungrouped';
   const [compare, setCompare] = useState(false);
-  const [selection, setSelection] = useState([]);
+  const [selection, setSelection] = useState(EMPTY_MATCH_SELECTION);
   const entries = useMemo(() => vault.entries.filter(e => !e.deletedAt), [vault.entries]);
   const self = entries.find(e => e.id === vault.selfId);
   const favorites = entries.filter(e => e.favorite);
@@ -85,16 +87,16 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
         { key:'favorites', title:'즐겨찾기', count:favorites.length, items:ordered.filter(e => e.favorite) },
         { key:'friends', title:'친구', count:friends.length, items:ordered.filter(e => !e.favorite) },
       ];
-  const toggleCompare = () => { setCompare(v => !v); setSelection([]); };
-  const select = id => setSelection(current => current.includes(id) ? current.filter(x => x !== id) : current.length >= 2 ? [current[1], id] : [...current, id]);
-  return <div className="reference-vault" data-testid="reference-vault">
+  const toggleCompare = () => { setCompare(v => !v); setSelection(EMPTY_MATCH_SELECTION); };
+  const select = id => setSelection(current => toggleMatchSelection(current,id));
+  return <div className="reference-vault" data-comparing={compare} data-testid="reference-vault">
     <div className="ref-fixed">
       <header className="ref-topbar"><button type="button" className="ref-toolbar-button" title="앱 종료" aria-label="앱 종료" disabled={busy} onClick={onExit}><RefIcon name="close" size={23} /></button><span className="ref-mobile-title">명식 보관함</span><div className="ref-right-icons"><button className="ref-toolbar-button" aria-label="명식 추가" onClick={() => navigate({name:'form'})}><RefIcon name="personAdd" size={25} /></button><button className="ref-toolbar-button" aria-label="명식 관리" onClick={() => navigate({name:'settings'})}><RefIcon name="edit" size={25} /></button></div></header>
       <div className="ref-quick-links" aria-label="바로가기">
         {[{key:'custom',icon:'vault',title:'커스텀',action:()=>navigate({name:'form',mode:'pillars'})},{key:'compare',icon:'heart',title:'궁합 모드',action:toggleCompare},{key:'settings',icon:'gear',title:'설정',action:()=>navigate({name:'settings'})}].map(x=><button type="button" key={x.key} className={x.key==='compare'&&compare?'active':''} onClick={x.action}><span className="ref-shortcut-icon"><RefIcon name={x.icon} size={24} fill={x.key==='compare'} /></span><span>{x.title}</span></button>)}
       </div>
       <div className="ref-filterbar">
-        <div className="ref-tabs" aria-label="명식 목록 구분"><button type="button" aria-pressed={tab==='friends'} className={tab==='friends'?'active':''} onClick={()=>{setTab('friends');setSelection([]);}}><RefIcon name="person" size={21}/>친구</button><button type="button" aria-pressed={tab==='recent'} className={tab==='recent'?'active':''} onClick={()=>{setTab('recent');setSelection([]);}}><RefIcon name="clock" size={21}/>최근 입력</button></div>
+        <div className="ref-tabs" aria-label="명식 목록 구분"><button type="button" aria-pressed={tab==='friends'} className={tab==='friends'?'active':''} onClick={()=>{setTab('friends');setSelection(EMPTY_MATCH_SELECTION);}}><RefIcon name="person" size={21}/>친구</button><button type="button" aria-pressed={tab==='recent'} className={tab==='recent'?'active':''} onClick={()=>{setTab('recent');setSelection(EMPTY_MATCH_SELECTION);}}><RefIcon name="clock" size={21}/>최근 입력</button></div>
         <div className="ref-searchrow"><label className="ref-search"><RefIcon name="search" size={22}/><input type="search" aria-label="명식 검색" autoComplete="off" value={search} onChange={e=>setSearch(e.target.value)} placeholder="이름 / 생년월일시 / 나이 / 일주 검색"/>{queryActive && <button type="button" className="ref-clear" aria-label="검색어 지우기" onClick={()=>setSearch('')}>×</button>}</label><select aria-label="정렬" className="ref-sort" value={sort} onChange={e=>setSort(e.target.value)} disabled={busy||tab==='recent'}>{LIST_SORT_OPTIONS.map(([key,label])=><option key={key} value={key}>{label}</option>)}</select></div>
         {groups.length > 0 && <div className="ref-group-filter"><select aria-label="그룹 필터" value={groupId} onChange={e=>setGroupId(e.target.value)}><option value="">전체 그룹</option><option value="ungrouped">미분류</option>{groups.map(g=><option key={g.id} value={g.id}>{g.name}</option>)}</select><button type="button" onClick={()=>navigate({name:'groups'})}>그룹 관리</button><button type="button" onClick={()=>navigate({name:'bulk'})}>일괄 관리</button></div>}
       </div>
@@ -102,11 +104,11 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
     <div className="ref-results">
       {sections.filter(section=>section.items.length || (!limited && section.key!=='me')).map(section=><section className={'ref-section section-'+section.key} key={section.key} aria-label={section.title}>
         <h2>{section.title}{section.count!==null&&<span> {section.count}</span>}</h2>
-        <ul className="ref-people">{section.items.map(entry=><PersonRow key={entry.id} entry={entry} self={section.key==='me'} open={open} favorite={favorite} busy={busy} compact={compact} comparison={compare} selected={selection.includes(entry.id)} select={select} ageNotation={ageNotation}/>)}</ul>
+        <ul className="ref-people">{section.items.map(entry=><PersonRow key={entry.id} entry={entry} self={section.key==='me'} open={open} favorite={favorite} busy={busy} compact={compact} comparison={compare} selected={selection.basisId===entry.id||selection.partnerId===entry.id} select={select} ageNotation={ageNotation}/>)}</ul>
       </section>)}
       {!ordered.length && <section className="ref-no-results"><RefIcon name="search" size={29}/><strong>{queryActive?'검색 결과가 없습니다':groupActive?'이 그룹에 명식이 없습니다':tab==='recent'?'최근 입력한 명식이 없습니다':'아직 명식이 없습니다'}</strong><p>{queryActive?'이름·날짜·나이·일주를 바꿔 검색해 보세요.':'오른쪽 상단의 추가 버튼으로 명식을 등록할 수 있습니다.'}</p></section>}
       {entries.some(e=>e.source) && <p className="ref-accuracy">원본에서 가져온 나이·일주는 저장 당시 표시값입니다. 역법·성별이 확인되지 않은 명식은 임의로 계산하지 않습니다.</p>}
     </div>
-    {compare && <ComparisonPanel selections={selection} entries={entries} open={open} close={()=>{setCompare(false);setSelection([]);}}/>}
+    {compare && <ComparisonPanel selection={selection} entries={entries} open={open} compare={(id,compareId)=>navigate({name:'details',id,compareId,panel:'compare'})} close={()=>{setCompare(false);setSelection(EMPTY_MATCH_SELECTION);}}/>}
   </div>;
 }

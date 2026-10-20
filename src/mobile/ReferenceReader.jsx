@@ -4,7 +4,7 @@ import SelectionTools from './SelectionTools.jsx';
 import FortuneTimeline from './FortuneTimeline.jsx';
 import ChartExport from './ChartExport.jsx';
 import {integrated,saveNote,rememberSelection} from '../vault/integrated-actions.js';
-import {selectedPillars,selectionForYear,preciseLuckView} from './selection-model.js';
+import {selectedPillars,selectionForYear,selectionForNow,preciseLuckView} from './selection-model.js';
 import {weightedAnalysis} from './weighted-analysis.js';
 import { compareIndependentEngines } from './engine-crosscheck.js';
 import { compareChartFacts, similarChartFacts } from './compatibility-model.js';
@@ -20,8 +20,8 @@ import { AnalysisOverview, RelationSection, ShinsalGrid } from './ReaderAnalysis
 import './reference-reader.css';
 import { readPreferences } from '../vault/workspace.js';
 import { savePreferences } from '../vault/workspace-actions.js';
+import {READING_TABS} from '../vault/reading-order.js';
 
-const PANELS=[['overview','분석'],['relations','사주'],['luck','운세'],['compare','궁합']];
 function ReaderDialog({title,children,onClose,busy=false}) {
   const ref=useRef(null);
   useEffect(()=>{const d=ref.current;d.showModal();return()=>d.close()},[]);
@@ -29,8 +29,8 @@ function ReaderDialog({title,children,onClose,busy=false}) {
     <header><h2>{title}</h2><button type="button" aria-label="창 닫기" disabled={busy} onClick={onClose}><ReaderIcon name="close"/></button></header>{children}
   </dialog>;
 }
-function ComparePanel({entry,vault,result,onInspect,onOpen}) {
-  const [otherId,setOtherId]=useState('');
+function ComparePanel({entry,vault,result,onInspect,onOpen,initialOtherId,onPartnerChange}) {
+  const [otherId,setOtherId]=useState(()=>vault.entries.some(e=>e.id===initialOtherId&&e.id!==entry.id&&!e.deletedAt)?initialOtherId:'');
   const [showSimilar,setShowSimilar]=useState(false);
   const other=vault.entries.find(e=>e.id===otherId&&!e.deletedAt);
   const otherResult=useMemo(()=>other?calculateEntry(other):null,[other]);
@@ -38,7 +38,7 @@ function ComparePanel({entry,vault,result,onInspect,onOpen}) {
   const similar=useMemo(()=>showSimilar?similarChartFacts(result,vault.entries.filter(e=>e.id!==entry.id&&!e.deletedAt),calculateEntry,12):[],[showSimilar,result,vault.entries,entry.id]);
   const empty=useMemo(()=>luckView(result,new Date().getFullYear()),[result]);
   return <section className="rr-compare-panel"><h2>두 명식의 확인 가능한 관계</h2><p className="rr-subnote">독립 관계표로 일간·일지·월지를 비교합니다. 궁합 점수나 좋고 나쁨을 계산하지 않습니다.</p>
-    <label>비교할 명식<select aria-label="비교할 명식" value={otherId} onChange={e=>setOtherId(e.target.value)}><option value="">선택하세요</option>{vault.entries.filter(e=>e.id!==entry.id&&!e.deletedAt).map(e=><option value={e.id} key={e.id}>{e.name}</option>)}</select></label>
+    <label>비교할 명식<select aria-label="비교할 명식" value={otherId} onChange={e=>{if(onPartnerChange)onPartnerChange(e.target.value);else setOtherId(e.target.value);}}><option value="">선택하세요</option>{vault.entries.filter(e=>e.id!==entry.id&&!e.deletedAt).map(e=><option value={e.id} key={e.id}>{e.name}</option>)}</select></label>
     {[{e:entry,r:result},{e:other,r:otherResult}].filter(x=>x.e&&x.r).map(({e,r})=><section key={e.id} className="rr-compare-card"><h3>{e.name}</h3><p>{birthSummary(e.birth)}</p><SixPillars manseDetails={readPreferences(vault).manseDetails} appearance={readPreferences(vault).appearance} columns={sixColumns(e,r,empty,false).slice(2)} dayStem={r.saju?.dayStem} onInspect={(c,p)=>onInspect({...c,inspectionDayStem:r.saju?.dayStem},p)}/></section>)}
     {facts&&(facts.status==='ready'?<section className="integration-compare-facts" aria-label="명식 상호관계"><h3>일주 {facts.dayPillars.join(' ↔ ')}</h3><p>비교 가능한 기둥 {facts.comparablePillars}개 · 글자 전체가 같은 기둥 {facts.samePillars}개</p>{facts.facts.length?<ul>{facts.facts.map((fact,i)=><li key={fact.name+i}><strong>{fact.name}</strong><span>{fact.description}</span></li>)}</ul>:<p>현재 연결된 조견표에서 일주·월지 조합이 발견되지 않았습니다. 관계가 없다는 뜻은 아닙니다.</p>}<small>{facts.note}</small></section>:<p className="rr-subnote">{facts.reason}</p>)}
     <section className="integration-compare-facts"><h3>보관함에서 비슷한 기둥 찾기</h3><button type="button" className="rr-primary-action" onClick={()=>setShowSimilar(v=>!v)}>{showSimilar?'검색 결과 닫기':'저장된 명식의 공통 글자 검색'}</button>
@@ -47,10 +47,11 @@ function ComparePanel({entry,vault,result,onInspect,onOpen}) {
     </section>
   </section>;
 }
-export default function ReferenceReader({entry,vault,navigate,change,busy}) {
+export default function ReferenceReader({entry,vault,navigate,change,busy,initialCompareId,initialPanel}) {
+  const PANELS=readPreferences(vault).readingOrder.map(key=>[key,READING_TABS[key]]);
   const result=useMemo(()=>calculateEntry(entry),[entry.birth,entry.name]);
   const crosscheck=useMemo(()=>compareIndependentEngines(entry),[entry.birth]);
-  const [screen,setScreen]=useState('chart'),[panel,setPanel]=useState('overview');
+  const [screen,setScreen]=useState(initialPanel==='compare'?'reading':'chart'),[panel,setPanel]=useState(initialPanel==='compare'?'compare':'overview');
   const [year,setYear]=useState(()=>safeYear(integrated(vault).selection?.entryId===entry.id?Number(integrated(vault).selection.date.slice(0,4)):new Date().getFullYear()));
   const [yearDraft,setYearDraft]=useState(String(year)),[selectedMonth,setSelectedMonth]=useState(null);
   const {hanja,large,includeLuck}=readPreferences(vault);
@@ -82,13 +83,14 @@ export default function ReferenceReader({entry,vault,navigate,change,busy}) {
     window.addEventListener('saju:before-history-leave',guard);
     return ()=>window.removeEventListener('saju:before-history-leave',guard);
   },[dirty,journalWorking,busy]);
-  const external=next=>{if(journalWorking||busy){setDialog({kind:'info',title:'처리 중',text:'사진 처리와 저장이 끝난 뒤 이동할 수 있습니다.'});return;}if(dirty)setPendingLeave(()=>()=>navigate(next));else navigate(next);};
+  const external=(next,replace=false)=>{if(journalWorking||busy){setDialog({kind:'info',title:'처리 중',text:'사진 처리와 저장이 끝난 뒤 이동할 수 있습니다.'});return;}if(dirty)setPendingLeave(()=>()=>navigate(next,replace));else navigate(next,replace);};
   const go=next=>{if(journalWorking||busy)return;setScreen(next);window.scrollTo({top:0,behavior:'instant'});};
   const info=value=>setDialog({kind:'info',...value});
   const inspect=(column,part)=>{const g=glyphInfo(column,part),labels=pillarLabels(column,column.inspectionDayStem??result.saju?.dayStem);
     info({title:`${column.label} ${part==='stem'?'천간':'지지'} · ${g.hanja||g.ko}`,text:column.kind==='reference'?'가져온 원본 화면의 글자입니다. 출생정보 확인 전에는 계산 결과로 사용하지 않습니다.':!g.known?'이 기둥을 계산할 입력이나 대운 결과가 없습니다. 임의의 글자는 채우지 않습니다.':part==='stem'?`${g.hanja}(${g.ko}) · 일간 기준 ${labels.stem}. 현재 명식에 선택한 계산 기준의 결과입니다.`:`${g.hanja}(${g.ko}) · 본기 십성 ${labels.branch} · 12운성 ${labels.growth}. 지장간 ${labels.hidden.map(h=>h.hanja).join('·')}.`});};
   const selectYear=y=>{const next=Math.min(2050,safeYear(y,year));setYear(next);setSelectedMonth(null);setSelection(s=>selectionForYear(s,next));};
   const applySelection=next=>{setSelection({...next,entryId:entry.id});setYear(Number(next.date.slice(0,4)));setSelectedMonth(null);};
+  const returnToToday=async()=>{try{const next=selectionForNow(entry.id);if(await change(state=>rememberSelection(state,next),'오늘의 운으로 돌아왔습니다.'))applySelection(next);}catch(error){info({title:'오늘의 운',text:error.message});}};
   const selectMonth=key=>{setSelectedMonth(key);setYear(Number(key.split('-')[0]));setSelection(s=>({...s,date:key+'-15'}));};
   const toggleYear=d=>{setYearDraft(String(year));setDialog({kind:'options',title:'명식 보기 설정'});};
   const saveMemo=async()=>{if(journalWorking||busy)return null;const ok=await change(state=>{const next=memo!==entry.memo?upsertEntry(state,{id:entry.id,memo}):state;return journalDraft?saveNote(next,entry.id,journalDraft):next;},'메모를 저장했습니다.');if(ok)setJournalDraft(null);return ok;};
@@ -107,15 +109,15 @@ export default function ReferenceReader({entry,vault,navigate,change,busy}) {
       </details>
       <SixPillars manseDetails={readPreferences(vault).manseDetails} appearance={readPreferences(vault).appearance} columns={columns} dayStem={result.saju?.dayStem} onInspect={inspect} hanja={hanja}/><ChartExport entry={entry} columns={columns} year={year} busy={busy}/>
       <LuckRails view={view} dayStem={result.saju?.dayStem} selectedMonth={selectedMonth} onYear={selectYear} onMonth={selectMonth} large={large}/>
-      <div className="rr-selection-bar" role="status"><span>선택 {selectedLabel}{view.decade?` · ${view.decade.startAge}세 대운`:''}</span><button type="button" onClick={toggleYear}>연도 변경</button></div>
+      <div className="rr-selection-bar" role="status"><span>선택 {selectedLabel}{view.decade?` · ${view.decade.startAge}세 대운`:''}</span><button type="button" disabled={busy} onClick={returnToToday}>오늘로 돌아가기</button><button type="button" onClick={toggleYear}>연도 변경</button></div>
       <button type="button" className="rr-primary-action" onClick={()=>go('reading')}>선택한 명식 풀이 보기 <ReaderIcon name="arrow" size={17}/></button>
       <button type="button" className="rr-calculation-note" onClick={()=>info({title:status.title,text:status.body+' 대운 시작 나이는 근사값입니다. 세운 옆 나이는 세는나이이며 목록의 만나이와 다릅니다.'})}>{result.origin==='manual'?'직접 입력 간지 · 계산 기준 확인':result.origin==='astronomical'?'독립 절입·시각 계산 · 기준 확인':'기존 계산기 산식 · 계산 기준 확인'}</button>
     </div>}
     {screen==='reading'&&<div id="rr-reading-content" role="tabpanel" aria-labelledby={'rr-tab-'+panel} className="rr-reading-page">
       {panel==='overview'&&<><AnalysisOverview result={analysisResult} weighted={weighted} customWeights={weights.enabled} onEditWeights={()=>setDialog({kind:'weights',title:'분석 비중 편집'})} view={view} includeLuck={includeLuck} setIncludeLuck={setIncludeLuck} onInfo={info}/><RelationSection columns={analysisColumns} part="stem" hanja={hanja}/><RelationSection columns={analysisColumns} part="branch" hanja={hanja}/><ShinsalGrid columns={analysisColumns} dayStem={result.saju?.dayStem} hanja={hanja} onInfo={info}/></>}
       {panel==='relations'&&<><div className="rr-section-intro"><h2>사주 관계</h2><p>{selectedLabel} · {includeLuck?'선택운 포함':'원국만'}</p><button type="button" onClick={()=>setIncludeLuck(!includeLuck)}>{includeLuck?'원국만 보기':'선택운 포함하기'}</button></div><RelationSection columns={analysisColumns} part="stem" hanja={hanja}/><RelationSection columns={analysisColumns} part="branch" hanja={hanja}/><ShinsalGrid columns={analysisColumns} dayStem={result.saju?.dayStem} hanja={hanja} onInfo={info}/></>}
-      {panel==='luck'&&<><SelectionTools key={selection.date+selection.hour+selection.minute} vault={vault} entry={entry} selection={selection} onSelect={applySelection} change={change} busy={busy}/><FortuneTimeline result={result} year={year} policy={entry.birth.calculation_policy} busy={busy} onSelect={async next=>{const value={entryId:entry.id,...next};if(await change(state=>rememberSelection(state,value),'선택한 월운을 저장했습니다.'))applySelection(value);}}/>{selected.error?<p role="alert">{selected.error}</p>:<div className="integration-selected-pillars">{[['month','월운'],['day','일운'],['hour','시운']].map(([k,label])=><span key={k}>{label}<strong>{selected[k].stem}{selected[k].branch}</strong></span>)}</div>}<p className="rr-subnote">{selection.date} {selection.hour}:{String(selection.minute).padStart(2,'0')} · 월·일·시운: 선택일의 독립 절입/시각 기준. 원국·용신은 기존 판정 기준을 유지합니다.</p><div className="rr-section-intro"><h2>{selectedLabel} 운 선택</h2><p>대운·연도를 누르면 위 명식표와 관계표에 함께 적용됩니다.</p><button type="button" onClick={toggleYear}>연도 직접 선택</button></div><SixPillars manseDetails={readPreferences(vault).manseDetails} appearance={readPreferences(vault).appearance} columns={columns} dayStem={result.saju?.dayStem} hanja={hanja} onInspect={inspect}/><LuckRails view={view} dayStem={result.saju?.dayStem} selectedMonth={selectedMonth} onYear={selectYear} onMonth={selectMonth} large={large}/><AnalysisOverview result={analysisResult} weighted={weighted} customWeights={weights.enabled} onEditWeights={()=>setDialog({kind:'weights',title:'분석 비중 편집'})} view={view} includeLuck={includeLuck} setIncludeLuck={setIncludeLuck} onInfo={info}/></>}
-      {panel==='compare'&&<ComparePanel entry={entry} vault={vault} result={result} onInspect={inspect} onOpen={id=>external({name:'details',id})}/>}
+      {panel==='luck'&&<><SelectionTools key={selection.date+selection.hour+selection.minute} vault={vault} entry={entry} selection={selection} onSelect={applySelection} onToday={returnToToday} change={change} busy={busy}/><FortuneTimeline result={result} year={year} policy={entry.birth.calculation_policy} busy={busy} onSelect={async next=>{const value={entryId:entry.id,...next};if(await change(state=>rememberSelection(state,value),'선택한 월운을 저장했습니다.'))applySelection(value);}}/>{selected.error?<p role="alert">{selected.error}</p>:<div className="integration-selected-pillars">{[['month','월운'],['day','일운'],['hour','시운']].map(([k,label])=><span key={k}>{label}<strong>{selected[k].stem}{selected[k].branch}</strong></span>)}</div>}<p className="rr-subnote">{selection.date} {selection.hour}:{String(selection.minute).padStart(2,'0')} · 월·일·시운: 선택일의 독립 절입/시각 기준. 원국·용신은 기존 판정 기준을 유지합니다.</p><div className="rr-section-intro"><h2>{selectedLabel} 운 선택</h2><p>대운·연도를 누르면 위 명식표와 관계표에 함께 적용됩니다.</p><button type="button" onClick={toggleYear}>연도 직접 선택</button></div><SixPillars manseDetails={readPreferences(vault).manseDetails} appearance={readPreferences(vault).appearance} columns={columns} dayStem={result.saju?.dayStem} hanja={hanja} onInspect={inspect}/><LuckRails view={view} dayStem={result.saju?.dayStem} selectedMonth={selectedMonth} onYear={selectYear} onMonth={selectMonth} large={large}/><AnalysisOverview result={analysisResult} weighted={weighted} customWeights={weights.enabled} onEditWeights={()=>setDialog({kind:'weights',title:'분석 비중 편집'})} view={view} includeLuck={includeLuck} setIncludeLuck={setIncludeLuck} onInfo={info}/></>}
+      {panel==='compare'&&<ComparePanel entry={entry} vault={vault} result={result} onInspect={inspect} initialOtherId={initialCompareId} onPartnerChange={compareId=>external({name:'details',id:entry.id,compareId,panel:'compare'},true)} onOpen={id=>external({name:'details',id})}/>}
       <button type="button" className="rr-floating-chart" onClick={()=>go('chart')}><b>명식</b>보기</button>
     </div>}
     {screen==='memo'&&<div className="rr-memo-page"><h2>나의 메모</h2><label className="rr-memo-label">기록 {memo.length.toLocaleString()} / 20,000<textarea aria-label="명식 메모" value={memo} disabled={busy} maxLength={20000} rows={7} placeholder="상담과 관찰 내용을 기록하세요" onChange={e=>setMemo(e.target.value)}/></label><button type="button" className="rr-primary-action" disabled={busy||journalWorking||!dirty} onClick={saveMemo}>메모 저장</button>{dirty&&<p role="status">아직 저장하지 않은 내용이 있습니다.</p>}

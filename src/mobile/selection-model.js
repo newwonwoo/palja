@@ -1,4 +1,10 @@
 import {precisePillars,DEFAULT_POLICY} from '../calendar/precise.js';
+export function selectionForNow(entryId,now=new Date()){
+ if(typeof entryId!=='string'||!entryId||!(now instanceof Date)||!Number.isFinite(now.getTime()))throw new Error('현재 날짜와 명식을 확인해 주세요.');
+ const year=now.getFullYear();if(year<1900||year>2050)throw new Error('운 선택은 1900~2050년입니다.');
+ const pad=n=>String(n).padStart(2,'0');
+ return {entryId,date:`${year}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`,hour:now.getHours(),minute:now.getMinutes()};
+}
 export function selectedPillars(selection,policy=DEFAULT_POLICY){
  try{const [year,month,day]=selection.date.split('-').map(Number);if(year<1900||year>2050)throw new Error('운 선택은 1900~2050년입니다.');
   const r=precisePillars({year,month,day,hour:selection.hour,minute:selection.minute},policy||DEFAULT_POLICY);

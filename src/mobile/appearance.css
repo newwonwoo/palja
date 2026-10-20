@@ -39,3 +39,8 @@
 .mobile-root[data-card-style=plain] .personal-preview { background:#fff; border-radius:0; border-width:0 0 1px; }
 .mobile-root[data-card-style=outline] .personal-preview { background:#fff; border-radius:8px; }
 @media(max-width:360px) { .personal-fields { grid-template-columns:1fr; } }
+.reading-order-dialog ol{list-style:none;padding:0;margin:16px 0;display:grid;gap:8px}
+.reading-order-dialog li{display:flex;align-items:center;gap:8px;padding:8px;background:#f3f5f9;border-radius:8px}
+.reading-order-dialog li strong{flex:1}
+.reading-order-dialog li button{min-width:44px;min-height:44px}
+.reading-order-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:16px}

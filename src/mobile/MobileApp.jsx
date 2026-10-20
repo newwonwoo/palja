@@ -2,6 +2,7 @@ import ExportSelection from './ExportSelection.jsx';
 import AppearanceSettings from './AppearanceSettings.jsx';
 import AgeNotationSettings from './AgeNotationSettings.jsx';
 import ManseDetailSettings from './ManseDetailSettings.jsx';
+import ReadingOrderSettings from './ReadingOrderSettings.jsx';
 import {appearanceStyle} from '../vault/appearance.js';
 import './appearance.css';
 import './integration.css';
@@ -186,6 +187,7 @@ function Settings({ vault, change, busy, setError, notify, navigate }) {
     <AgeNotationSettings value={preferences.ageNotation} change={change} busy={busy}/>
     <AppearanceSettings preferences={preferences} change={change} busy={busy}/>
     <ManseDetailSettings value={preferences.manseDetails} change={change} busy={busy}/>
+    <ReadingOrderSettings value={preferences.readingOrder} change={change} busy={busy}/>
     <section className="panel"><h2>명식 분류</h2><button type="button" className="settings-action" onClick={()=>navigate({name:'bulk'})}><Icon name="check"/><span><strong>명식 일괄 관리</strong><small>여러 명식을 그룹에 추가·제외하거나 휴지통으로 이동</small></span><Icon name="arrow"/></button><button type="button" className="settings-action" onClick={()=>navigate({name:'groups'})}><Icon name="vault"/><span><strong>그룹 관리</strong><small>그룹 만들기·편집·복원 · 명식을 여러 그룹에 분류</small></span><Icon name="arrow"/></button></section>
     <section className="panel"><h2>백업과 가져오기</h2><p className="muted">{isAndroid() ? '앱을 삭제하거나 기기를 바꾸기 전에 백업 파일을 따로 보관하세요.' : '앱에서는 기기 내부에 저장됩니다. 브라우저의 사이트 데이터를 지우기 전에는 백업하세요.'}</p><button className="settings-action" disabled={working || busy} onClick={exportFile}><Icon name="download" /><span><strong>백업 내보내기</strong><small>명식·메모·그룹·보기 설정·원본·휴지통을 JSON으로 저장</small></span><Icon name="arrow" size={18} /></button><button className="settings-action" disabled={working || busy} onClick={pickFile}><Icon name="upload" /><span><strong>자료 가져오기</strong><small>명식 자료 또는 백업 JSON 선택</small></span><Icon name="arrow" size={18} /></button><input hidden type="file" accept=".json,application/json" ref={file} aria-label="가져올 JSON 파일" onChange={async event => { const chosen = event.target.files?.[0]; event.target.value = ''; if (!chosen) return; if (chosen.size > 8 * 1024 * 1024) { setError('8MB 이하의 JSON 파일을 선택해 주세요.'); return; } try { inspect(await chosen.text()); } catch (error) { setError(errorText(error)); } }} /><p className="field-hint">같은 자료를 다시 가져와도 중복을 만들지 않습니다. 수정한 내용과 삭제 상태를 우선 보존합니다.</p></section>
     <ExportSelection vault={vault}/>
@@ -272,7 +274,7 @@ export default function MobileApp() {
     {page !== 'vault' && page !== 'details' && <header className="app-header"><div>{canBack ? <button className="icon-button" aria-label="뒤로" onClick={back}><Icon name="back" /></button> : <span className="brand-seal">命</span>}<span className="header-title">{page === 'analysis' ? entry.name + ' · 상세 해석' : '사주 보관함'}</span></div><span className="offline-label"><i />{busy ? '저장 중' : '오프라인'}</span></header>}
     {!vault ? <main className="mobile-main"><section className="empty-state"><Icon name="vault" size={40} /><h1>{error ? '보관함을 열지 못했어요' : '보관함을 열고 있어요'}</h1>{error && <button className="primary" onClick={() => window.location.reload()}>다시 시도</button>}</section></main> : page === 'analysis' && analysis?.legacyForm ? <div className="legacy-analysis"><AnalysisBoundary key={entry.id} onReturn={back}><LegacyApp initialForm={analysis.legacyForm} onReturn={back} /></AnalysisBoundary></div> : <main className="mobile-main">
       {page === 'vault' && <ReferenceVault vault={vault} change={change} navigate={navigate} open={open} onExit={exitVault} favorite={id => change(state => toggleFavorite(state, id))} busy={busy} />}
-      {page === 'details' && entry && <ReferenceReader key={entry.id} entry={entry} vault={vault} navigate={navigate} change={change} busy={busy} />}
+      {page === 'details' && entry && <ReferenceReader key={`${entry.id}:${route.compareId||''}:${route.panel||''}`} initialCompareId={route.compareId} initialPanel={route.panel} entry={entry} vault={vault} navigate={navigate} change={change} busy={busy} />}
       {page === 'tools' && <ManseTools key={JSON.stringify([route.tab, route.pillarInput])} navigate={navigate} initialTab={route.tab} pillarInput={route.pillarInput} />}
       {page === 'groups' && <GroupsPage vault={vault} change={change} busy={busy} />}
       {page === 'bulk' && <BulkManage vault={vault} change={change} busy={busy} navigate={navigate} />}
