@@ -31,6 +31,11 @@ const parityComplete = feature => feature.implementation === 'verified'
   && feature.originalComparisonEvidence.trim().length > 0;
 const verified = features.filter(parityComplete).length;
 const sections = [...new Set(features.map(feature => feature.area))];
+const artifacts = scope.target.artifactVerification;
+const baseVerified = artifacts?.baseApk?.verified === true;
+const archiveVerified = artifacts?.splitArchive?.verified === true;
+const libappVerified = artifacts?.arm64Libapp?.verified === true;
+const checked = value => value ? 'x' : ' ';
 const lines = [
   '# 원본 APK 대조 체크리스트',
   '',
@@ -40,13 +45,15 @@ const lines = [
   '',
   '## 원본 확보 및 판정 기준',
   '',
-  '- [ ] 원본 `8자어때-18.2.8-split-apks.zip` 확보. 기존 분석 기록의 예상 SHA-256: `8b2977069ae037dfb960f13d67cc423dab484f767d1938a1071e0a63148f1b1c`.',
-  '- [ ] ZIP 안의 원본 패키지 `com.mansecalendar8.mansecalendar8.lite`, 버전 18.2.8, `libapp.so` SHA-256 `a5e4c25d119466c2c46b870509c5b1f59395b59b034b73ffa3e6658a6e4b1d9d` 확인.',
+  `- [${checked(archiveVerified)}] 원본 \`8자어때-18.2.8-split-apks.zip\` 전체 무결성 확인. 기존 분석 기록의 예상 SHA-256: \`8b2977069ae037dfb960f13d67cc423dab484f767d1938a1071e0a63148f1b1c\`.`,
+  `- [${checked(baseVerified)}] \`base.apk\` SHA-256 \`39df6df7b492c272a82dd8b59388369c4b1b7a1840da8dbd9c6a64588a6fda09\`, ZIP CRC, APK v2/v3 서명 검증. 패키지 \`com.mansecalendar8.mansecalendar8.lite\`, 버전 18.2.8 확인.`,
+  `- [${checked(libappVerified)}] ARM64 \`libapp.so\` 전체 확보 및 SHA-256 \`a5e4c25d119466c2c46b870509c5b1f59395b59b034b73ffa3e6658a6e4b1d9d\` 확인.`,
   '- [ ] 원본 앱을 실행해 각 기능의 화면, 입력, 조작, 결과, 재열기, 저장, 오프라인 동작을 기록. 모듈 이름만으로 실제 동작을 확정하지 않는다.',
   '- [ ] 같은 합성 입력으로 Palja 결과를 대조하고, 차이와 계산 기준을 기록. 개인정보·원본 APK·서명키는 공개 저장소에 넣지 않는다.',
   '- [ ] Android 실기기에서 업데이트 서명, 기존 SQLite 유지, 백업·복원, 종료·재실행을 확인.',
   '',
-  '각 항목의 체크는 **자체 구현 완료 + 원본 동작 검증 + 독립 검증 + 비교 근거 기록**을 모두 충족할 때만 표시한다. 완료 항목은 JSON에 `implementation: "verified"`, `referenceBehavior: "verified"`, `independentVerification: "passed"`, `originalComparisonEvidence`를 기록한다. 현재 원본 파일이 없어 원본 대조 상태는 모두 미검증이다. 기존 APK 분석 요약은 [기록](rea-apk-real-18.2.8.md)을 참고한다.',
+  '각 항목의 체크는 **자체 구현 완료 + 원본 동작 검증 + 독립 검증 + 비교 근거 기록**을 모두 충족할 때만 표시한다. 완료 항목은 JSON에 `implementation: "verified"`, `referenceBehavior: "verified"`, `independentVerification: "passed"`, `originalComparisonEvidence`를 기록한다. APK 확보·정적 분석은 기능 동작 검증과 별개다. 기존 APK 분석 요약은 [기록](rea-apk-real-18.2.8.md)을 참고한다.',
+  ...(artifacts ? ['', `현재 파일 검증: **${artifacts.checkedOn}**. base APK ${baseVerified ? '검증 완료' : '미검증'} / 전체 ZIP ${archiveVerified ? '검증 완료' : '미검증'} / ARM64 실행 파일 ${libappVerified ? '검증 완료' : '불완전'}. [새 분석 기록](${artifacts.report}).`] : []),
   '',
   '갱신 방법: `docs/full-feature-scope.json`의 상태·남은 작업·근거를 수정한 뒤 `node scripts/update-original-parity-checklist.mjs`를 실행한다. 체크박스는 그 상태에서 자동 생성한다.',
   '',
