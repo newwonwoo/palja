@@ -1321,14 +1321,15 @@
       "area": "settings",
       "title": "십성·지장간·운성·납음·신살 표시 설정",
       "implementation": "partial",
-      "referenceBehavior": "unverified",
-      "gap": "1.1.5: 명식표 십성·지장간·12운성 개별 표시 설정 및 재열기·백업 연결. 한자/큰운 목록 유지. 납음·신살 표시 설정은 남음.",
+      "referenceBehavior": "partial",
+      "gap": "Palja의 십성·지장간 글자·12운성 3종 토글은 연결됨. 원본은 십성/12운성의 주간·일간 기준, 신살의 년주·일주 기준, 지장간 십성·납음 등 8개 필드로 나뉘어 별도 구현·이관 및 실행 대조 필요.",
       "apkEvidence": [
         "package:how8ja/features/setting/presentation/manse_view_setting_page/manse_view_setting_card.dart",
         "package:how8ja/features/setting/presentation/manse_view_setting_page/manse_view_setting_page.dart"
       ],
-      "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "evidenceLimit": "원본 AOT 모델의 기준별 표시 필드 8개와 Provider의 기본 객체 값을 교차 확인. 실제 표시 위젯·화면·프리셋 동작 대조는 남음.",
+      "independentVerification": "pending",
+      "originalComparisonEvidence": "docs/original-apk-display-options.md"
     },
     {
       "id": "settings.design",
