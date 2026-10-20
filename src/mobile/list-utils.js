@@ -1,5 +1,6 @@
 import { isManualBirth, manualBirthLabel } from '../vault/pillar-input.js';
 import { isDefaultSolar, effectiveCalendar } from './birth-defaults.js';
+import {solarAge} from '../vault/age-notation.js';
 // UI-only projection for the offline vault. Never infer sex or calendar from badge colors.
 export const LIST_SORT_OPTIONS = Object.freeze([
   ['name', '가나다순'],
@@ -21,16 +22,12 @@ export function dayGlyphs(entry, computedDay = null) {
   return { stem: '·', branch: '·', captured: false };
 }
 
-export function ageBadge(entry, today = new Date()) {
+export function ageBadge(entry, today = new Date(), notation = 'international') {
   const birth = entry.birth || {};
   if (isManualBirth(birth)) return { text: '—', captured: false };
-  const birthday = [birth.input_year, birth.input_month, birth.input_day];
-  if (effectiveCalendar(birth) === 'solar' && birthday.every(Number.isInteger) &&
-      birth.input_month >= 1 && birth.input_month <= 12 && birth.input_day >= 1 && birth.input_day <= 31) {
-    const age = today.getFullYear() - birth.input_year -
-      (today.getMonth() + 1 < birth.input_month ||
-       (today.getMonth() + 1 === birth.input_month && today.getDate() < birth.input_day) ? 1 : 0);
-    return Number.isInteger(age) && age >= 0 && age <= 130 ? { text: String(age), captured: false } : { text: '—', captured: false };
+  if (effectiveCalendar(birth) === 'solar') {
+    const age = solarAge(birth, today, notation);
+    return Number.isInteger(age) && age >= 0 ? { text: String(age), captured: false } : { text: '—', captured: false };
   }
   // The age shown in the reference image may be stale; do not recalculate using unconfirmed dates.
   const raw = entry.referenceDisplay?.badge_text;
@@ -57,11 +54,11 @@ export function referenceBirthLabel(entry) {
 export const branchColor = glyph => ELEMENT_BY_BRANCH[glyph] || 'unknown';
 export const stemColor = glyph => ELEMENT_BY_STEM[glyph] || 'unknown';
 
-export function filterAndSortEntries(entries, { query = '', sort = 'name', now = new Date(), dayOf = () => null } = {}) {
+export function filterAndSortEntries(entries, { query = '', sort = 'name', now = new Date(), dayOf = () => null, ageNotation = 'international' } = {}) {
   const text = String(query || '').toLocaleLowerCase('ko').trim().replace(/\s+/g, ' ');
   const tokens = text.split(' ').filter(Boolean);
   const data = entries.filter(e => !e.deletedAt).map((entry, index) => {
-    const age = ageBadge(entry, now).text;
+    const age = ageBadge(entry, now, ageNotation).text;
     const day = dayGlyphs(entry, dayOf(entry));
     const searchable = [entry.name, referenceBirthLabel(entry), entry.memo || '', age === '—' ? '' : age,
       `${age}세`, day.stem + day.branch, `${day.stem} ${day.branch}`, day.stem, day.branch].join(' ').toLocaleLowerCase('ko');

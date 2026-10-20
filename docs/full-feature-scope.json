@@ -31,7 +31,15 @@
         "sha256": "a5e4c25d119466c2c46b870509c5b1f59395b59b034b73ffa3e6658a6e4b1d9d"
       },
       "report": "original-apk-analysis-2026-10-20.md",
-      "manifestApkHashesMatched": 4
+      "manifestApkHashesMatched": 4,
+      "aotAnalysis": {
+        "generated": true,
+        "tool": "Blutter",
+        "toolCommit": "4a60ac648bf448c5a7596437243bcd0b9376fdf0",
+        "dartVersion": "3.12.0",
+        "snapshotHash": "41be3daaabd524b8aa7423bc24584957",
+        "literalRoutePaths": 30
+      }
     },
     "scope": "개인용 오프라인 명리 앱의 전체 사용자 기능·UI·UX. 원본 APK의 실제 화면·동작·결과와 직접 대조하고, 계산의 독립 검증도 병행한다.",
     "limitations": [
@@ -711,17 +719,18 @@
       "area": "engine",
       "title": "균시차 적용",
       "implementation": "implemented",
-      "referenceBehavior": "unverified",
-      "gap": "NOAA 분수년 조화식 균시차 근사, 옵션 적용/해제 및 근거 표시. 원본 수치 일치/초 단위 정확성 미검증.",
+      "referenceBehavior": "partial",
+      "gap": "기존 NOAA 연속 근사식은 유지. 원본의 연도·시각 비의존 월·일별 정수 표를 확인했지만 변환·보정 순서와 원본 실행 대조 후 연결해야 함.",
       "apkEvidence": [
         "package:how8ja/core/domains/manse/rules/get_equation_of_time_minute.dart"
       ],
-      "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
+      "evidenceLimit": "원본 AOT 함수 0xa01c1c와 객체 풀 0x18328에서 월·일별 366개 정수 표 조회를 확인. 전체 시각 보정 호출 순서와 런타임 대조는 남음.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
         "docs/integrated-release-1.1.0.md"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "pending",
+      "originalComparisonEvidence": "docs/original-apk-equation-of-time.md"
     },
     {
       "id": "engine.zi-hour",
@@ -1342,15 +1351,16 @@
     {
       "id": "settings.age",
       "area": "settings",
-      "title": "만/세는/연나이 표기 설정",
+      "title": "한국/만 나이 표기 설정",
       "implementation": "partial",
-      "referenceBehavior": "unverified",
-      "gap": "기존 화면별 기준 상이; 통합 설정 필요",
+      "referenceBehavior": "partial",
+      "gap": "1.1.5: 원본의 한국/만 나이 2종·한국 나이 기본값을 목록 배지·검색·정렬·설정 저장·백업에 연결. 대운·세운·음력·미래 출생 분기와 원본 UI 실행 대조는 남음.",
       "apkEvidence": [
         "package:how8ja/features/setting/presentation/manse_settings/age_notation_options.dart"
       ],
-      "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "evidenceLimit": "완전한 원본 ARM64 실행 파일의 함수·객체 분석에서 두 선택지와 한국 나이 기본값·생일 비교 분기를 확인. 원본 앱 UI 실행 대조는 남음.",
+      "independentVerification": "partial",
+      "originalComparisonEvidence": "docs/original-apk-age-notation.md"
     },
     {
       "id": "settings.order",

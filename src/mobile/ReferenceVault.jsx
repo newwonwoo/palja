@@ -27,14 +27,14 @@ function RefIcon({ name, size = 23, fill = false }) {
   return <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill={fill ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{paths[name]}</svg>;
 }
 
-function PersonRow({ entry, self = false, open, favorite, busy, compact, comparison, selected, select }) {
-  const age = ageBadge(entry);
+function PersonRow({ entry, self = false, open, favorite, busy, compact, comparison, selected, select, ageNotation }) {
+  const age = ageBadge(entry, new Date(), ageNotation);
   const rawDay = referenceDay(entry);
   const day = dayGlyphs(entry, rawDay);
   const label = referenceBirthLabel(entry);
   return <li className={'ref-row' + (compact ? ' compact' : '') + (selected ? ' checked' : '')}>
     <button className="ref-person" onClick={() => comparison ? select(entry.id) : open(entry.id)} aria-pressed={comparison ? selected : undefined}>
-      <span className={'ref-age ' + (entry.referenceDisplay?.badge_color === 'pink' ? 'pink' : entry.referenceDisplay?.badge_color === 'teal' ? 'teal' : 'neutral')} title={age.captured ? '원본 화면에 기록된 나이' : '생일 기준 만나이'}>{age.text}</span>
+      <span className={'ref-age ' + (entry.referenceDisplay?.badge_color === 'pink' ? 'pink' : entry.referenceDisplay?.badge_color === 'teal' ? 'teal' : 'neutral')} title={age.captured ? '원본 화면에 기록된 나이' : ageNotation === 'korean' ? '옛 한국 나이' : '생일 기준 만나이'}>{age.text}</span>
       <span className="ref-day" title={day.captured ? '원본 화면에 표시된 일주' : '계산된 일주'}><span data-color={stemColor(day.stem)}>{day.stem}</span><span data-color={branchColor(day.branch)}>{day.branch}</span></span>
       <span className="ref-person-info"><strong>{entry.name}</strong><span className="ref-birth">{label}</span></span>
       {comparison && <span className="ref-selected" aria-hidden="true">{selected && <RefIcon name="check" size={17} />}</span>}
@@ -56,7 +56,7 @@ function ComparisonPanel({ selections, entries, open, close }) {
 export default function ReferenceVault({ vault, navigate, open, favorite, busy, change, onExit }) {
   const [tab, setTab] = useState('friends');
   const [search, setSearch] = useState('');
-  const { sort, compact } = readPreferences(vault);
+  const { sort, compact, ageNotation } = readPreferences(vault);
   const setSort = sort => change(state => savePreferences(state,{sort}));
   const [groupId, setGroupId] = useState('');
   const groups = activeGroups(vault);
@@ -75,7 +75,7 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
   const groupedIds = new Set(groups.flatMap(g => g.entryIds));
   const visible = selectedGroup ? pool.filter(e => selectedGroup.entryIds.includes(e.id)) : groupId === 'ungrouped' ? pool.filter(e=>!groupedIds.has(e.id)) : pool;
   const matching = useMemo(() => filterAndSortEntries(visible, {query:search, sort:tab === 'recent' ? 'recent' : sort,
-    dayOf:referenceDay}), [visible, search, sort, tab]);
+    dayOf:referenceDay, ageNotation}), [visible, search, sort, tab, ageNotation]);
   // Recent items must preserve access order, not fall back to 가나다순.
   const ordered = tab === 'recent' ? visible.filter(e => matching.includes(e)) : matching;
   const sections = tab === 'recent' ? [{ key:'recent', title:'최근 입력', count:ordered.length, items:ordered }] : limited
@@ -102,7 +102,7 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
     <div className="ref-results">
       {sections.filter(section=>section.items.length || (!limited && section.key!=='me')).map(section=><section className={'ref-section section-'+section.key} key={section.key} aria-label={section.title}>
         <h2>{section.title}{section.count!==null&&<span> {section.count}</span>}</h2>
-        <ul className="ref-people">{section.items.map(entry=><PersonRow key={entry.id} entry={entry} self={section.key==='me'} open={open} favorite={favorite} busy={busy} compact={compact} comparison={compare} selected={selection.includes(entry.id)} select={select}/>)}</ul>
+        <ul className="ref-people">{section.items.map(entry=><PersonRow key={entry.id} entry={entry} self={section.key==='me'} open={open} favorite={favorite} busy={busy} compact={compact} comparison={compare} selected={selection.includes(entry.id)} select={select} ageNotation={ageNotation}/>)}</ul>
       </section>)}
       {!ordered.length && <section className="ref-no-results"><RefIcon name="search" size={29}/><strong>{queryActive?'검색 결과가 없습니다':groupActive?'이 그룹에 명식이 없습니다':tab==='recent'?'최근 입력한 명식이 없습니다':'아직 명식이 없습니다'}</strong><p>{queryActive?'이름·날짜·나이·일주를 바꿔 검색해 보세요.':'오른쪽 상단의 추가 버튼으로 명식을 등록할 수 있습니다.'}</p></section>}
       {entries.some(e=>e.source) && <p className="ref-accuracy">원본에서 가져온 나이·일주는 저장 당시 표시값입니다. 역법·성별이 확인되지 않은 명식은 임의로 계산하지 않습니다.</p>}
