@@ -93,7 +93,8 @@
       "evidence": [
         "src/mobile/ReferenceVault.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/ci-verification-20261020.md"
       ],
       "gates": [
         {
@@ -128,7 +129,8 @@
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261020.md"
         }
       ]
     },
@@ -178,7 +180,8 @@
       "evidence": [
         "src/vault/integrated-actions.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/ci-verification-20261020.md"
       ],
       "gates": [
         {
@@ -213,7 +216,8 @@
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261020.md"
         }
       ]
     },
@@ -222,7 +226,8 @@
       "evidence": [
         "src/mobile/LuckExplorer.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/ci-verification-20261020.md"
       ],
       "gates": [
         {
@@ -257,7 +262,8 @@
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261020.md"
         }
       ]
     },
@@ -508,7 +514,7 @@
       ]
     },
     "analysis.climate": {
-      "note": "기존 한난·조습 산식과 대운/세운 기준 유지. 5계층 전체 조후 규칙은 미완료.",
+      "note": "원국 및 5계층 개별 증분×비중의 한난·조습 지수와 기여표. 기존 2계층 게이지는 보존하며, 운끼리의 추가 합국은 제외한다고 명시.",
       "evidence": [
         "src/mobile/reader-model.js",
         "tests/completion-extension.test.mjs",
@@ -525,7 +531,8 @@
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "tests/completion-extension.test.mjs"
         },
         {
           "name": "persistenceWhenApplicable",
@@ -538,7 +545,7 @@
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "tests/completion-extension.test.mjs"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
@@ -629,8 +636,9 @@
       ]
     },
     "analysis.gyeok": {
-      "note": "월지 본기/투간 우선 내격, 4응용격, 종격/전왕/화기 후보 탐색. 외잡격 전체와 충돌·파격 우선순위는 미완료.",
+      "note": "월령 본기/투간 내격·4응용격·삼명통회 5외격과 화기 구조 후보. 임의 75% 종격 탐색 제거. 전체 외잡격·파격·충돌 우선순위는 미완료.",
       "evidence": [
+        "src/mobile/classical-patterns.js",
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
         "docs/completion-20261020.md"
@@ -1301,7 +1309,8 @@
       "evidence": [
         "src/mobile/DisplaySettings.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/ci-verification-20261020.md"
       ],
       "gates": [
         {
@@ -1336,7 +1345,8 @@
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261020.md"
         }
       ]
     },
@@ -1345,7 +1355,8 @@
       "evidence": [
         "src/mobile/DisplaySettings.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/ci-verification-20261020.md"
       ],
       "gates": [
         {
@@ -1380,7 +1391,8 @@
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261020.md"
         }
       ]
     },
@@ -1389,7 +1401,8 @@
       "evidence": [
         "src/mobile/list-utils.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/ci-verification-20261020.md"
       ],
       "gates": [
         {
@@ -1424,7 +1437,8 @@
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261020.md"
         }
       ]
     },
@@ -1433,7 +1447,8 @@
       "evidence": [
         "src/mobile/DisplaySettings.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/ci-verification-20261020.md"
       ],
       "gates": [
         {
@@ -1468,7 +1483,8 @@
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261020.md"
         }
       ]
     },

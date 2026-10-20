@@ -12,6 +12,7 @@ const output=await build({stdin:{contents:`
  export * from './src/calendar/precise.js';
  export {locationPolicy,LOCATIONS} from './src/calendar/locations.js';
  export {calculateEntry} from './src/mobile/engine.js';
+ export {classicalExteriorCandidates} from './src/mobile/classical-patterns.js';
  export {researchAnalysis,patternCandidates,monthCommand,combineContributions} from './src/mobile/research-analysis.js';
  export {compatibilityComposition} from './src/mobile/compatibility-model.js';
  export {weightedAnalysis} from './src/mobile/weighted-analysis.js';
@@ -28,7 +29,7 @@ const output=await build({stdin:{contents:`
  export function renderExtension(name,props){return renderToStaticMarkup(React.createElement({ResearchPanel,LuckExplorer,DisplaySettings,CompatibilityDetails,ReferenceReader,RelationSection,ShinsalGrid,SixPillars,LuckRails,ReferenceVault}[name],props));}
  export {luckView};
  export {preciseLuckView} from './src/mobile/selection-model.js';
- export {relations,shinsalView,sixColumns} from './src/mobile/reader-model.js';
+ export {relations,shinsalView,sixColumns,multiLayerClimate} from './src/mobile/reader-model.js';
  import {RelationSection,ShinsalGrid} from './src/mobile/ReaderAnalysis.jsx';
  `,resolveDir:root},bundle:true,write:false,platform:'node',format:'esm',banner:{js:`import {createRequire} from 'node:module';const require=createRequire(${JSON.stringify(root+'package.json')});`},loader:{'.css':'empty'},define:{'import.meta.env.VITE_APP_MODE':'"mobile"','import.meta.env.VITE_GEMINI_API_KEY':'""'},logLevel:'silent'});
 const c=await import('data:text/javascript;base64,'+Buffer.from(output.outputFiles[0].text).toString('base64'));
@@ -70,3 +71,15 @@ test('custom tone foregrounds follow measured relative luminance endpoints',()=>
 
 test('decade choice selects a real start in local time and rounds forward to the next minute',()=>{const policy=c.locationPolicy(c.DEFAULT_POLICY,'newyork'),instant=Date.parse('2024-06-01T03:59:45Z');assert.deepEqual(c.selectionForDecade({startInstant:instant},policy),{date:'2024-06-01',hour:0,minute:0});assert.deepEqual(c.selectionForDecade({startYear:2020},policy),{date:'2020-07-01',hour:12,minute:0});assert.throws(()=>c.selectionForDecade({startYear:null},policy));});
 test('calendar-based decade boundaries use next actual start without an approximate gap',()=>{const a={startInstant:Date.parse('2020-01-01T00:00Z')},b={startInstant:Date.parse('2029-12-31T00:00Z')},base={decades:[b,a],years:[],months:[],year:2029},result={origin:'astronomical'};assert.equal(c.preciseLuckView(base,result,{instant:b.startInstant-1},c.DEFAULT_POLICY).decade,a);assert.equal(c.preciseLuckView(base,result,{instant:b.startInstant},c.DEFAULT_POLICY).decade,b);});
+
+const classicalFixture=values=>values.map(([s,b])=>c.pillar([...'甲乙丙丁戊己庚辛壬癸'].indexOf(s),[...'子丑寅卯辰巳午未申酉戌亥'].indexOf(b)));
+for(const [name,values] of [
+ ['곡직격 후보',[['癸','亥'],['甲','寅'],['乙','卯'],['乙','未']]],
+ ['염상격 후보',[['乙','亥'],['丙','午'],['甲','寅'],['丙','戌']]],
+ ['종혁격 후보',[['癸','巳'],['辛','酉'],['己','丑'],['辛','亥']]],
+ ['윤하격 후보',[['庚','申'],['壬','子'],['壬','辰'],['癸','亥']]],
+ ['가색격 후보',[['己','丑'],['戊','辰'],['己','未'],['甲','戌']]],
+])test('classical source core conditions: '+name,()=>{const p=classicalFixture(values);assert.ok(c.classicalExteriorCandidates(p).some(x=>x.name===name&&x.source.includes('卷六')));assert.deepEqual(c.classicalExteriorCandidates([{unknown:true},...p.slice(1)]),[]);});
+test('classical candidate exclusions are applied without percentage-score substitutes',()=>{const wood=classicalFixture([['辛','亥'],['甲','寅'],['乙','卯'],['乙','未']]);assert.equal(c.classicalExteriorCandidates(wood).some(x=>x.name==='곡직격 후보'),false);const fire=classicalFixture([['乙','亥'],['丙','午'],['甲','寅'],['戊','戌']]);assert.equal(c.classicalExteriorCandidates(fire).some(x=>x.name==='염상격 후보'),false);const metal=classicalFixture([['丁','巳'],['辛','酉'],['己','丑'],['丁','亥']]);assert.equal(c.classicalExteriorCandidates(metal).some(x=>x.name==='종혁격 후보'),false);const water=classicalFixture([['庚','申'],['壬','子'],['壬','辰'],['戊','戌']]);assert.equal(c.classicalExteriorCandidates(water).some(x=>x.name==='윤하격 후보'),false);const earth=classicalFixture([['己','丑'],['戊','辰'],['己','未'],['丙','戌']]);assert.equal(c.classicalExteriorCandidates(earth).some(x=>x.name==='가색격 후보'),false);});
+
+test('five-layer climate preserves natal baseline, exact individual original slots and user weight',()=>{const r=c.calculateEntry({name:'기후',birth:B}),p=c.pillar(2,6),base=c.multiLayerClimate(r,[]),d=c.multiLayerClimate(r,[p]),year=c.multiLayerClimate(r,[null,p]),all=c.multiLayerClimate(r,[p,p,p,p,p]);assert.equal(base.temperature,base.temperatureBase);assert.equal(base.humidity,base.humidityBase);assert.equal(all.rows.length,5);assert.ok(Math.abs(all.temperature-(base.temperature+d.rows[0].temperature+year.rows[1].temperature*4))<.011);const weight={luck:[0,0,0,0,0]};assert.equal(c.multiLayerClimate(r,[p,p,p,p,p],weight).temperature,base.temperature);assert.equal(c.multiLayerClimate({...r,status:'partial'},[p]),null);assert.throws(()=>c.multiLayerClimate(r,[p],{luck:[NaN]}));});

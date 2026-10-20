@@ -1,12 +1,13 @@
 /** Explicit Palja research conventions. Descriptive symbol analysis, never event forecasts.
  * Month hidden stems: existing EBH 30-day allocation. Inner patterns: month-main or revealed.
- * External-pattern percentage thresholds below are product screening conventions, not classical proofs.
+ * Source-bounded exterior candidates are separated from product strength thresholds.
  */
 import {HS,EB,HS_EL,EB_EL,EBH,getSS} from './engine.js';
-import {validPillar} from './reader-model.js';
+import {validPillar,multiLayerClimate} from './reader-model.js';
 import {weightedAnalysis} from './weighted-analysis.js';
 import {DEFAULT_WEIGHTS} from '../vault/integrated-schema.js';
 import {DEFAULT_RULES} from '../vault/analysis-rules.js';
+import {classicalExteriorCandidates} from './classical-patterns.js';
 export const ELEMENTS=[...'木火土金水'];
 export const GENERATES={木:'火',火:'土',土:'金',金:'水',水:'木'};
 export const CONTROLS={木:'土',火:'金',土:'水',金:'木',水:'火'};
@@ -45,11 +46,7 @@ export function patternCandidates(result,rules=DEFAULT_RULES){
  const p=result?.saju?.pillars||[],day=p[1],month=p[2];if(!validPillar(day)||!validPillar(month))return null;
  const command=monthCommand(result),exposed=command.table.filter(t=>t.positions.length),chosen=rules.patternMode==='revealed'?(exposed.find(t=>p[2].stem===t.stem)||[...exposed].reverse()[0]||command.table.at(-1)):command.table.at(-1);
  const god=getSS(day.stem,chosen.stem),name=god==='비견'?'건록격':god==='겁재'?'월겁격':god+'격';
- const all=p.filter(validPillar),counts=Object.fromEntries(ELEMENTS.map(e=>[e,0]));
- for(const v of all){counts[el(v.stem)]++;counts[EB_EL[v.branchIdx]]++;}
- const total=all.length*2,dominant=ELEMENTS.reduce((a,b)=>counts[a]>=counts[b]?a:b),ratio=counts[dominant]/total;
- const external=[];
- if(all.length===4&&ratio>=.75)external.push({name:dominant===el(day.stem)?'전왕격 검토':'종격 검토',reason:`겉글자 ${total}개 중 ${counts[dominant]}개가 ${dominant} (${Math.round(ratio*100)}%). 75%는 후보 탐색용 제품 기준이며 종격 성립 확정이 아님.`});
+ const all=p.filter(validPillar),external=classicalExteriorCandidates(p);
  const dayPair=HAP.find(([a,b])=>day.stem===a||day.stem===b),partner=dayPair?.slice(0,2).find(s=>s!==day.stem);
  if(dayPair&&all.some((v,i)=>i!==1&&v.stem===partner))external.push({name:'화기격 검토',reason:`일간 ${day.stem}과 ${partner}의 합 후보. 월령·통근·쟁합·파격은 별도 확인.`});
  const applied=[];
@@ -66,13 +63,13 @@ export function researchAnalysis(result,luck=[],weights=DEFAULT_WEIGHTS,rules=DE
  const strength={name:support>=.6?'신강 경향':support<=.4?'신약 경향':'중화 구간',ratio:support,deukRyeong:month===null?null:season,deukJi:roots.length>0,deukSe:support>=.5,roots,basis:'신강/약: 비겁+인성의 상대 비중 ≥60% / ≤40%, 중간은 중화. 득령: 월지 오행이 비겁/인성. 득지: 원국 지장간에 일간 동오행. 득세: 비겁+인성 50% 이상. 이 임계값은 설명 가능한 제품 규칙.'};
  const eobbu=support>.6?GENERATES[dayElement]:support<.4?resource:null;
  const dominant=ELEMENTS.reduce((a,b)=>scores[a]>=scores[b]?a:b),byeong=scores[dominant]/total>=.4?dominant:null,yak=byeong?CONTROLLED_BY[byeong]:null;
- const johu=result.yongsin?.johu?.primary||null,tongwan=result.yongsin?.tongwan?.primary||null,pattern=patternCandidates(result,rules),patternElement=pattern?el(pattern.inner.stem):null;
+ const climate=multiLayerClimate(result,luck,weights),johu=climate?(climate.temperature<=-6?'火':climate.temperature>=6?'水':null):null,tongwan=result.yongsin?.tongwan?.primary||null,pattern=patternCandidates(result,rules),patternElement=pattern?el(pattern.inner.stem):null;
  const yong=eobbu||johu||tongwan;
  const roles=ELEMENTS.map(e=>({element:e,role:!yong?'판정 보류':e===yong?'용':GENERATES[e]===yong?'희':CONTROLS[e]===yong?'기':CONTROLS[yong]===e?'구':'한',ratio:scores[e]/total}));
  const command=pattern?.command;
  const trueStems=command?.current?command.table.filter(t=>t.stem===command.current&&t.positions.length).map(t=>t.stem):[];
  const falseStems=command?.current?command.table.filter(t=>t.stem!==command.current&&t.positions.length).map(t=>t.stem):[];
- return {status:'ready',partial:p.some(v=>!validPillar(v)),base,current,scores,total,strength,pattern,
+ return {status:'ready',partial:p.some(v=>!validPillar(v)),base,current,scores,total,strength,pattern,climate,
   cheYong:{body:day.stem,monthCommand:command?.main,current:command?.current,trueStems,falseStems},
-  methods:[{name:'억부',element:eobbu,reason:`비겁+인성 ${(support*100).toFixed(1)}%: 60% 초과는 식상, 40% 미만은 인성, 중간은 보류`},{name:'조후',element:johu,reason:result.yongsin?.johu?.reason||'기존 조후 계산이 없거나 중간 구간'},{name:'통관',element:tongwan,reason:result.yongsin?.tongwan?.reason||'기존 통관 조합 없음'},{name:'병약',element:yak,reason:byeong?`${byeong} ${(scores[byeong]/total*100).toFixed(1)}% 집중(40% 이상) → 이를 극하는 ${yak}를 약 후보로 분류`:'40% 이상 집중 오행이 없어 보류'},{name:'용격',element:patternElement,reason:pattern?.inner.reason||'월주 미확인'}],roles,convention:'palja-research-v1: 설정 가능한 독립 규칙. 기존 엔진 판정과 병기하며 학파 전체의 합의나 원본 앱 산식을 뜻하지 않음.'};
+  methods:[{name:'억부',element:eobbu,reason:`비겁+인성 ${(support*100).toFixed(1)}%: 60% 초과는 식상, 40% 미만은 인성, 중간은 보류`},{name:'조후',element:johu,reason:climate?`5계층 증분형 한난 ${climate.temperature}: 기존 ±6 문턱으로 火/水 후보 분류`:'완전한 원국이 없어 조후 보류'},{name:'통관',element:tongwan,reason:result.yongsin?.tongwan?.reason||'기존 통관 조합 없음'},{name:'병약',element:yak,reason:byeong?`${byeong} ${(scores[byeong]/total*100).toFixed(1)}% 집중(40% 이상) → 이를 극하는 ${yak}를 약 후보로 분류`:'40% 이상 집중 오행이 없어 보류'},{name:'용격',element:patternElement,reason:pattern?.inner.reason||'월주 미확인'}],roles,convention:'palja-research-v1: 설정 가능한 독립 규칙. 기존 엔진 판정과 병기하며 학파 전체의 합의나 원본 앱 산식을 뜻하지 않음.'};
 }
