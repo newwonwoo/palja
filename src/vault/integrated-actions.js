@@ -15,7 +15,7 @@ export function saveSelectionPreset(state,entryId,name,selection){
   if(presets.length>=30)throw new Error('운 즐겨찾기는 30개까지 보관됩니다.');
   const normalized=name.trim().normalize('NFKC').toLocaleLowerCase('ko');
   if(presets.some(p=>p.entryId===entryId&&p.name.normalize('NFKC').toLocaleLowerCase('ko')===normalized))throw new Error('같은 이름의 운 즐겨찾기가 있습니다.');
-  return {...x,presets:[...presets,{id:'preset-'+crypto.randomUUID(),entryId,name:name.trim(),selection:{date:selection.date,hour:selection.hour,minute:selection.minute},createdAt:new Date().toISOString()}]};
+  return {...x,presets:[...presets,{id:'preset-'+crypto.randomUUID(),entryId,name:name.trim(),selection:{date:selection.date,hour:selection.hour,minute:selection.minute,...(Object.hasOwn(selection,'type')?{type:selection.type}:{})},createdAt:new Date().toISOString()}]};
  });
 }
 export function removeSelectionPreset(state,id){return updateIntegrated(state,x=>({...x,presets:(x.presets||[]).filter(p=>p.id!==id)}));}

@@ -9,6 +9,8 @@ import './workspace.css';
 import { activeGroups, readPreferences } from '../vault/workspace.js';
 import { savePreferences } from '../vault/workspace-actions.js';
 import {EMPTY_MATCH_SELECTION,toggleMatchSelection,matchSelectionEntries} from './match-selection.js';
+import ProfileBanners from './ProfileBanners.jsx';
+import './profile-banners.css';
 
 function RefIcon({ name, size = 23, fill = false }) {
   const paths = {
@@ -67,7 +69,6 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
   const [compare, setCompare] = useState(false);
   const [selection, setSelection] = useState(EMPTY_MATCH_SELECTION);
   const entries = useMemo(() => vault.entries.filter(e => !e.deletedAt), [vault.entries]);
-  const self = entries.find(e => e.id === vault.selfId);
   const favorites = entries.filter(e => e.favorite);
   const friends = entries.filter(e => !e.favorite);
   const queryActive = Boolean(search.trim());
@@ -83,7 +84,6 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
   const sections = tab === 'recent' ? [{ key:'recent', title:'최근 입력', count:ordered.length, items:ordered }] : limited
     ? [{ key:'search', title:queryActive?'검색 결과':selectedGroup?.name || '미분류', count:ordered.length, items:ordered }]
     : [
-        ...(self ? [{ key:'me', title:'me', count:null, items:[self] }] : []),
         { key:'favorites', title:'즐겨찾기', count:favorites.length, items:ordered.filter(e => e.favorite) },
         { key:'friends', title:'친구', count:friends.length, items:ordered.filter(e => !e.favorite) },
       ];
@@ -102,6 +102,7 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
       </div>
     </div>
     <div className="ref-results">
+      {!compare&&!limited&&tab==='friends'&&<ProfileBanners vault={vault} settings={readPreferences(vault).profileBanners} open={open} navigate={navigate} busy={busy}/>}
       {sections.filter(section=>section.items.length || (!limited && section.key!=='me')).map(section=><section className={'ref-section section-'+section.key} key={section.key} aria-label={section.title}>
         <h2>{section.title}{section.count!==null&&<span> {section.count}</span>}</h2>
         <ul className="ref-people">{section.items.map(entry=><PersonRow key={entry.id} entry={entry} self={section.key==='me'} open={open} favorite={favorite} busy={busy} compact={compact} comparison={compare} selected={selection.basisId===entry.id||selection.partnerId===entry.id} select={select} ageNotation={ageNotation}/>)}</ul>

@@ -1,4 +1,5 @@
 import React,{useEffect,useRef,useState} from 'react';
+import {selectionType,LUCK_TYPES} from './selection-model.js';
 import {integrated,saveNote,setNoteDeleted,restoreNoteVersion} from '../vault/integrated-actions.js';
 const today=()=>new Date(Date.now()+9*3600000).toISOString().slice(0,10);
 async function compactImage(file) {
@@ -30,11 +31,11 @@ export default function Journal({entry,vault,change,busy,draft,setDraft,selectio
  <div className="integration-images">{draft.images.map((image,i)=><div key={i}><img src={image} alt={'첨부 사진 '+(i+1)}/><button type="button" aria-label={'사진 '+(i+1)+' 제거'} onClick={()=>update('images',draft.images.filter((_,n)=>n!==i))}>제거</button></div>)}</div>
  <button type="button" className="small-button" onClick={()=>setDraw(!draw)}>{draw?'그림판 접기':'그림 그리기'}</button>{draw&&<DrawingPad value={draft.drawing} onChange={v=>update('drawing',v)}/>}
  <label className="rr-check"><input type="checkbox" checked={Boolean(draft.selection)} onChange={e=>update('selection',e.target.checked?selection:null)}/>현재 선택운 함께 기록</label>
- {draft.selection&&<p className="rr-subnote">{draft.selection.date} {String(draft.selection.hour).padStart(2,'0')}:{String(draft.selection.minute).padStart(2,'0')}</p>}
+ {draft.selection&&<p className="rr-subnote">{draft.selection.date} {String(draft.selection.hour).padStart(2,'0')}:{String(draft.selection.minute).padStart(2,'0')} · {LUCK_TYPES[selectionType(draft.selection)]}</p>}
  {error&&<p role="alert">{error}</p>}<div className="rr-dialog-actions"><button type="button" onClick={()=>{if(window.confirm('작성 내용을 버릴까요?'))setDraft(null);}}>작성 취소</button><button type="submit">기록 저장</button></div></fieldset></form>:<>
  <label>기록 검색<input type="search" aria-label="기록 검색" placeholder="제목·본문·날짜·분류" value={query} onChange={e=>setQuery(e.target.value)}/></label>
  {notes.map(n=><article className="integration-note" key={n.id}><div><h3>{n.title}</h3><small>{n.date} · {n.category||'미분류'}</small></div><p>{n.text}</p><div className="integration-images">{[...n.images,...(n.drawing?[n.drawing]:[])].map((img,i)=><button type="button" key={i} aria-label={n.title+' 첨부 '+(i+1)+' 크게 보기'} onClick={()=>setPreview(img)}><img src={img} alt="첨부 이미지"/></button>)}</div>
- {n.selection&&<button type="button" className="rr-small-link" onClick={()=>onApplySelection(n.selection)}>기록 당시 운 선택 · {n.selection.date}</button>}
+ {n.selection&&<button type="button" className="rr-small-link" onClick={()=>onApplySelection(n.selection)}>기록 당시 운 선택 · {n.selection.date} · {LUCK_TYPES[selectionType(n.selection)]}</button>}
  <div className="rr-dialog-actions"><button type="button" onClick={()=>edit(n)}>기록 수정</button><button type="button" onClick={()=>setDeleting(n.id)}>기록 삭제</button></div>
  {!!n.history.length&&<details><summary>수정 이력 {n.history.length}</summary>{n.history.map((h,i)=><div key={i}><span>{h.at.slice(0,16)} · {h.title}</span><button type="button" disabled={busy} onClick={()=>change(s=>restoreNoteVersion(s,n.id,i),'이전 메모를 복원했습니다.')}>이 버전 복원</button></div>)}</details>}
  </article>)}{!notes.length&&<p className="rr-empty">날짜별 기록이 없습니다.</p>}

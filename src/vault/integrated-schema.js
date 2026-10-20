@@ -9,7 +9,7 @@ export function weightErrors(w) {
 }
 export function imageValid(s) {return typeof s==='string'&&s.length<=1100000&&/^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(s);}
 const validDate = date => typeof date==='string' && /^\d{4}-\d{2}-\d{2}$/.test(date) && Number.isFinite(Date.parse(date)) && new Date(date).toISOString().slice(0,10)===date;
-const validSelection = selection => plain(selection) && validDate(selection.date) && selection.date>='1900-01-01' && selection.date<='2050-12-31' && Number.isInteger(selection.hour) && selection.hour>=0 && selection.hour<=23 && Number.isInteger(selection.minute) && selection.minute>=0 && selection.minute<=59;
+export const validSelection = selection => plain(selection) && validDate(selection.date) && selection.date>='1900-01-01' && selection.date<='2050-12-31' && Number.isInteger(selection.hour) && selection.hour>=0 && selection.hour<=23 && Number.isInteger(selection.minute) && selection.minute>=0 && selection.minute<=59 && (!Object.hasOwn(selection,'type')||['day','month','year'].includes(selection.type));
 export function noteContentErrors(n) {
  const e=[];if(typeof n.title!=='string'||!n.title.trim()||n.title.length>120)e.push('제목은 1~120자');
  if(typeof n.text!=='string'||n.text.length>20000)e.push('본문은 20,000자 이하');

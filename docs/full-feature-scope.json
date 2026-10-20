@@ -397,15 +397,16 @@
       "area": "library",
       "title": "내 명식·즐겨찾기·친구·최근",
       "implementation": "implemented",
-      "referenceBehavior": "unverified",
-      "gap": "원본 스크롤/최근 입력과 열람의 차이 대조",
+      "referenceBehavior": "partial",
+      "gap": "내 명식·즐겨찾기·친구·최근 목록과 원본 3종 배너(내 명식/현재/생일자), 명식별 생일자 표시 연결. 현재 명식은 독립 계산이며 원본 실제 화면/계산 대조·접기 애니메이션은 남음.",
       "apkEvidence": [
         "package:how8ja/features/profile_list/application/celebrity/celebrity_filtering_provider.dart",
         "package:how8ja/features/profile_list/application/celebrity/celebrity_list_providers.dart",
         "package:how8ja/features/profile_list/application/celebrity/celebrity_sortings_provider.dart"
       ],
-      "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "evidenceLimit": "원본 AOT의 배너 종류·배열/숨김·생일자 필터를 정적 확인. Palja 자체 저장/화면 검증이며 원본 전체 실행 대조는 미완료.",
+      "independentVerification": "partial",
+      "originalComparisonEvidence": "docs/original-apk-batch-navigation.md"
     },
     {
       "id": "library.search",
@@ -570,11 +571,13 @@
       "title": "현재 운 바로가기·선택 상태",
       "implementation": "partial",
       "referenceBehavior": "partial",
-      "gap": "명식/운세 화면에서 현재 기기 날짜·시각으로 복귀·저장·재실행 연결. 지원 범위 밖이면 차단. 원본 월/연 프리셋, 선택 유형과 계산·실제 화면 대조는 남음.",
+      "gap": "오늘 복귀와 일/월/년 유형 전환·이전/다음·저장·재열기·메모/즐겨찾기/백업 연결. 현재 원국을 자동 저장 없이 조회·갱신·등록 폼 전달. 원본의 전체 시각 정규화·분석 결과·절운 시작 탐색·실제 화면 대조는 남음.",
       "apkEvidence": [
         "package:how8ja/features/myeongjo/application/basis_joo_type_provider.dart",
         "package:how8ja/features/myeongjo/application/custom_widget_options_provider.dart",
-        "package:how8ja/features/myeongjo/application/myeongjo_calc_providers.dart"
+        "package:how8ja/features/myeongjo/application/myeongjo_calc_providers.dart",
+        "package:how8ja/features/woonse/presentation/widgets/woonse_preset_button.dart",
+        "package:how8ja/features/profile/current/application/current_time_profile_provider.dart"
       ],
       "evidenceLimit": "원본 AOT의 상태 전이·화면 인자·저장 경로 정적 확인 및 Palja 브라우저 조작 검증. 원본 실제 화면·실기기 전체 대조는 미완료.",
       "implementationEvidence": [
@@ -582,7 +585,7 @@
         "docs/integrated-release-1.1.0.md"
       ],
       "independentVerification": "partial",
-      "originalComparisonEvidence": "docs/original-apk-navigation-gaps.md"
+      "originalComparisonEvidence": "docs/original-apk-batch-navigation.md"
     },
     {
       "id": "reader.tree",
@@ -590,7 +593,7 @@
       "title": "운세 트리·다층 운 흐름",
       "implementation": "partial",
       "referenceBehavior": "partial",
-      "gap": "시진·일진·절운·세운·대운과 원국 표시, 날짜/시각 저장·오늘 복귀·운세/메모 연결·교운 시각 비교·백업 검증. 흐름 점수·오행/한난조습 다층 변화·원본 실제 화면/계산 대조는 남음.",
+      "gap": "5단 운과 원국·날짜/시각·조회 유형 저장·오늘 복귀·운세/메모·교운 경계·지장간 표시 연결. 명식표와 경계 판정 공통화. 흐름 점수·오행/한난조습 다층 변화·원본 실제 화면/계산 대조는 남음.",
       "apkEvidence": [
         "package:how8ja/features/woonse_tree_chart/presentation/woonse_tree_chart_page.dart"
       ],
@@ -776,7 +779,7 @@
       "title": "대운 순역·기산·시작일·10대운",
       "implementation": "partial",
       "referenceBehavior": "unverified",
-      "gap": "독립 모드 순역·10대운, 절입 경과일/3 기산 연결. 시작일은 365.2425일/년 근사, 원본 기산법 대조 전. 기존 엔진 2000-01-01 남성 입력의 이전 해 절기 탐색 누락으로 대운 배열이 비는 현상 재현; 연도 경계 보완 필요.",
+      "gap": "독립 모드 순역·10대운·명시적 끝 경계·교운 순간 이후 분 선택 연결. 시작일은 365.2425일/년 근사, 원본 기산법 대조 전. 기존 엔진의 2000-01-01 남성 이전 해 절기 탐색 누락은 보존·미해결.",
       "apkEvidence": [
         "package:how8ja/core/domains/manse/calculator/dea_joo_calculator.dart",
         "package:how8ja/features/setting/presentation/manse_settings/daewoon_calculation_options.dart"
@@ -784,9 +787,11 @@
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/luck-selection-types.test.mjs",
+        "docs/original-apk-batch-navigation.md"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "partial"
     },
     {
       "id": "analysis.element",
@@ -1375,14 +1380,14 @@
       "title": "탭 순서·프로필 배너 순서",
       "implementation": "partial",
       "referenceBehavior": "partial",
-      "gap": "풀이 4개 탭의 순서 편집·확인/취소·초기화·저장·백업·방향키 탐색 연결. 원본 드래그 UI 및 프로필 배너 내 명식/현재/생일자 순서·표시는 남음.",
+      "gap": "풀이 4개 탭 순서 편집과 내 명식/현재/생일자 3종 배너 순서·숨김·기본값·저장·백업 연결. 내 명식/현재 동시 숨김 차단. 원본 드래그·애니메이션·접기와 실제 화면 대조는 남음.",
       "apkEvidence": [
         "package:how8ja/features/explanation/presentation/widgets/explanation_tab_reorder_sheet.dart",
         "package:how8ja/features/setting/presentation/general_settings/profile_banner_order_options.dart"
       ],
       "evidenceLimit": "원본 AOT의 상태 전이·화면 인자·저장 경로 정적 확인 및 Palja 브라우저 조작 검증. 원본 실제 화면·실기기 전체 대조는 미완료.",
       "independentVerification": "partial",
-      "originalComparisonEvidence": "docs/original-apk-navigation-gaps.md"
+      "originalComparisonEvidence": "docs/original-apk-batch-navigation.md"
     },
     {
       "id": "settings.calculation",

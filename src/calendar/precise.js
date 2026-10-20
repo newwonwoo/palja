@@ -91,8 +91,8 @@ export function preciseDaeun(saju,sex) {
  const gap=Math.abs(event.instant-saju.clock.instant)/DAY,age=gap/3;
  const base=saju.pillars[2],birthYear=saju.solar.year;
  return Array.from({length:10},(_,i)=>{
-  const startAgeExact=age+i*10,startInstant=saju.clock.instant+startAgeExact*365.2425*DAY;
-  return {...pillar(base.stemIdx+(forward?1:-1)*(i+1),base.branchIdx+(forward?1:-1)*(i+1)),startAge:Number(startAgeExact.toFixed(2)),startAgeExact,startYear:new Date(startInstant+9*3600000).getUTCFullYear(),startInstant,direction:forward?'순행':'역행',basis:'절입까지 경과일 ÷ 3; 시작일은 1년=365.2425일 근사',boundary:event.iso,birthYear};
+  const startAgeExact=age+i*10,startInstant=saju.clock.instant+startAgeExact*365.2425*DAY,endInstant=saju.clock.instant+(age+(i+1)*10)*365.2425*DAY;
+  return {...pillar(base.stemIdx+(forward?1:-1)*(i+1),base.branchIdx+(forward?1:-1)*(i+1)),startAge:Number(startAgeExact.toFixed(2)),startAgeExact,startYear:new Date(startInstant+9*3600000).getUTCFullYear(),startInstant,endInstant,direction:forward?'순행':'역행',basis:'절입까지 경과일 ÷ 3; 시작일은 1년=365.2425일 근사',boundary:event.iso,birthYear};
  });
 }
 export function preciseEntryBase(b) {

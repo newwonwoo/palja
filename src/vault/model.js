@@ -248,7 +248,8 @@ export function validateVault(state) {
   const entryFields = ['id', 'name', 'favorite', 'memo', 'birth', 'referenceDisplay', 'source', 'birthRevisions', 'createdAt', 'updatedAt', 'deletedAt'];
   for (const [index, entry] of state.entries.entries()) {
     const at = `$.entries[${index}]`;
-    if (!fields(entry, entryFields, errors, at)) continue;
+    if (!fields(entry, own(entry,'showBirthday')?[...entryFields,'showBirthday']:entryFields, errors, at)) continue;
+    if(own(entry,'showBirthday')&&typeof entry.showBirthday!=='boolean')issue(errors,`${at}.showBirthday`,'must be a boolean');
     if (!nonempty(entry.id) || ids.has(entry.id)) issue(errors, `${at}.id`, 'must be nonempty and unique');
     ids.set(entry.id, entry);
     if (!nonempty(entry.name)) issue(errors, `${at}.name`, 'must be a nonempty string');
@@ -336,7 +337,7 @@ export function upsertEntry(state, draft) {
   assertState(state);
   const parsed = readPayload(draft, 'entry draft');
   if (!plain(parsed)) fail('entry draft', ['$: must be an object']);
-  const editable = ['id', 'name', 'favorite', 'memo', 'birth'];
+  const editable = ['id', 'name', 'favorite', 'memo', 'birth','showBirthday'];
   const old = own(parsed, 'id') ? entryAt(state, parsed.id) : null;
   // Passing a full current entry is supported, but imported metadata cannot be edited.
   for (const key of Object.keys(parsed)) {
@@ -365,6 +366,7 @@ export function upsertEntry(state, draft) {
     id: old?.id || localId('entry'),
     name: own(parsed, 'name') ? parsed.name : old?.name,
     favorite: own(parsed, 'favorite') ? parsed.favorite : old?.favorite ?? false,
+    ...(own(parsed,'showBirthday')?{showBirthday:parsed.showBirthday}:old&&own(old,'showBirthday')?{showBirthday:old.showBirthday}:{}),
     memo: own(parsed, 'memo') ? parsed.memo : old?.memo ?? '',
     birth,
     referenceDisplay: old?.referenceDisplay ?? null,

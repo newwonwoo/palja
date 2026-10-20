@@ -43,24 +43,24 @@ export function SixPillars({columns,dayStem,onInspect,hanja=true,compact=false,a
       {manseDetails?.nayin&&<tr className="rr-nayin" aria-label="납음오행">{columns.map(c=>{const n=c.kind==='calculated'?nayinOf(c.pillar):null;return <td key={c.key} title={n?.hanja}>{n?.name||'—'}</td>;})}</tr>}
     </tbody></table>;
 }
-function LuckTile({item,kind,dayStem,selected,onSelect,birthYear}) {
+function LuckTile({item,kind,dayStem,selected,onSelect,birthYear,busy=false}) {
   const c={kind:'calculated',pillar:item,key:kind,label:kind==='year'?'세운':kind==='decade'?'대운':'월운'};
   const labels=pillarLabels(c,dayStem);
   const title=kind==='decade'?`${item.startAge}세 대운 ${item.stem}${item.branch}`:kind==='year'?`${item.year}년 세운 ${item.stem}${item.branch}`:`${item.year}년 ${item.month}월 월운 ${item.stem}${item.branch}`;
-  return <button type="button" className={`rr-luck-tile ${selected?'selected':''}`} aria-label={title} aria-pressed={selected} disabled={(kind==='decade'&&!Number.isInteger(item.startYear))||((kind==='decade'?item.startYear:item.year)>2050)} onClick={()=>onSelect(item)}>
+  return <button type="button" className={`rr-luck-tile ${selected?'selected':''}`} aria-label={title} aria-pressed={selected} disabled={busy||(kind==='decade'&&!Number.isInteger(item.startYear))||((kind==='decade'?item.startYear:item.year)>2050)} onClick={()=>onSelect(item)}>
     <span className="rr-luck-date">{kind==='decade'?item.startAge:kind==='year'?item.year:`${item.month}월`}</span>
     {kind==='year'&&<span className="rr-luck-age" title="세는나이: 해당 연도 − 출생연도 + 1">{birthYear&&item.year>=birthYear?item.year-birthYear+1:'—'}</span>}
     <span className="rr-luck-god">{labels.stem}</span><Rune column={c} part="stem" hanja={false} small/><Rune column={c} part="branch" hanja={false} small/>
     <span className="rr-luck-god">{labels.branch}</span><span className="rr-growth" data-stage={labels.growth}>{labels.growth}</span>
   </button>;
 }
-export function LuckRails({view,dayStem,selectedMonth,onYear,onMonth,large=false}) {
+export function LuckRails({view,dayStem,selectedMonth,onYear,onMonth,onDecade,busy=false,large=false}) {
   const month=view.months.find(m=>m.key===selectedMonth);
   return <section className={`rr-luck-rails ${large?'rr-large-rails':''}`} aria-label="대운 세운 월운 선택">
-    {view.decades.length>0?<div className="rr-rail" role="group" aria-label="대운 목록" style={{'--slots':Math.max(view.decades.length,8)}}>{view.decades.map(d=><LuckTile key={d.startYear??d.startAge} item={d} kind="decade" dayStem={dayStem} selected={view.decade!=null&&view.decade.startYear===d.startYear} onSelect={d=>onYear(d.startYear)}/>)}</div>:<p className="rr-empty">대운은 성별·출생시각과 계산 결과 확인 후 표시합니다.</p>}
+    {view.decades.length>0?<div className="rr-rail" role="group" aria-label="대운 목록" style={{'--slots':Math.max(view.decades.length,8)}}>{view.decades.map(d=><LuckTile key={d.startYear??d.startAge} item={d} kind="decade" busy={busy} dayStem={dayStem} selected={view.decade!=null&&view.decade.startYear===d.startYear} onSelect={d=>onDecade?onDecade(d):onYear(d.startYear)}/>)}</div>:<p className="rr-empty">대운은 성별·출생시각과 계산 결과 확인 후 표시합니다.</p>}
     {view.decades.some(d=>d.manualBasis)&&<p className="rr-subnote">직접 지정 대운수입니다. 시작 연도 미상 또는 2050년 초과 항목은 연도 선택에 사용하지 않습니다.</p>}
-    <div className="rr-rail" role="group" aria-label="세운 목록" style={{'--slots':10}}>{view.years.map(y=><LuckTile key={y.year} item={y} kind="year" dayStem={dayStem} selected={view.year===y.year} onSelect={y=>onYear(y.year)} birthYear={view.birthYear}/>)}</div>
-    {view.months.length>0&&<><div className="rr-rail rr-month-rail" role="group" aria-label="월운 목록" style={{'--slots':12}}>{view.months.map(m=><LuckTile key={m.key} item={m} kind="month" dayStem={dayStem} selected={selectedMonth===m.key} onSelect={m=>onMonth(m.key)}/>)}</div>
+    <div className="rr-rail" role="group" aria-label="세운 목록" style={{'--slots':10}}>{view.years.map(y=><LuckTile key={y.year} item={y} kind="year" busy={busy} dayStem={dayStem} selected={view.year===y.year} onSelect={y=>onYear(y.year)} birthYear={view.birthYear}/>)}</div>
+    {view.months.length>0&&<><div className="rr-rail rr-month-rail" role="group" aria-label="월운 목록" style={{'--slots':12}}>{view.months.map(m=><LuckTile key={m.key} item={m} kind="month" busy={busy} dayStem={dayStem} selected={selectedMonth===m.key} onSelect={m=>onMonth(m.key)}/>)}</div>
     <p className="rr-rail-note" role="status">{month?`${month.year}년 ${month.month}월 · ${month.stem}${month.branch} 선택. `:''}월운: 각 월 15일 {view.precision?'12시의 독립 절입 산식':'기존 산식'} · 1월은 다음 해입니다.</p></>}
   </section>;
 }
