@@ -40,10 +40,11 @@ const checked = value => value ? 'x' : ' ';
 const lines = [
   '# 원본 APK 대조 체크리스트',
   '',
-  '이 목록은 `full-feature-scope.json`의 79개 작업 단위를 추적한다. 원본 앱 전체 기능 수를 확정한 목록은 아니다. 새 기능이 확인되면 JSON에 행을 추가하고 이 문서를 다시 생성한다.',
+  `이 목록은 \`full-feature-scope.json\`의 ${features.length}개 작업 단위를 추적한다. 원본 앱 전체 기능 수를 확정한 목록은 아니다. 새 기능이 확인되면 JSON에 행을 추가하고 이 문서를 다시 생성한다.`,
   '',
   `현재 자체 구현 분류: **구현 ${count('implemented') + count('verified')} / 부분 구현 ${count('partial')} / 미구현 ${count('not_implemented')}**. 원본 대조와 독립 검증을 모두 통과한 항목: **${verified} / ${features.length}**. 자체 구현 숫자를 원본 일치율로 해석하지 않는다.`,
   `원본 정적 분석으로 동작을 일부 확인한 항목: **${features.filter(feature => feature.referenceBehavior === 'partial').length}개**. 이는 원본 앱 실행 대조 완료와 구분한다.`,
+  '완료한 세부 작업과 다음 대조 순서는 [반복 작업 기록](original-apk-iteration-log.md)을 확인한다. 세부 작업 완료와 전체 기능 일치 완료를 구분한다.',
   '',
   '## 원본 확보 및 판정 기준',
   '',
@@ -72,4 +73,10 @@ for (const area of sections) {
   }
   lines.push('');
 }
-writeFileSync(join(root, 'docs/original-apk-parity-checklist.md'), lines.join('\n'));
+const destination=join(root,'docs/original-apk-parity-checklist.md'),output=lines.join('\n');
+if(process.argv.includes('--check')){
+  if(readFileSync(destination,'utf8')!==output){
+    console.error('체크리스트가 JSON 상태와 다릅니다. npm run parity:update를 실행하세요.');
+    process.exitCode=1;
+  }
+}else writeFileSync(destination,output);

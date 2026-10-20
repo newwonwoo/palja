@@ -1,4 +1,4 @@
-import {readFile} from 'node:fs/promises';
+import {readFile,access} from 'node:fs/promises';
 const scope=JSON.parse(await readFile(new URL('../docs/full-feature-scope.json',import.meta.url),'utf8'));
 const ids=new Set(), errors=[];
 const statuses=['not_implemented','partial','implemented','verified'];
@@ -6,6 +6,11 @@ for(const item of scope.features){
  if(ids.has(item.id)||!item.title||!item.gap||!statuses.includes(item.implementation))errors.push('Invalid feature: '+item.id);
  ids.add(item.id);
  if(!Array.isArray(item.apkEvidence)||!item.apkEvidence.length)errors.push('Missing inventory evidence: '+item.id);
+ if(['partial','verified'].includes(item.referenceBehavior)){
+   if(typeof item.originalComparisonEvidence!=='string'||!item.originalComparisonEvidence.trim())errors.push('Missing original comparison report: '+item.id);
+   else if(!/^docs\/[a-zA-Z0-9._/-]+\.md$/.test(item.originalComparisonEvidence)||item.originalComparisonEvidence.split('/').includes('..'))errors.push('Invalid comparison report path: '+item.id);
+   else try{await access(new URL('../'+item.originalComparisonEvidence,import.meta.url));}catch{errors.push('Comparison report does not exist: '+item.id);}
+ }
  if(item.implementation==='verified' && (item.referenceBehavior!=='verified' || item.independentVerification!=='passed'
    || typeof item.originalComparisonEvidence!=='string' || !item.originalComparisonEvidence.trim()))
    errors.push('Cannot mark verified without original comparison evidence and independent validation: '+item.id);
