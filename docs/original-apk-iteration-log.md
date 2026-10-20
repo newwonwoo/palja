@@ -62,6 +62,6 @@
 - [ ] 명식 내보내기와 새 기준별 표시의 동기화, 원본 색상·간격·배치 대조.
 - [ ] 나머지 기능을 기능 체크리스트 순서로 반복. 미구현 기능을 설명 문구만으로 완료 처리하지 않음.
 
-이 환경에는 `/dev/kvm`이 없어 소프트웨어 에뮬레이션을 사용한다. Android 35에는 원본 split APK 설치가 성공했지만 실제 캡처에 Android System UI/Pixel Launcher 응답 없음이 나타나 원본 화면 대조를 완료하지 못했다. 해당 실행만 종료했고 AVD와 설치된 도구·저장소는 보존했다. Android 30은 첫 부팅 후 에뮬레이터 자체가 종료 코드 134로 중단돼 설치가 실패했다. 같은 AVD를 더 낮은 해상도·Vulkan 비활성화로 재시도해 부팅 완료까지 도달했지만, 원본 base.apk 설치 쓰기 중 패키지 서비스가 `Broken pipe (32)`로 끊겼다. 원본 앱 결함으로 단정하거나 실행 검증 완료로 해석하지 않는다. `/workspace/private-apk-analysis/tools/original-install-api30-retry.log`에 실제 실패를 보존했다. 추가 권한이나 하드웨어 가속 권한은 요청·부여하지 않았다.
+이 환경에는 `/dev/kvm`이 없어 소프트웨어 에뮬레이션을 사용한다. Android 35에는 원본 split APK 설치가 성공했지만 실제 캡처에 Android System UI/Pixel Launcher 응답 없음이 나타나 원본 화면 대조를 완료하지 못했다. 해당 실행만 종료했고 AVD와 설치된 도구·저장소는 보존했다. Android 30은 첫 부팅 후 에뮬레이터 자체가 종료 코드 134로 중단돼 설치가 실패했다. 같은 AVD를 더 낮은 해상도·Vulkan 비활성화로 재시도해 부팅 완료까지 도달했지만, 원본 base.apk 설치 쓰기 중 패키지 서비스가 `Broken pipe (32)`로 끊겼다. 원본 앱 결함으로 단정하거나 실행 검증 완료로 해석하지 않는다. `/workspace/private-apk-analysis/tools/original-install-api30-retry.log`에 실제 실패를 보존했다. 추가 crash 버퍼에서 `DeadSystemException: The system died`를 확인했다. 실패한 에뮬레이터 프로세스만 종료하고 AVD 데이터는 보존했다. 추가 권한이나 하드웨어 가속 권한은 요청·부여하지 않았다.
 
 약관·권한·결제: 새 수락이나 허용·결제 없음. 기존 SDK 라이선스 파일 8개의 SHA-256이 시작 시점과 동일함을 확인했다. 자동 수락 명령은 실행하지 않았다. 공식 SDK 약관: https://developer.android.com/studio/terms . 원본 앱 동의 화면이 나타나면 동의하지 않고 해당 실행 경로를 중단한다.
