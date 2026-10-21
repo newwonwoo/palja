@@ -1589,110 +1589,142 @@
       "implementation": "partial"
     },
     "input.date": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
-      "evidence": [],
-      "gates": [
-        {
-          "name": "input",
-          "status": "pending"
-        },
-        {
-          "name": "action",
-          "status": "pending"
-        },
-        {
-          "name": "result",
-          "status": "pending"
-        },
-        {
-          "name": "persistenceWhenApplicable",
-          "status": "pending"
-        },
-        {
-          "name": "offline",
-          "status": "pending"
-        },
-        {
-          "name": "regression",
-          "status": "pending"
-        },
-        {
-          "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
-        }
-      ]
-    },
-    "input.lunar": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "implementation": "verified",
+      "note": "실제 오프라인 날짜/성별/00:00 수정, 원래 ID·출생정보 이력·재열기·전체 백업 보존 검증.",
       "evidence": [
-        "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
+        }
+      ]
+    },
+    "input.lunar": {
+      "implementation": "verified",
+      "note": "평달/윤달 입력·알려진 2023년 변환 사례·원래 음력 날짜/윤달 플래그 백업 검증. 역법 엔진 전체의 별도 검증은 남음.",
+      "evidence": [
+        "tests/integrated.test.mjs",
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
+        },
+        {
+          "name": "action",
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
+        },
+        {
+          "name": "offline",
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "알려진 변환 사례·독립 라이브러리 회귀로 입력 전달 검증. 역법 전체 정확도는 engine.lunar의 별도 검증."
         }
       ]
     },
     "input.unknown": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "미상/미확인 상태 구분·시분 null·재열기/백업 보존 검증.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
@@ -1773,40 +1805,50 @@
       ]
     },
     "input.duplicates": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "implementation": "verified",
+      "note": "중복 확인의 취소/별개 저장 및 원래 두 ID 보존을 오프라인 UI와 백업으로 검증.",
       "evidence": [
         "tests/pillar-input.test.mjs",
-        "tests/pillar-search.test.mjs"
+        "tests/pillar-search.test.mjs",
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
@@ -1849,212 +1891,278 @@
       ]
     },
     "library.self": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "내 명식·즐겨찾기·친구/최근 목록의 실제 이동·원래 ID·재열기/백업 상태 검증.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "library.search": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "복수 토큰 이름/날짜·결과 없음과 domain 나이/일주 검색 검증. 검색어 자체는 임시 UI 상태.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "library.sort": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "이름/나이 양방향/추가/일주 다섯 실제 정렬과 설정 재열기/백업 검증.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "library.groups": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "한 명식의 두 그룹 배정·그룹 삭제/복원·구성원 ID 보존·새 컨텍스트 백업 복원 검증.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "library.filter": {
-      "implementation": "implemented",
-      "note": "성별/나이 구간/복합 필터 확장",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "실제 그룹/미분류 결과, 그룹 데이터 재열기/백업 검증. 필터 자체는 임시 UI 상태.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "library.bulk": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "오프라인 다중 선택·그룹 추가/제외·원본 출생정보 불변과 domain 원자성/휴지통 보존 검증.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
@@ -2509,265 +2617,336 @@
       ]
     },
     "fortune.presets": {
-      "implementation": "implemented",
-      "note": "명식별 이름 있는 운 선택 최대 30개, 추가·재열기·적용·삭제 및 전체/선택 백업. 출생 시각과 분리 저장.",
+      "implementation": "verified",
+      "note": "오프라인 선택 즐겨찾기 생성/다른 날짜에서 적용/삭제·재열기/백업 및 출생정보 분리 검증.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "memo.text": {
-      "implementation": "implemented",
-      "note": "모바일 키보드/시스템 뒤로가기 검증 필요",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "오프라인 텍스트/이모지 저장·재열기·두 탭 revision 충돌 차단과 미저장 초안 보존 검증.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "memo.items": {
-      "implementation": "implemented",
-      "note": "여러 메모·날짜·분류·검색·저장·재열기·삭제·복원 연결.",
+      "implementation": "verified",
+      "note": "날짜/분류/본문 검색·여러 기록·기록 삭제/복원·ID 보존·재열기/백업 검증.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "memo.history": {
-      "implementation": "implemented",
-      "note": "최근 10개 메모 수정 이력 복원, 저장 버전 충돌 보호. 로컬 우선 백업 병합.",
+      "implementation": "verified",
+      "note": "수정 이력 복원 시 본문/사진/그림 유지, 이력 순서/상한/충돌 domain 회귀와 전체 백업 검증.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "memo.pictures": {
-      "implementation": "implemented",
-      "note": "JPG/PNG/WebP 최대 4장 축소/정규화 후 저장, 확대·제거 및 백업. 전체 8MiB 한도, 실기기 파일 선택은 미검증.",
+      "implementation": "verified",
+      "note": "오프라인 사진 첨부·JPEG 저장·확대, 전체/그룹 백업 후 이미지·이력 동일성 검증.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "memo.luck": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "implementation": "verified",
+      "note": "메모의 운 선택이 화면만 바뀌던 버그 수정. 실제 DB 선택값·재열기·백업과 출생정보 불변 검증.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "memo.drawing": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "implementation": "verified",
+      "note": "실제 캔버스 획/되돌리기/지우개/전체 지우기·PNG 저장·재열기/전체 및 그룹 백업 검증.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
@@ -2915,218 +3094,282 @@
       ]
     },
     "settings.persist": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "한자/큰 운목록/목록 간격의 실제 저장·재열기/백업 보존 검증.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "data.offline": {
-      "implementation": "implemented",
-      "note": "Android 실기기 별도",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "브라우저 내부 DB·오프라인 저장·두 탭 stale writer 차단·최신 값/미저장 초안 보존. JVM SQLite 동시 쓰기/손상/용량 회귀. 실기기 업데이트는 별도.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "data.backup": {
-      "implementation": "implemented",
-      "note": "확장된 백업은 이전 1.0.x로 가져오지 않기",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "오프라인 전체 내보내기·새 컨텍스트 가져오기의 entries/workspace 완전 일치·반복 가져오기 중복 없음 검증.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "data.share-one": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "implementation": "verified",
+      "note": "한 명식만 메모 제외 내보내기·오프라인 가져오기/중복 방지·다른 명식/기록/원본 묶음 제외 검증.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "data.share-group": {
-      "implementation": "implemented",
-      "note": "그룹 선택→필요 명식 체크→범위별 내보내기·병합·복원. 삭제/충돌은 로컬 우선.",
+      "implementation": "verified",
+      "note": "그룹 구성원만 메모/사진/그림/이력 포함 내보내기·새 컨텍스트 복원·그룹 밖 명식 제외 검증.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     },
     "data.image": {
-      "implementation": "implemented",
-      "note": "명식 6열 개인 PNG 생성. Android 시스템 문서 선택기로 로컬 저장; 개인정보 안내·PNG 서명·크기·파일명 검사. 실기기 선택기 검증은 별도.",
-      "evidence": [],
+      "implementation": "verified",
+      "note": "오프라인 명식 PNG 파일 생성·실제 다운로드와 PNG/native payload 형식 회귀. Android 기기별 공유 대상 UI 검증은 별도.",
+      "evidence": [
+        "tests/browser/remaining-flows.cjs",
+        "docs/verification-offline-flows-20261021.md"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-offline-flows-20261021.md",
+          "note": "입력·저장·UI 계약의 독립 불변조건으로 검증. 전통 문헌 비교는 이 기능에 적용 제외."
         }
       ]
     }

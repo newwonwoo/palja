@@ -19,7 +19,7 @@
 
 [79개 기능 체크리스트](docs/IMPLEMENTATION_CHECKLIST.md) · [작업·검증 기록](docs/completion-20261020.md).
 
-코드 구현 78개 / 일부 구현 1개 / 미구현 0개입니다. 7개 검증 게이트와 실기기 확인이 남아 **100% 완료로 표기하지 않습니다.** `npm run checklist:check`로 문서와 근거를 검사합니다. `npm run checklist:complete`는 전체 완료 전에는 실패합니다.
+코드 구현 78개 / 일부 구현 1개 / 미구현 0개입니다. 7개 검증 게이트와 실기기 확인이 남아 **100% 완료로 표기하지 않습니다.** 작업 완료 때마다 `npm run progress`로 코드 구현률과 전체 검증률을 분리 보고합니다. `npm run checklist:check`로 문서와 근거를 검사합니다. `npm run checklist:complete`는 전체 완료 전에는 실패합니다.
 
 ## 개인 DB 복원 / 최초 설치
 
