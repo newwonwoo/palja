@@ -82,7 +82,12 @@ export default function ReferenceReader({entry,vault,navigate,change,busy,initia
   const analysisColumns=useMemo(()=>[...sixColumns(entry,result,view,includeLuck),...([['selectedMonth','월운',selected.month],['selectedDay','일운',selected.day],['selectedHour','시운',selected.hour]].map(([key,label,pillar],i)=>({key,label,index:6+i,pillar,kind:includeLuck&&pillar?'calculated':'unknown'})))],[entry,result,view,includeLuck,selected]);
   const status=displayCertainty(entry,result),mismatch=isSourceDayDifferent(entry,result,STEM_KO,BRANCH_KO);
   const dirty=memo!==entry.memo||Boolean(journalDraft);
-  useEffect(()=>{setMemo(entry.memo)},[entry.memo]);
+  const savedMemo=useRef(entry.memo);
+  useEffect(()=>{
+    const previous=savedMemo.current;
+    setMemo(current=>current===previous?entry.memo:current);
+    savedMemo.current=entry.memo;
+  },[entry.memo]);
   useEffect(()=>{if(!dirty)return;const unload=e=>{e.preventDefault();e.returnValue='';};window.addEventListener('beforeunload',unload);return()=>window.removeEventListener('beforeunload',unload);},[dirty]);
   // Browser/WebView history back must not discard a lifted note draft.
   useEffect(()=>{
