@@ -137,13 +137,20 @@ function EntryForm({ entry, vault, change, navigate, busy, seedBirth, candidateN
   </>;
 }
 
-function ImportMappings({ vault, change, busy }) {
+function ImportMappings({ vault, change, busy, initialOpen = false }) {
+  const mappingRef = useRef(null);
+  useEffect(() => {
+    if (initialOpen && mappingRef.current) {
+      mappingRef.current.open = true;
+      mappingRef.current.scrollIntoView({ block: 'start' });
+    }
+  }, [initialOpen]);
   const [mapping, setMapping] = useState({ plus: '', minus: '', teal: '', pink: '', leap: '' });
   const [preview, setPreview] = useState(null);
   const selected = () => ({ calendar: { '+': mapping.plus || null, '-': mapping.minus || null }, sex: { teal: mapping.teal || null, pink: mapping.pink || null }, lunarLeap: mapping.leap === '' ? null : mapping.leap === 'true' });
   const set = (key, value) => setMapping(current => ({ ...current, [key]: value }));
   const [error, setError] = useState('');
-  return <details className="panel mapping-panel"><summary>가져온 기호 확인</summary><p className="muted">기호의 뜻을 알고 있을 때 선택하세요. 아직 미확인인 항목에만 적용하고 원본은 보관합니다.</p><div className="mapping-grid">
+  return <details ref={mappingRef} className="panel mapping-panel"><summary>가져온 기호 확인</summary><p className="muted">성별이 미확인인 명식은 대운 방향을 계산할 수 없습니다. 원본 색상의 뜻을 확인해 일괄 적용하거나 명식별로 성별을 입력하세요. 확인된 값은 유지하고 원본은 보관합니다.</p><div className="mapping-grid">
     <Field label="+ 기호"><select aria-label="+ 기호" value={mapping.plus} onChange={e => set('plus', e.target.value)}><option value="">미확인 유지</option><option value="solar">양력으로 확인</option></select></Field>
     <Field label="− 기호"><select aria-label="- 기호" value={mapping.minus} onChange={e => set('minus', e.target.value)}><option value="">미확인 유지</option><option value="lunar">음력으로 확인</option></select></Field>
     {['teal', 'pink'].map(color => <Field key={color} label={color === 'teal' ? '청록색 표시' : '분홍색 표시'}><select aria-label={color === 'teal' ? '청록색 표시' : '분홍색 표시'} value={mapping[color]} onChange={e => set(color, e.target.value)}><option value="">미확인 유지</option><option value="male">남성으로 확인</option><option value="female">여성으로 확인</option></select></Field>)}
@@ -154,7 +161,7 @@ function ImportMappings({ vault, change, busy }) {
   </details>;
 }
 
-function Settings({ vault, change, busy, setError, notify, navigate }) {
+function Settings({ vault, change, busy, setError, notify, navigate, showImportMappings = false }) {
   const preferences = readPreferences(vault);
   const file = useRef(null);
   const [preview, setPreview] = useState(null);
@@ -187,7 +194,7 @@ function Settings({ vault, change, busy, setError, notify, navigate }) {
     <section className="panel"><h2>백업과 가져오기</h2><p className="muted">{isAndroid() ? '앱을 삭제하거나 기기를 바꾸기 전에 백업 파일을 따로 보관하세요.' : '앱에서는 기기 내부에 저장됩니다. 브라우저의 사이트 데이터를 지우기 전에는 백업하세요.'}</p><button className="settings-action" disabled={working || busy} onClick={exportFile}><Icon name="download" /><span><strong>백업 내보내기</strong><small>명식·메모·그룹·보기 설정·원본·휴지통을 JSON으로 저장</small></span><Icon name="arrow" size={18} /></button><button className="settings-action" disabled={working || busy} onClick={pickFile}><Icon name="upload" /><span><strong>자료 가져오기</strong><small>명식 자료 또는 백업 JSON 선택</small></span><Icon name="arrow" size={18} /></button><input hidden type="file" accept=".json,application/json" ref={file} aria-label="가져올 JSON 파일" onChange={async event => { const chosen = event.target.files?.[0]; event.target.value = ''; if (!chosen) return; if (chosen.size > 8 * 1024 * 1024) { setError('8MB 이하의 JSON 파일을 선택해 주세요.'); return; } try { inspect(await chosen.text()); } catch (error) { setError(errorText(error)); } }} /><p className="field-hint">같은 자료를 다시 가져와도 중복을 만들지 않습니다. 수정한 내용과 삭제 상태를 우선 보존합니다.</p></section>
     <DisplaySettings vault={vault} change={change} busy={busy}/>
     <ExportSelection vault={vault}/>
-    {vault.sources.length > 0 && <ImportMappings vault={vault} change={change} busy={busy} />}
+    {vault.sources.length > 0 && <ImportMappings vault={vault} change={change} busy={busy} initialOpen={showImportMappings} />}
     <details className="panel trash-panel"><summary>휴지통 <span>{trash.length}</span></summary>{trash.length ? <ul>{trash.map(entry => <li key={entry.id}><span><strong>{entry.name}</strong><small>{dateLabel(entry.deletedAt)} 삭제</small></span><button className="small-button" disabled={busy} onClick={() => change(state => restoreEntry(state, entry.id), '명식을 복원했습니다.')}>복원</button></li>)}</ul> : <p className="muted">삭제한 명식이 없습니다.</p>}</details>
     <details className="panel engine-notes"><summary>계산 기준과 지원 범위</summary><p>모든 계산과 저장은 기기 안에서 수행합니다. 기존 명식의 계산 기준은 자동으로 바꾸지 않습니다.</p><ul><li>기존 역법: 1900~2030년, 자시 23:30 기준. 년·월주는 날짜 경계 중심이며 별도의 출생지·역사적 시각 보정은 적용하지 않습니다.</li><li>독립 절입·시각 계산: 출생정보 수정에서 직접 선택합니다. 1900~2050년 한국 음력·윤달, 태양 황경에 따른 절입, 역사적 한국 시간대·서머타임, 경도 및 근사 균시차를 적용합니다.</li><li>시진 시작은 23:00/23:30, 자시 날짜 경계는 자정/선택한 자시 시작/야자시 분리, 연주는 입춘/1월 1일 중 선택합니다. 원본 자오해사 옵션 전체와 동일한 것은 아닙니다. 대운은 10개이며 평균년 비례 또는 UTC 달력 가산 기산법과 순역 직접 지정을 지원합니다. 기산 규칙별 차이는 단계별 근거에서 확인하세요.</li><li>출생시각 미상은 하루 중 달라질 수 있는 기둥과 관련 해석을 보류합니다. 원본 8자어때와 계산 결과 동일성은 미검증입니다.</li><li>궁성·지장간·5계층 선택운 비중은 오행·음양과 독립 규칙 분석에 적용됩니다. 합화는 선택형 단순 규칙이며 기존 엔진 결과와 구분합니다. 격국·용신 후보는 설명 가능한 연구 규칙으로, 원본 앱 또는 모든 학파의 정밀 판정을 보증하지 않습니다.</li><li>네 기둥 역검색·시각 후보 비교는 기존 역법 기준입니다. 독립 역법의 정확한 경계 검색과 혼동하지 마세요.</li><li>날짜별 메모·사진·그림·수정 이력은 전체 8MiB 저장/백업 한도에 포함됩니다. 새 백업은 구버전 앱으로 가져오지 마세요.</li></ul></details>
     <div className="app-signature"><span>命</span><p>사주 보관함 <b>{appMetadata.version}</b></p><small>나의 기록, 나의 기기에.</small></div>
@@ -278,7 +285,7 @@ export default function MobileApp() {
       {page === 'form' && (isManualBirth(entry?.birth) || route.mode === 'pillars'
         ? <ManualPillarForm key={entry?.id || 'new-pillars'} entry={entry} vault={vault} change={change} navigate={navigate} busy={busy}/>
         : <EntryForm key={entry?.id || JSON.stringify(route.seedBirth) || 'new'} seedBirth={route.seedBirth} candidateNote={route.candidateNote} entry={entry} vault={vault} change={change} navigate={navigate} busy={busy}/>)}
-      {page === 'settings' && <Settings vault={vault} navigate={navigate} change={change} busy={busy} setError={setError} notify={notify} />}
+      {page === 'settings' && <Settings vault={vault} navigate={navigate} change={change} busy={busy} setError={setError} notify={notify} showImportMappings={route.showImportMappings} />}
     </main>}
     {vault && page !== 'analysis' && page !== 'form' && page !== 'vault' && page !== 'details' && <nav className="bottom-nav" aria-label="주 메뉴"><button className={page === 'vault' ? 'active' : ''} onClick={() => navigate(INITIAL_ROUTE, true)}><Icon name="vault" /><span>보관함</span></button><button className="nav-add" onClick={() => navigate({ name: 'form' })}><span className="add-circle"><Icon name="plus" size={24} /></span><span>명식 추가</span></button><button className={page === 'settings' ? 'active' : ''} onClick={() => navigate({ name: 'settings' })}><Icon name="settings" /><span>설정</span></button></nav>}
     {toast && <div className="toast" role="status"><Icon name="check" size={18} />{toast}</div>}
