@@ -45,7 +45,19 @@ test('weighted five elements and polarity match an independent 10-stem mass ledg
   const research=c.researchAnalysis({status:'partial',saju:{pillars:natal}},luck,w),total=expected.scores.reduce((a,b)=>a+b,0),day=Math.floor(natal[1].stemIdx/2),support=(expected.scores[day]+expected.scores[(day+4)%5])/total;
   close(research.strength.ratio,support);assert.equal(research.strength.name,support>=.6?'신강 경향':support<=.4?'신약 경향':'중화 구간');assert.equal(research.strength.deukSe,support>=.5);
   assert.equal(research.methods[0].element,support>.6?elements[(day+1)%5]:support<.4?elements[(day+4)%5]:null);
-  assert.equal(research.methods[1].element,null);close(research.roles.reduce((a,b)=>a+b.ratio,0),1);
+  assert.equal(research.methods[1].element,null);
+  const fractions=expected.scores.map(x=>x/total),dominant=fractions.indexOf(Math.max(...fractions));
+  assert.equal(research.methods[3].element,fractions[dominant]>=.4?elements[(dominant+3)%5]:null);
+  const bridge=[[0,2,1],[1,3,2],[2,4,3],[3,0,4],[4,1,0]].find(([a,b])=>fractions[a]>=.2&&fractions[b]>=.2&&fractions[a]+fractions[b]>=.55);
+  assert.equal(research.methods[2].element,bridge?elements[bridge[2]]:null);
+  assert.equal(research.methods[4].element,elements[Math.floor(hidden[natal[2].branchIdx][2][0]/2)]);
+  const use=research.methods[0].element||research.methods[2].element,u=elements.indexOf(use);
+  assert.equal(research.cheYong.use,use);
+  for(let j=0;j<5;j++)assert.equal(research.roles[j].role,!use?'판정 보류':j===u?'용':(j+1)%5===u?'희':(j+2)%5===u?'기':(u+2)%5===j?'구':'한');
+  const monthElements=[4,2,0,0,2,1,1,2,3,3,2,4],monthElement=monthElements[natal[2].branchIdx];
+  assert.equal(research.strength.deukRyeong,monthElement===day||monthElement===(day+4)%5);
+  const expectedRoots=natal.filter(p=>!p.unknown).some(p=>hidden[p.branchIdx].some(x=>x&&Math.floor(x[0]/2)===day));assert.equal(research.strength.deukJi,expectedRoots);
+  close(research.roles.reduce((a,b)=>a+b.ratio,0),1);
  }
 });
 test('all month-command allocations switch at stated boundaries without inventing timing',()=>{
