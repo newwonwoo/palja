@@ -314,42 +314,47 @@
         "src/calendar/precise.js",
         "tests/completion-extension.test.mjs",
         "docs/completion-20261020.md",
-        "docs/remaining-20261021.md"
+        "docs/remaining-20261021.md",
+        "docs/ci-verification-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261021.md"
         }
       ],
-      "implementation": "implemented"
+      "implementation": "verified"
     },
     "engine.daewoon": {
       "note": "순역 자동/직접 지정, 평균년 비례/UTC 달력 가산 2기산법, 시작일·10대운·단계별 근거. 전 학파 동일성은 주장하지 않음.",
@@ -1500,42 +1505,47 @@
         "src/mobile/CalculationPolicy.jsx",
         "tests/completion-extension.test.mjs",
         "docs/completion-20261020.md",
-        "docs/remaining-20261021.md"
+        "docs/remaining-20261021.md",
+        "docs/ci-verification-20261021.md"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/ci-verification-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/ci-verification-20261021.md"
         }
       ],
-      "implementation": "implemented"
+      "implementation": "verified"
     },
     "data.upgrade": {
       "note": "1.1.5/code15 unsigned release·원래 서명 확인·과거 SQLite 합성 검증·설치 전후 전체 백업 비교 도구. 원래 개인키 서명/실기기 설치·DB 보존은 대기.",

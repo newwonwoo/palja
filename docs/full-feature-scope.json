@@ -725,7 +725,7 @@
       "id": "engine.zi-hour",
       "area": "engine",
       "title": "야자시·조자시·자오해사 옵션",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "독립 계약: 시진 시작 23:00/23:30 × 일주 경계 자정/자시 시작/야자시 분리. 보정 후 적용·저장·백업. 조사표 자오해사 원본 의미/동일성은 미확인.",
       "apkEvidence": [
@@ -736,9 +736,10 @@
         "src/calendar/precise.js",
         "tests/completion-extension.test.mjs",
         "docs/completion-20261020.md",
-        "docs/remaining-20261021.md"
+        "docs/remaining-20261021.md",
+        "docs/ci-verification-20261021.md"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "engine.year-start",
@@ -1492,7 +1493,7 @@
       "id": "settings.calculation",
       "area": "settings",
       "title": "대운·연주·자시 계산 설정",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "시진 지연 0/30분·3자시·연주·2대운 기산·순역·시간대·태양시 정책을 명식별 실제 계산/저장/백업에 연결.",
       "apkEvidence": [
@@ -1503,9 +1504,10 @@
         "src/mobile/CalculationPolicy.jsx",
         "tests/completion-extension.test.mjs",
         "docs/completion-20261020.md",
-        "docs/remaining-20261021.md"
+        "docs/remaining-20261021.md",
+        "docs/ci-verification-20261021.md"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "data.offline",

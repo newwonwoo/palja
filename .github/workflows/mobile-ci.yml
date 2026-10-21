@@ -79,6 +79,9 @@ jobs:
           trap 'kill "$server" || true' EXIT
           for i in $(seq 1 25); do if curl -fsS "$QA_URL" >/dev/null; then break; fi; sleep 1; done
           node tests/browser/completion-extension.cjs
+          node tests/browser/integrated.cjs
+          node tests/browser/independent-extension.cjs
+          node tests/browser/fortune-bulk.cjs
       - name: Upload synthetic browser evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -87,6 +90,8 @@ jobs:
           path: |
             /tmp/palja-completion-qa/*.png
             /tmp/palja-completion-qa/completion-results.json
+            /tmp/palja-completion-qa/results.json
+            /tmp/palja-completion-qa/fortune-bulk-results.json
           if-no-files-found: ignore
           retention-days: 7
 
