@@ -7,7 +7,7 @@ import {validPillar,multiLayerClimate} from './reader-model.js';
 import {weightedAnalysis} from './weighted-analysis.js';
 import {DEFAULT_WEIGHTS} from '../vault/integrated-schema.js';
 import {DEFAULT_RULES} from '../vault/analysis-rules.js';
-import {classicalExteriorCandidates} from './classical-patterns.js';
+import {classicalExteriorCandidates,EXTERIOR_RULEBOOK} from './classical-patterns.js';
 export const ELEMENTS=[...'木火土金水'];
 export const GENERATES={木:'火',火:'土',土:'金',金:'水',水:'木'};
 export const CONTROLS={木:'土',火:'金',土:'水',金:'木',水:'火'};
@@ -52,7 +52,7 @@ export function patternCandidates(result,rules=DEFAULT_RULES){
  const applied=[];
  const exposedGods=p.filter((v,i)=>i!==1&&validPillar(v)).map(v=>getSS(day.stem,v.stem));
  for(const [a,b,n] of [['식신','편관','식신제살'],['정관','정인','관인상생'],['상관','정인','상관패인'],['식신','정재','식신생재']])if(exposedGods.includes(a)&&exposedGods.includes(b))applied.push({name:n,reason:`원국 투간 ${a}·${b} 동시 존재. 강약·제화 성공을 확정하지 않는 구성 분류.`});
- return {inner:{name,stem:chosen.stem,god,reason:`${rules.patternMode==='revealed'?'월지 투간 우선':'월지 본기'} 규칙: ${month.branch}의 ${chosen.stem} → 일간 ${day.stem} 기준 ${god}`},external,applied,command};
+ return {inner:{name,stem:chosen.stem,god,reason:`${rules.patternMode==='revealed'?'월지 투간 우선':'월지 본기'} 규칙: ${month.branch}의 ${chosen.stem} → 일간 ${day.stem} 기준 ${god}`},external,applied,command,rulebook:EXTERIOR_RULEBOOK};
 }
 export function researchAnalysis(result,luck=[],weights=DEFAULT_WEIGHTS,rules=DEFAULT_RULES){
  const p=result?.saju?.pillars||[],day=p[1];if(!validPillar(day))return {status:'unavailable',reason:'일주를 먼저 확인하세요.'};

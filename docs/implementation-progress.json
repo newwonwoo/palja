@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-20",
+  "updatedAt": "2026-10-21",
   "features": {
     "input.location": {
       "note": "23개 도시·17시간대·경도 직접 입력. 한국 2025b/해외 IANA 2026b 전환표 내장. 도시 중심 경도임을 표시.",
@@ -309,11 +309,12 @@
       ]
     },
     "engine.zi-hour": {
-      "note": "자정/23시/야자시 분리 실제 적용·경계 테스트. 자오해사 세부 정책은 아직 미구현.",
+      "note": "독립 계약: 시진 시작 23:00/23:30 × 일주 경계 자정/자시 시작/야자시 분리. 보정 후 적용·저장·백업. 조사표 자오해사 원본 의미/동일성은 미확인.",
       "evidence": [
         "src/calendar/precise.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/remaining-20261021.md"
       ],
       "gates": [
         {
@@ -347,7 +348,8 @@
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
           "status": "pending"
         }
-      ]
+      ],
+      "implementation": "implemented"
     },
     "engine.daewoon": {
       "note": "순역 자동/직접 지정, 평균년 비례/UTC 달력 가산 2기산법, 시작일·10대운·단계별 근거. 전 학파 동일성은 주장하지 않음.",
@@ -636,12 +638,13 @@
       ]
     },
     "analysis.gyeok": {
-      "note": "월령 본기/투간 내격·4응용격·삼명통회 5외격과 화기 구조 후보. 임의 75% 종격 탐색 제거. 전체 외잡격·파격·충돌 우선순위는 미완료.",
+      "note": "월지 본기/투간 내격·4응용격·고전 10외잡격 구조와 화기 검토. 내격 우선·복수 후보 병기. 10종 지원 계약이며 고전 전체의 성립/파격 판정 아님.",
       "evidence": [
         "src/mobile/classical-patterns.js",
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/remaining-20261021.md"
       ],
       "gates": [
         {
@@ -675,7 +678,8 @@
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
           "status": "pending"
         }
-      ]
+      ],
+      "implementation": "implemented"
     },
     "analysis.hapchoong": {
       "note": "천간 합충, 지지 육합/삼합/방합·충형파해원진자형을 9열로 표시. 합화 변환은 별도 명시 규칙.",
@@ -719,11 +723,12 @@
       ]
     },
     "analysis.sinsal": {
-      "note": "십이신살·기존5종과 추가14종 조견표, 일/년 기준 저장·9열 연결. 길신/흉살 전체 범위와 추가표 전수 독립 검증은 미완료.",
+      "note": "선언된 38종 지원·표/기준 연결·제외 시 전체 제거. 10간×12지 전수 및 월/년/순중 공망 검증. 모든 학파의 전체 목록 아님.",
       "evidence": [
         "src/mobile/shinsal-catalog.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/remaining-20261021.md"
       ],
       "gates": [
         {
@@ -757,7 +762,8 @@
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
           "status": "pending"
         }
-      ]
+      ],
+      "implementation": "implemented"
     },
     "analysis.gongmang": {
       "note": "원국과 선택 대운/년월일시운의 공망 지지·납음, 연지 삼재 분류 연결.",
@@ -1489,11 +1495,12 @@
       ]
     },
     "settings.calculation": {
-      "note": "대운 순역/2기산법·연주/3자시/시각보정 설정 저장. 자오해사 전체 세부 정책은 미완료.",
+      "note": "시진 지연 0/30분·3자시·연주·2대운 기산·순역·시간대·태양시 정책을 명식별 실제 계산/저장/백업에 연결.",
       "evidence": [
         "src/mobile/CalculationPolicy.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/remaining-20261021.md"
       ],
       "gates": [
         {
@@ -1527,14 +1534,16 @@
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
           "status": "pending"
         }
-      ]
+      ],
+      "implementation": "implemented"
     },
     "data.upgrade": {
-      "note": "재개 기준 계산/네이티브7파일 해시 보존. 새 개인 APK 서명·실기기 덮어쓰기/기존 SQLite 유지 확인은 미완료.",
+      "note": "1.1.5/code15 unsigned release·원래 서명 확인·과거 SQLite 합성 검증·설치 전후 전체 백업 비교 도구. 원래 개인키 서명/실기기 설치·DB 보존은 대기.",
       "evidence": [
         "tests/preserved-boundaries.test.mjs",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "docs/remaining-20261021.md"
       ],
       "gates": [
         {
@@ -1566,7 +1575,8 @@
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
           "status": "pending"
         }
-      ]
+      ],
+      "implementation": "partial"
     }
   }
 }

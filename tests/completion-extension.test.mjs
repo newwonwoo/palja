@@ -13,12 +13,12 @@ const output=await build({stdin:{contents:`
  export {locationPolicy,LOCATIONS} from './src/calendar/locations.js';
  export {calculateEntry} from './src/mobile/engine.js';
  export {luckyChoice,ELEMENT_CHOICES} from './src/mobile/lucky-choice.js';
- export {classicalExteriorCandidates} from './src/mobile/classical-patterns.js';
+ export {classicalExteriorCandidates,EXTERIOR_RULEBOOK} from './src/mobile/classical-patterns.js';
  export {researchAnalysis,patternCandidates,monthCommand,combineContributions} from './src/mobile/research-analysis.js';
  export {compatibilityComposition} from './src/mobile/compatibility-model.js';
  export {weightedAnalysis} from './src/mobile/weighted-analysis.js';
  export {elementMonthTimeline} from './src/mobile/fortune-model.js';
- export {extraShinsal} from './src/mobile/shinsal-catalog.js';
+ export {extraShinsal,voidBranches,SHINSAL_CATALOG} from './src/mobile/shinsal-catalog.js';
  export {nowSelection,selectionForDecade} from './src/mobile/LuckExplorer.jsx';
  export {ageBadge,filterAndSortEntries} from './src/mobile/list-utils.js';
  export {PUBLIC_PEOPLE,addPublicPerson} from './src/mobile/public-people.js';
@@ -89,3 +89,91 @@ test('choice lookup uses published fixed Hetu pairs for all elements and an expl
 test('lucky method choice is validated and survives backup without requiring older rules to contain it',()=>{let s=setAnalysisRules(state(),{luckyMethod:'용격'});assert.equal(readRules(restoreBackup(createEmptyVault(),createBackup(s)).state).luckyMethod,'용격');assert.throws(()=>setAnalysisRules(s,{luckyMethod:'random'}));const old=copy(s);delete old.workspace.integrated.rules.luckyMethod;assert.equal(validateVault(old).valid,true);assert.equal(readRules(old).luckyMethod,'억부');});
 
 test('body/use/month command and five independent methods expose explicit calculated fields',()=>{const r=c.calculateEntry({name:'체용',birth:B}),a=c.researchAnalysis(r);assert.equal(a.status,'ready');assert.equal(a.cheYong.body,r.saju.dayStem);assert.equal(a.cheYong.monthCommand,a.pattern.command.main);assert.ok(a.cheYong.current);assert.ok(Object.hasOwn(a.cheYong,'use'));assert.ok(Array.isArray(a.cheYong.trueStems)&&Array.isArray(a.cheYong.falseStems));assert.deepEqual(a.methods.map(m=>m.name),['억부','조후','통관','병약','용격']);assert.ok(a.methods.every(m=>m.reason.length>5));assert.ok(a.roles.every(x=>['용','희','기','구','한','판정 보류'].includes(x.role)));const selected=c.researchAnalysis(r,[c.pillar(0,2),c.pillar(0,2),c.pillar(0,2),c.pillar(0,2),c.pillar(0,2)]);assert.notDeepEqual(selected.scores,a.scores);assert.ok(selected.methods.find(m=>m.name==='통관').reason.includes('5계층')||selected.methods.find(m=>m.name==='통관').reason.includes('20%'));});
+
+
+test('30-minute hour boundaries cover Zi, Chou, Wu and Hai without shifting midnight day',()=>{
+ const policy={...c.DEFAULT_POLICY,zone:'fixed',offsetMinutes:0,hourBoundaryOffset:30};
+ for(const [hour,minute,branch] of [[23,29,'亥'],[23,30,'子'],[0,0,'子'],[0,30,'子'],[1,29,'子'],[1,30,'丑'],[11,29,'巳'],[11,30,'午'],[21,29,'戌'],[21,30,'亥']])assert.equal(c.precisePillars({year:2000,month:2,day:29,hour,minute},policy).pillars[0].branch,branch);
+ const before={year:2000,month:2,day:29,hour:23,minute:29},after={...before,minute:30};
+ for(const mode of ['midnight','zi23','zi-split']){
+  const p={...policy,dayBoundary:mode},a=c.precisePillars(before,p),b=c.precisePillars(after,p);
+  assert.equal(b.pillars[1].stem===a.pillars[1].stem,mode!=='zi23');
+  if(mode==='zi-split')assert.equal(b.pillars[0].stem,c.precisePillars(after,{...p,dayBoundary:'zi23'}).pillars[0].stem);
+ }
+});
+test('hour offset is applied after solar and DST correction and survives full backup',()=>{
+ const b={...B,calculation_policy:{...c.DEFAULT_POLICY,hourBoundaryOffset:30,dayBoundary:'zi-split'}};
+ let s=upsertEntry(createEmptyVault(),{name:'경계',birth:b});
+ assert.deepEqual(restoreBackup(createEmptyVault(),createBackup(s)).state.entries[0].birth.calculation_policy,b.calculation_policy);
+ for(const value of [-30,15,60,'30',null])assert.throws(()=>upsertEntry(s,{id:s.entries[0].id,birth:{...b,calculation_policy:{...b.calculation_policy,hourBoundaryOffset:value}}}));
+ const base={year:2000,month:2,day:29,hour:23,minute:40};
+ const p={...c.DEFAULT_POLICY,zone:'fixed',offsetMinutes:540,clock:'mean-solar',longitude:127.5,hourBoundaryOffset:30};
+ const r=c.precisePillars(base,p);assert.equal(r.clock.hour,23);assert.equal(r.clock.minute,10);assert.equal(r.pillars[0].branch,'亥');
+ const summer=c.precisePillars({year:1988,month:7,day:1,hour:0,minute:40},{...c.DEFAULT_POLICY,hourBoundaryOffset:30});assert.equal(summer.clock.hour,23);assert.equal(summer.pillars[0].branch,'子');
+});
+for(const [name,values] of [
+ ['일귀 구조',[['壬','寅'],['丁','酉'],['庚','申'],['甲','子']]],
+ ['일덕 구조',[['壬','子'],['甲','寅'],['庚','申'],['丙','午']]],
+ ['괴강 중첩 구조',[['壬','辰'],['庚','辰'],['庚','申'],['甲','子']]],
+ ['녹원호환 구조',[['乙','卯'],['戊','申'],['庚','申'],['甲','子']]],
+ ['자오쌍포 구조',[['壬','午'],['戊','子'],['庚','午'],['甲','子']]],
+])test('additional classical structure positive and day/hour mutation: '+name,()=>{
+ const p=classicalFixture(values);assert.ok(c.classicalExteriorCandidates(p).some(x=>x.name===name));
+ const mutated=classicalFixture([['乙','丑'],['乙','丑'],['乙','丑'],['乙','丑']]);assert.ok(!c.classicalExteriorCandidates(mutated).some(x=>x.name===name));
+});
+test('pattern overlap preserves month priority and does not erase either structural candidate',()=>{
+ const p=classicalFixture([['壬','辰'],['庚','辰'],['甲','寅'],['甲','子']]),r=c.patternCandidates({saju:{pillars:p}});
+ assert.equal(r.inner.god,'편재');assert.ok(r.external.some(x=>x.name==='일덕 구조'));assert.ok(r.external.some(x=>x.name==='괴강 중첩 구조'));
+ assert.equal(c.EXTERIOR_RULEBOOK.names.length,10);assert.ok(r.rulebook.priority.includes('덮어쓰지'));
+});
+test('six decades of void branches agree with published JiaZi reference and reject invalid parity',()=>{
+ for(const [pair,expected] of [['甲子','戌亥'],['甲戌','申酉'],['甲申','午未'],['甲午','辰巳'],['甲辰','寅卯'],['甲寅','子丑']]){
+  const start=[...'子丑寅卯辰巳午未申酉戌亥'].indexOf(pair[1]);
+  for(let i=0;i<10;i++)assert.equal(c.voidBranches(c.pillar(i,start+i)).join(''),expected);
+ }
+ assert.deepEqual(c.voidBranches({stem:'甲',branch:'丑'}),[]);
+});
+test('new star catalogue has 38 unique names and all ten stems have published Lu targets',()=>{
+ assert.equal(c.SHINSAL_CATALOG.names.length,38);assert.equal(new Set(c.SHINSAL_CATALOG.names).size,38);
+ for(const [i,target] of [...'寅卯巳午巳午申酉亥子'].entries()){
+  const stars=c.extraShinsal({stem:'甲',branch:target},{dayStem:[...'甲乙丙丁戊己庚辛壬癸'][i],basis:'day'});
+  assert.ok(stars.some(x=>x.name==='건록'&&x.basis==='日'));
+ }
+});
+test('monthly virtue combinations, pair-only nets and day-only defeat expose fixed bases',()=>{
+ const get=(stem,branch,context)=>c.extraShinsal({stem,branch},context).map(x=>x.name);
+ assert.ok(get('壬','子',{monthBranch:'寅'}).includes('천덕합'));
+ assert.ok(get('辛','子',{monthBranch:'寅'}).includes('월덕합'));
+ assert.ok(get('甲','戌',{natalBranches:['亥']}).includes('천라(지지쌍)'));
+ assert.ok(get('乙','巳',{natalBranches:['辰']}).includes('지망(지지쌍)'));
+ for(const pair of ['甲辰','乙巳','丙申','丁亥','戊戌','己丑','庚辰','辛巳','壬申','癸亥']){
+  assert.ok(get(...pair,{isNatalDay:true}).includes('십악대패(일주)'));
+  assert.ok(!get(...pair,{isNatalDay:false}).includes('십악대패(일주)'));
+ }
+ assert.deepEqual(c.extraShinsal({stem:'甲',branch:'辰'},{isNatalDay:true,basis:'none'}),[]);
+});
+test('disabling sinsal removes legacy fixed stars as well as basis-dependent stars',()=>{
+ const p=classicalFixture([['甲','辰'],['庚','辰'],['戊','戌'],['壬','辰']]);
+ const columns=p.map((pillar,index)=>({key:['hour','day','month','birthYear'][index],index,pillar,kind:'calculated'}));
+ assert.ok(c.shinsalView(columns).some(r=>r.caution.length));
+ assert.ok(c.shinsalView(columns,[]).every(r=>!r.movement.length&&!r.good.length&&!r.caution.length));
+});
+
+test('declared stem star reference tables check both hits and misses for every stem and branch',()=>{
+ const reference=[['문창귀인','巳 午 申 酉 申 酉 亥 子 寅 卯'],['금여','辰 巳 未 申 未 申 戌 亥 丑 寅'],['국인귀인','戌 亥 丑 寅 丑 寅 辰 巳 未 申'],['태극귀인','子午 子午 卯酉 卯酉 辰戌丑未 辰戌丑未 寅亥 寅亥 巳申 巳申'],['홍염(삼명통회)','午 午 寅 未 子 辰 戌 酉 巳 申'],['유하','酉 戌 未 申 巳 午 辰 卯 亥 寅']];
+ for(const [name,row] of reference)for(const [i,targets] of row.split(' ').entries())for(const branch of [...'子丑寅卯辰巳午未申酉戌亥']){
+  const context={dayStem:[...'甲乙丙丁戊己庚辛壬癸'][i],basis:'day'},found=c.extraShinsal({stem:'甲',branch},context).some(x=>x.name===name);
+  assert.equal(found,targets.includes(branch),name+' stem '+i+' branch '+branch);
+  assert.equal(c.extraShinsal({stem:'甲',branch},{...context,basis:'year'}).some(x=>x.name===name),false);
+ }
+});
+test('month and year fixed reference stars cover all twelve branches',()=>{
+ const branches=[...'子丑寅卯辰巳午未申酉戌亥'];
+ const virtues=[...'巳庚丁申壬辛亥甲癸寅丙乙'],lonely=[...'寅寅巳巳巳申申申亥亥亥寅'],widow=[...'戌戌丑丑丑辰辰辰未未未戌'];
+ for(let i=0;i<12;i++){
+  const target=virtues[i],p={stem:[...'甲乙丙丁戊己庚辛壬癸'].includes(target)?target:'甲',branch:branches.includes(target)?target:'子'};
+  assert.ok(c.extraShinsal(p,{monthBranch:branches[i]}).some(x=>x.name==='천덕귀인'));
+  assert.ok(c.extraShinsal({stem:'甲',branch:lonely[i]},{yearBranch:branches[i]}).some(x=>x.name==='고신'));
+  assert.ok(c.extraShinsal({stem:'甲',branch:widow[i]},{yearBranch:branches[i]}).some(x=>x.name==='과숙'));
+ }
+});

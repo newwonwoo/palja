@@ -87,10 +87,11 @@ export function precisePillars(s,p=DEFAULT_POLICY) {
  // Month stems follow the solar-term year even if displayed year uses Jan 1.
  const monthStem=mod((mod(solarYear-4,10)%5)*2+2+monthOrdinal,10);
  let dayInstant=Date.UTC(clock.year,clock.month-1,clock.day);
- if(p.dayBoundary==='zi23'&&clock.hour>=23)dayInstant+=DAY;
+ const minuteOfDay=clock.hour*60+clock.minute,offset=p.hourBoundaryOffset||0,lateZi=minuteOfDay>=1380+offset;
+ if(p.dayBoundary==='zi23'&&lateZi)dayInstant+=DAY;
  const dayDate=new Date(dayInstant),dp=datePillar(dayDate.getUTCFullYear(),dayDate.getUTCMonth()+1,dayDate.getUTCDate());
- const hourBranch=Math.floor(((clock.hour*60+clock.minute+60)%1440)/120);
- const hourDayStem=p.dayBoundary==='zi-split'&&clock.hour>=23?mod(dp.stemIdx+1,10):dp.stemIdx;
+ const hourBranch=Math.floor(mod(minuteOfDay+60-offset,1440)/120);
+ const hourDayStem=p.dayBoundary==='zi-split'&&lateZi?mod(dp.stemIdx+1,10):dp.stemIdx;
  const pillars=[pillar((hourDayStem%5)*2+hourBranch,hourBranch),dp,pillar(monthStem,monthBranch),pillar(year-4,year-4)]
    .map((v,i)=>({label:['시','일','월','년'][i],...v}));
  return {pillars,dayStem:dp.stem,solar:{...s},clock,lastJie,nextJie,yearBoundary:lichun.iso};

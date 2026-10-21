@@ -151,6 +151,7 @@ const GOEGANG=['庚辰','庚戌','壬辰','壬戌','戊辰','戊戌'];
 const WONJIN=['子未','丑午','寅酉','卯申','辰亥','巳戌'];
 export function shinsalView(columns,bases=['day','birthYear']) {
   const records=columns.map(c=>({column:c,movement:[],good:[],caution:[]}));
+  if(!bases.length)return records;
   const known=columns.filter(c=>c.kind==='calculated'&&validPillar(c.pillar));
   const day=known.find(c=>c.key==='day');
   for(const basis of bases){const source=known.find(c=>c.key===basis);if(!source)continue;
@@ -164,7 +165,7 @@ export function shinsalView(columns,bases=['day','birthYear']) {
     if(BAEKHO.includes(p.stem+p.branch))r.caution.push({name:'백호',basis:'柱'});
     if(GOEGANG.includes(p.stem+p.branch))r.caution.push({name:'괴강',basis:'柱'});
     const year=known.find(c=>c.key==='birthYear'),month=known.find(c=>c.key==='month');
-    for(const star of extraShinsal(p,{dayStem:day?.pillar.stem,yearStem:year?.pillar.stem,yearBranch:year?.pillar.branch,monthBranch:month?.pillar.branch,basis:bases.includes('day')&&bases.includes('birthYear')?'both':bases.includes('day')?'day':'year',natalBranches:known.filter(n=>['hour','day','month','birthYear'].includes(n.key)&&n.index!==c.index).map(n=>n.pillar.branch)}))if(bases.length)r[star.type].push(star);
+    for(const star of extraShinsal(p,{dayStem:day?.pillar.stem,yearStem:year?.pillar.stem,dayPillar:day?.pillar,yearPillar:year?.pillar,isNatalDay:c.key==='day',yearBranch:year?.pillar.branch,monthBranch:month?.pillar.branch,basis:bases.includes('day')&&bases.includes('birthYear')?'both':bases.includes('day')?'day':'year',natalBranches:known.filter(n=>['hour','day','month','birthYear'].includes(n.key)&&n.index!==c.index).map(n=>n.pillar.branch)}))if(bases.length)r[star.type].push(star);
   }
   // Preserve the original distance rule on natal pillars only. Do not reinterpret it on a reordered 6-column table.
   const natal=known.filter(c=>['hour','day','month','birthYear'].includes(c.key));

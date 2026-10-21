@@ -57,6 +57,23 @@ async function settings(){await page.getByRole('navigation',{name:'명식 주 �
  for(const width of [320,390,800]){await page.setViewportSize({width,height:900});check('settings no page overflow '+width,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));}
  await page.getByRole('button',{name:'보관함',exact:true}).click();await page.getByRole('button',{name:/합성 명식 가/}).first().click();await reading('분석');
  await page.locator('.toast').waitFor({state:'hidden'});for(const width of [320,390,800]){await page.setViewportSize({width,height:900});check('analysis contains horizontal tables '+width,await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));await page.screenshot({path:dir+'/research-'+width+'.png'});}
+ await page.getByRole('button',{name:'새 명식 추가',exact:true}).click();
+ await page.getByLabel('이름',{exact:true}).fill('합성 자시 경계');
+ for(const [label,value] of [['출생 연도','2000'],['출생 월','2'],['출생 일','29']])await page.getByLabel(label,{exact:true}).fill(value);
+ await page.getByLabel('양력·음력',{exact:true}).selectOption('solar');await page.getByLabel('성별',{exact:true}).selectOption('male');
+ await page.getByLabel('출생시각 상태',{exact:true}).selectOption('known');await page.getByLabel('출생 시',{exact:true}).fill('23');await page.getByLabel('출생 분',{exact:true}).fill('15');
+ await page.getByLabel('계산 엔진',{exact:true}).selectOption('astronomical');await page.getByLabel('시간대',{exact:true}).selectOption('fixed');await page.getByLabel('UTC 차이',{exact:true}).fill('0');
+ await page.getByLabel('시진 시작',{exact:true}).selectOption('30');await page.getByLabel('일주 경계',{exact:true}).selectOption('zi-split');
+ await context.setOffline(true);await page.getByRole('button',{name:'명식 저장',exact:true}).click();
+ await saved(s=>s.entries.some(e=>e.name==='합성 자시 경계'&&e.birth.calculation_policy.hourBoundaryOffset===30));
+ await page.getByRole('button',{name:/^시.*지지 해$/}).waitFor();
+ check('offline calculation policy affects actual hour branch',await page.getByRole('button',{name:/^시.*지지 해$/}).count()===1);
+ await context.setOffline(false);await page.reload();await page.getByRole('button',{name:/^시.*지지 해$/}).waitFor();check('Zi calculation survives reopening',await page.getByRole('button',{name:/^시.*지지 해$/}).count()===1);
+ await reading('분석');await page.getByLabel('신살 기준',{exact:true}).selectOption('none');await saved(s=>s.workspace.integrated.rules.sinsalBasis==='none');
+ check('disable sinsal clears all actual table rows',await page.getByRole('region',{name:'신살 표'}).locator('.rr-shinsal-cell button').count()===0);
+ const ruleDetails=page.getByLabel('지원 분석 규칙',{exact:true});await ruleDetails.locator('summary').click();check('rule catalogue and priority visible',(await ruleDetails.innerText()).includes('38종 지원')&&(await ruleDetails.innerText()).includes('덮어쓰지'));
+ await settings();const policyDownload=page.waitForEvent('download');await page.getByRole('button',{name:/백업 내보내기/}).click();const policyBackup=await policyDownload;await policyBackup.saveAs(dir+'/policy-backup.json');
+ const policyState=JSON.parse(fs.readFileSync(dir+'/policy-backup.json','utf8')).state;check('exported backup retains Zi options and old record identities',policyState.entries.find(e=>e.name==='합성 자시 경계').birth.calculation_policy.hourBoundaryOffset===30&&seed.entries.every(old=>policyState.entries.some(e=>e.id===old.id&&e.birth.input_year===old.birth.input_year)));
  check('no console/runtime errors',errors.length===0);
  fs.writeFileSync(dir+'/completion-results.json',JSON.stringify({checks,errors},null,2));console.log('PASS completion extension',checks.length);await browser.close();
 })().catch(async error=>{console.error(error);fs.writeFileSync(dir+'/completion-results.json',JSON.stringify({checks,errors,error:error.message},null,2));await page?.screenshot({path:dir+'/failure.png'}).catch(()=>{});await browser?.close();process.exitCode=1;});

@@ -118,12 +118,12 @@ jobs:
         working-directory: android
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon testDebugUnitTest assembleDebug
+          ./gradlew --no-daemon testDebugUnitTest assembleDebug assembleRelease
 
       - name: Publish clean first-install debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: palja-1.1.4-fresh-install-DEBUG-not-update
+          name: palja-1.1.5-fresh-install-DEBUG-not-update
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 7
@@ -140,8 +140,16 @@ jobs:
       - name: Upload clean debug APK for first-install diagnostics only
         uses: actions/upload-artifact@v4
         with:
-          name: palja-1.1.4-debug-no-personal-data
+          name: palja-1.1.5-debug-no-personal-data
           path: android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 3
 
+
+      - name: Publish unsigned release for private local signing
+        uses: actions/upload-artifact@v4
+        with:
+          name: palja-1.1.5-UNSIGNED-release-not-installable
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          if-no-files-found: error
+          retention-days: 7

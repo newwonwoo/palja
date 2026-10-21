@@ -2,7 +2,7 @@
 
 **이 저장소가 모바일 앱의 단일 개발 기준입니다.** 기존 웹사이트는 별도 저장소 [newwonwoo/saju](https://github.com/newwonwoo/saju)의 `main`으로 계속 유지합니다.
 
-- **현재 소스 버전:** 1.1.4 (versionCode 14), `com.newwonwoo.saju`. 이번 확장은 개발 중이며 새 개인 업데이트 APK로 배포되지 않았습니다.
+- **현재 소스 버전:** 1.1.5 (versionCode 15), `com.newwonwoo.saju`. 이번 확장은 개발 중이며 새 개인 업데이트 APK로 배포되지 않았습니다.
 - **모바일 앱의 새 기본 브랜치:** `main` (이 저장소)
 - **원본 개발 통합 소스:** `newwonwoo/saju` → `app/offline-vault` @ `3459207e30fd9b5589cb9e09260bf9c9f572b0a3`
 - **필독:** [새 저장소 인수인계](docs/PALJA_HANDOFF.md) · [기능 완료 추적표](docs/full-feature-scope.md)
@@ -19,7 +19,7 @@
 
 [79개 기능 체크리스트](docs/IMPLEMENTATION_CHECKLIST.md) · [작업·검증 기록](docs/completion-20261020.md).
 
-코드 구현 74개 / 일부 구현 5개 / 미구현 0개입니다. 7개 검증 게이트와 실기기 확인이 남아 **100% 완료로 표기하지 않습니다.** `npm run checklist:check`로 문서와 근거를 검사합니다. `npm run checklist:complete`는 전체 완료 전에는 실패합니다.
+코드 구현 78개 / 일부 구현 1개 / 미구현 0개입니다. 7개 검증 게이트와 실기기 확인이 남아 **100% 완료로 표기하지 않습니다.** `npm run checklist:check`로 문서와 근거를 검사합니다. `npm run checklist:complete`는 전체 완료 전에는 실패합니다.
 
 ## 개인 DB 복원 / 최초 설치
 
