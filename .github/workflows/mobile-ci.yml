@@ -82,6 +82,7 @@ jobs:
           node tests/browser/integrated.cjs
           node tests/browser/independent-extension.cjs
           node tests/browser/fortune-bulk.cjs
+          node tests/browser/remaining-flows.cjs
       - name: Upload synthetic browser evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -92,6 +93,7 @@ jobs:
             /tmp/palja-completion-qa/completion-results.json
             /tmp/palja-completion-qa/results.json
             /tmp/palja-completion-qa/fortune-bulk-results.json
+            /tmp/palja-completion-qa/remaining-results.json
           if-no-files-found: ignore
           retention-days: 7
 

@@ -12,7 +12,8 @@
     "checklist": "node scripts/update-checklist.mjs",
     "checklist:check": "node scripts/update-checklist.mjs --check",
     "checklist:complete": "node scripts/update-checklist.mjs --check --require-complete",
-    "upgrade:verify": "node scripts/verify-upgrade-backups.mjs"
+    "upgrade:verify": "node scripts/verify-upgrade-backups.mjs",
+    "progress": "node scripts/update-checklist.mjs --check"
   },
   "dependencies": {
     "@capacitor/android": "^8.5.3",
