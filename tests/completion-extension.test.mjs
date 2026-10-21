@@ -37,6 +37,21 @@ const c=await import('data:text/javascript;base64,'+Buffer.from(output.outputFil
 const B={input_year:2000,input_month:2,input_day:29,input_hour:13,input_minute:45,time_status:'known',sex:'male',calendar_type:'solar',lunar_leap_month:false,calculation_policy:{...c.DEFAULT_POLICY}};
 const state=()=>upsertEntry(createEmptyVault(),{name:'합성 A',birth:B});
 const copy=x=>JSON.parse(JSON.stringify(x));
+test('unknown time on a midnight DST gap keeps invariant pillars without fabricating a birth hour',()=>{
+ const birth={...B,input_year:1948,input_month:6,input_day:1,time_status:'unknown',input_hour:null,input_minute:null};
+ assert.throws(()=>c.localToUtc({year:1948,month:6,day:1,hour:0,minute:0}),/존재하지/);
+ const before=JSON.stringify(birth),r=c.preciseEntryBase(birth);
+ assert.equal(r.partial,true);assert.equal(r.saju.pillars[0].unknown,true);
+ assert.ok(r.saju.pillars.slice(1).every(p=>!p.unknown));assert.equal(r.saju.solar.hour,null);
+ assert.deepEqual(r.daeun,[]);assert.equal(JSON.stringify(birth),before);
+});
+test('unknown time includes both fold occurrences and withholds pillars crossing a solar term',()=>{
+ for(const [year,month,day] of [[1948,9,12],[2024,2,4],[1988,5,8]]){
+  const r=c.preciseEntryBase({...B,input_year:year,input_month:month,input_day:day,time_status:'unknown',input_hour:null,input_minute:null});
+  assert.equal(r.partial,true);assert.equal(r.saju.pillars[0].unknown,true);
+  if(year===2024){assert.equal(r.saju.pillars[2].unknown,true);assert.equal(r.saju.pillars[3].unknown,true);}
+ }
+});
 test('optional presentation preserves existing v1 data and birth identity',()=>{const s=state(),before=copy(s.entries);assert.deepEqual(readPresentation(s),DISPLAY_DEFAULTS);const n=savePresentation(s,{palette:'muted',ageMode:'year',tabOrder:['compare','luck','relations','overview']});assert.deepEqual(n.entries,before);assert.equal(validateVault(n).valid,true);assert.equal(readPresentation(restoreBackup(createEmptyVault(),createBackup(n)).state).palette,'muted');});
 test('display validation rejects malformed order and invalid option values atomically',()=>{const s=state();for(const patch of [{tabOrder:['overview','overview','luck','compare']},{bannerOrder:['friends']},{fontScale:100},{palette:'invalid'},{tenGods:1},{surprise:true}])assert.throws(()=>savePresentation(s,patch));assert.equal(s.workspace,undefined);});
 test('local display preferences win import conflict; missing optional namespace is recovered',()=>{let a=savePresentation(state(),{palette:'contrast'});const backup=createBackup(a);a=savePresentation(a,{palette:'muted'});const restored=restoreBackup(a,backup);assert.equal(readPresentation(restored.state).palette,'muted');assert.ok(restored.stats.conflicts.some(x=>x.kind==='presentation'));let b=state();const id=b.entries[0].id;const incoming=savePresentation(b,{fontScale:1.3});assert.equal(readPresentation(restoreBackup(b,createBackup(incoming)).state).fontScale,1.3);});

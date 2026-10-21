@@ -115,9 +115,27 @@ export function calendarDaeunStart(birthInstant,age,decadeIndex=0){
 export function preciseEntryBase(b) {
  const s=solarInput(b),p=b.calculation_policy;
  if(b.time_status!=='known') {
-  // Do not silently choose a noon birth near a term or changed local day.
-  const a=precisePillars({...s,hour:0,minute:0},p),z=precisePillars({...s,hour:23,minute:59},p);
-  const pillars=a.pillars.map((v,i)=>i===0||v.stem!==z.pillars[i].stem||v.branch!==z.pillars[i].branch?{label:v.label,unknown:true}:v);
+  // Midnight itself can be a gap/fold. Inspect the entire civil date, including
+  // both occurrences of repeated minutes, without choosing a birth time.
+  const errors=validatePolicy(p);if(errors.length)throw new Error(errors.join(' '));
+  const extremes={};
+  for(let minute=0;minute<1440;minute++){
+   const sample={...s,hour:Math.floor(minute/60),minute:minute%60};
+   let first;
+   try{first=correctedClock(sample,{...p,fold:'earlier'});}
+   catch(error){if(error.message.includes('실제 존재하지 않는 현지 시각'))continue;throw error;}
+   const clocks=[{clock:first,fold:'earlier'}];
+   if(first.audit.ambiguous)clocks.push({clock:correctedClock(sample,{...p,fold:'later'}),fold:'later'});
+   for(const {clock,fold} of clocks)for(const key of ['instant','adjusted'])for(const side of ['min','max']){
+    const id=key+side,previous=extremes[id];
+    if(!previous||(side==='min'?clock[key]<previous.clock[key]:clock[key]>previous.clock[key]))extremes[id]={sample,clock,fold};
+   }
+  }
+  if(!extremes.instantmin)throw new Error('이 시간대에 실제 존재하는 현지 날짜가 아닙니다.');
+  // Year/month depend on actual instants; day on corrected instants. All are
+  // monotone over those ranges. Hour is always withheld for unknown time.
+  const probes=Object.values(extremes).map(({sample,fold})=>precisePillars(sample,{...p,fold}));
+  const pillars=probes[0].pillars.map((v,i)=>i===0||probes.some(z=>v.stem!==z.pillars[i].stem||v.branch!==z.pillars[i].branch)?{label:v.label,unknown:true}:v);
   return {saju:{pillars,dayStem:pillars[1].unknown?null:pillars[1].stem,solar:{...s,hour:null,minute:null}},daeun:[],partial:true};
  }
  const saju=precisePillars({...s,hour:b.input_hour,minute:b.input_minute},p);

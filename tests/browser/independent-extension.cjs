@@ -2,7 +2,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const fs = require('node:fs');
 const assert = require('node:assert/strict');
 (async()=>{
-  const browser=await chromium.launch({args:['--no-sandbox']});
+  const browser=await chromium.launch({executablePath:process.env.PLAYWRIGHT_EXECUTABLE||undefined,args:['--no-sandbox']});
   const page=await browser.newPage({locale:'ko-KR',viewport:{width:390,height:844}});
   const errors=[];page.on('pageerror',err=>errors.push(String(err)));
   page.on('console',msg=>{if(msg.type()==='error')errors.push(msg.text())});

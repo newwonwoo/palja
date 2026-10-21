@@ -241,7 +241,7 @@
       "title": "양력·음력·평달·윤달 입력",
       "implementation": "verified",
       "referenceBehavior": "unverified",
-      "gap": "평달/윤달 입력·알려진 2023년 변환 사례·원래 음력 날짜/윤달 플래그 백업 검증. 역법 엔진 전체의 별도 검증은 남음.",
+      "gap": "평달/윤달 입력·알려진 2023년 변환 사례·원래 음력 날짜/윤달 플래그 백업 검증. 역법 엔진의 표본/공유 데이터 한계는 engine.lunar 검증 문서 참조.",
       "apkEvidence": [
         "package:how8ja/utils/lunar_calendar_converter.dart",
         "package:how8ja/core/domains/manse/data/leap_month_data.dart"
@@ -278,7 +278,7 @@
       "id": "input.location",
       "area": "input",
       "title": "출생지·경도·시간대 선택",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "23개 도시·17시간대·경도 직접 입력. 한국 2025b/해외 IANA 2026b 전환표 내장. 도시 중심 경도임을 표시.",
       "apkEvidence": [
@@ -290,15 +290,18 @@
       "implementationEvidence": [
         "src/calendar/locations.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "input.custom",
       "area": "input",
       "title": "커스텀 간지 직접 입력",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "간지 네 기둥·시주 미상과 대운수/방향/선택 시작연도를 직접 저장·수정·해석. 생일을 만들지 않음.",
       "apkEvidence": [
@@ -309,17 +312,20 @@
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "input.reverse",
       "area": "input",
       "title": "네 기둥으로 생일·가능 연도 역검색",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
-      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
       "apkEvidence": [
         "package:how8ja/features/profile_input/domain/usecases/find_birthday_from_saju_usecase.dart",
         "package:how8ja/features/profile_input/domain/usecases/find_possible_year_usecase.dart"
@@ -327,9 +333,12 @@
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/pillar-input.test.mjs",
-        "tests/pillar-search.test.mjs"
+        "tests/pillar-search.test.mjs",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "input.duplicates",
@@ -355,18 +364,21 @@
       "id": "input.predicted-hour",
       "area": "input",
       "title": "미상 시각 후보 비교",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
-      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
       "apkEvidence": [
         "package:how8ja/features/profile_input/presentation/profile_input_page/widgets/hour_prediction_list.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/pillar-input.test.mjs",
-        "tests/pillar-search.test.mjs"
+        "tests/pillar-search.test.mjs",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "library.self",
@@ -519,20 +531,25 @@
       "id": "reader.six",
       "area": "reader",
       "title": "세운·대운·원국 6열 명식표",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "시각 구조는 캡처 근거, 계산 수치 동일성 별도",
       "apkEvidence": [
         "package:how8ja/features/myeongjo/presentation/widgets/myeongjo_saju_luck_widget.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "independentVerification": "passed",
+      "implementationEvidence": [
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
+      ]
     },
     {
       "id": "reader.luckrails",
       "area": "reader",
       "title": "대운·세운·월운 연속 선택",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "기존/독립 기준별 대운·세운·월운 선택 연결. 독립 역법 10대운; 2050년 초과 연도 선택 제한.",
       "apkEvidence": [
@@ -541,15 +558,18 @@
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "reader.letter",
       "area": "reader",
       "title": "글자 상세·십성·지장간·운성",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "표시 옵션 및 용어 도움말 확장",
       "apkEvidence": [
@@ -558,13 +578,18 @@
         "package:how8ja/features/myeongjo/application/myeongjo_calc_providers.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "independentVerification": "passed",
+      "implementationEvidence": [
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
+      ]
     },
     {
       "id": "reader.napum",
       "area": "reader",
       "title": "납음·표시 옵션",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "육십갑자 납음과 명식표 표시 토글, 설정 저장·백업 연결.",
       "apkEvidence": [
@@ -572,11 +597,14 @@
         "package:how8ja/features/setting/domain/models/manse_view_options/napeum_option.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "partial",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/ReaderTiles.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
@@ -623,7 +651,7 @@
       "id": "reader.explain-correction",
       "area": "reader",
       "title": "출생/대운 계산 근거 팝업",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "실제 UTC·DST·경도·균시차·절입 근거 및 순역/경과일/기산법/10대운 시작 단계 표시.",
       "apkEvidence": [
@@ -633,32 +661,38 @@
       "implementationEvidence": [
         "src/mobile/ReferenceReader.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "engine.pillars",
       "area": "engine",
       "title": "사주 4주 산출",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
-      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
       "apkEvidence": [
         "package:how8ja/core/domains/manse/calculator/saju_calculator.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "engine.lunar",
       "area": "engine",
       "title": "음양력 변환·윤달 데이터",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "korean-lunar-calendar 0.4.0 내장 한국 음력·윤달 변환. 지원 연도 내 샘플 왕복 검증.",
       "apkEvidence": [
@@ -667,32 +701,38 @@
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "engine.solar-terms",
       "area": "engine",
       "title": "절입 시각 기반 년·월주",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
-      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
       "apkEvidence": [
         "package:how8ja/core/domains/manse/solar_term_converter/kasi_base/solar_term_time_data.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "engine.timezone",
       "area": "engine",
       "title": "역사적 한국 표준시",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "IANA tzdb 2025b Asia/Seoul 전환표 적용. 중복 현지 시각 선택, 미존재 시각 거부.",
       "apkEvidence": [
@@ -701,15 +741,18 @@
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "engine.dst",
       "area": "engine",
       "title": "서머타임 보정",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "역사적 DST 보정 한 번만 적용하고 계산 근거에 표시. 공백/중복 시각 경계 테스트.",
       "apkEvidence": [
@@ -718,15 +761,18 @@
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "engine.longitude",
       "area": "engine",
       "title": "출생지 경도 보정",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "입력 경도와 당시 표준 offset 차이를 적용. 원시 출생정보는 변경하지 않음.",
       "apkEvidence": [
@@ -736,26 +782,32 @@
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "engine.equation",
       "area": "engine",
       "title": "균시차 적용",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
-      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
       "apkEvidence": [
         "package:how8ja/core/domains/manse/rules/get_equation_of_time_minute.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "engine.zi-hour",
@@ -781,7 +833,7 @@
       "id": "engine.year-start",
       "area": "engine",
       "title": "입춘/연주 시작 기준 옵션",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "입춘/1월1일 연주 옵션 반영. 월주 천간은 절기년 기준을 유지한다고 명시.",
       "apkEvidence": [
@@ -790,15 +842,18 @@
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "engine.daewoon",
       "area": "engine",
       "title": "대운 순역·기산·시작일·10대운",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "순역 자동/직접 지정, 평균년 비례/UTC 달력 가산 2기산법, 시작일·10대운·단계별 근거. 전 학파 동일성은 주장하지 않음.",
       "apkEvidence": [
@@ -809,15 +864,18 @@
       "implementationEvidence": [
         "src/calendar/precise.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "analysis.element",
       "area": "analysis",
       "title": "오행 원형 관계도·선택운 반영",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "원국+대운/세운/월운/일운/시운의 오행·음양 비중과 도식 동기화. 기존 산식 판정과 별도 표시.",
       "apkEvidence": [
@@ -828,15 +886,18 @@
       "implementationEvidence": [
         "src/mobile/ReferenceReader.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "analysis.weights",
       "area": "analysis",
       "title": "궁성·합화·지장간·선택운 가중치 편집",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "궁성·지장간·5계층운 비중과 선택형 합화 전환 비율 저장. 인접·월령 지원·쟁합 제외의 단순 합화 규칙을 명시.",
       "apkEvidence": [
@@ -848,15 +909,18 @@
       "implementationEvidence": [
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "analysis.yin-yang",
       "area": "analysis",
       "title": "음양 분포",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "사용자 상대 가중치에 따른 음양 합계와 비율 표시. 기존 강약/용신 판정은 별도.",
       "apkEvidence": [
@@ -865,15 +929,18 @@
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "analysis.strength",
       "area": "analysis",
       "title": "신강약·득령·득지·득세",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "비겁+인성 상대 비중, 월지 생조·동오행 통근으로 신강약 경향/득령/득지/득세와 근거 표시. 제품 규칙이며 기존 판정을 보존.",
       "apkEvidence": [
@@ -881,36 +948,42 @@
         "package:how8ja/core/domains/manse_analysis/deuks/deuks_calculator.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "analysis.climate",
       "area": "analysis",
       "title": "한난·조습 지수와 기준",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "원국 및 5계층 개별 증분×비중의 한난·조습 지수와 기여표. 기존 2계층 게이지는 보존하며, 운끼리의 추가 합국은 제외한다고 명시.",
       "apkEvidence": [
         "package:how8ja/core/domains/manse_analysis/han_nan_jo_seup/han_nan_jo_seup_calculator.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/reader-model.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "analysis.che-yong",
       "area": "analysis",
       "title": "체·용·월령·사령·진신·가신",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "일간 체·용 후보·월령 본기·절입 후 30일 배당 사령·사령 일치/불일치 투간을 실제 계산하고 근거를 표시. 명시한 배당표 규칙이며 고급 판정의 독립 검증은 별도 게이트.",
       "apkEvidence": [
@@ -918,18 +991,21 @@
         "package:how8ja/core/domains/manse_analysis/wol_ryeong/wol_ryeong_bundle_calculate.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "analysis.yongsin",
       "area": "analysis",
       "title": "억부·조후·통관·병약·용격",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "현재 5계층 오행 비중에서 억부/통관/집중도 병약, 5계층 조후, 월령 격신을 5방법으로 계산하고 희기구한 분류. 수치 문턱과 충돌 순서를 명시한 독립 연구 규칙; 근거 검증은 별도 게이트.",
       "apkEvidence": [
@@ -937,18 +1013,21 @@
         "package:how8ja/core/domains/manse_analysis/yongsin/parts/byeongyak_calculator.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "analysis.gyeok",
       "area": "analysis",
       "title": "내격·응용격·외잡격",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "월지 본기/투간 내격·4응용격·고전 10외잡격 구조와 화기 검토. 내격 우선·복수 후보 병기. 10종 지원 계약이며 고전 전체의 성립/파격 판정 아님.",
       "apkEvidence": [
@@ -957,20 +1036,23 @@
         "package:how8ja/core/domains/manse_analysis/gyeoks/gueokgook_parts/outer_gyeokgook_calculator.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/classical-patterns.js",
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
         "docs/completion-20261020.md",
-        "docs/remaining-20261021.md"
+        "docs/remaining-20261021.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "analysis.hapchoong",
       "area": "analysis",
       "title": "천간·지지 합충형파해·원진·자형",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "천간 합충, 지지 육합/삼합/방합·충형파해원진자형을 9열로 표시. 합화 변환은 별도 명시 규칙.",
       "apkEvidence": [
@@ -979,18 +1061,21 @@
         "package:how8ja/core/domains/manse_analysis/hapchoong/checkers/jiji_hae_checker.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "partial",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/reader-model.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "analysis.sinsal",
       "area": "analysis",
       "title": "십이신살·길신·흉살 전체",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "선언된 38종 지원·표/기준 연결·제외 시 전체 제거. 10간×12지 전수 및 월/년/순중 공망 검증. 모든 학파의 전체 목록 아님.",
       "apkEvidence": [
@@ -999,19 +1084,22 @@
         "package:how8ja/core/domains/manse_analysis/sinsal/enums/sip_i_sinsal.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/shinsal-catalog.js",
         "tests/completion-extension.test.mjs",
         "docs/completion-20261020.md",
-        "docs/remaining-20261021.md"
+        "docs/remaining-20261021.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "analysis.gongmang",
       "area": "analysis",
       "title": "공망·삼재·납음 연계",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "원국과 선택 대운/년월일시운의 공망 지지·납음, 연지 삼재 분류 연결.",
       "apkEvidence": [
@@ -1019,18 +1107,21 @@
         "package:how8ja/features/woonse_tree_chart/domain/rules/check_samjae.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "partial",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/LuckExplorer.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "analysis.personality",
       "area": "analysis",
       "title": "성격·일주 SWOT·특징·해설",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "10천간 물상+일지 본기 십성/운성으로 60일주별 자체 해설·SWOT 관찰 질문을 구성. 진단·예언으로 표현하지 않음.",
       "apkEvidence": [
@@ -1039,36 +1130,42 @@
         "package:how8ja/features/saju_analysis/domain/data/personality_tags.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/ResearchPanel.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "analysis.moolsang",
       "area": "analysis",
       "title": "물상 유형·도식·해설",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "10천간 자연물 비유와 인성→일간→식상 관계 SVG 및 선택운 오행 연결. 외부 이미지 생성 없이 오프라인.",
       "apkEvidence": [
         "package:how8ja/core/domains/manse_analysis/moolsang/moolsang_calculator.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/ResearchPanel.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "fortune.date",
       "area": "fortune",
       "title": "오늘/선택일·달력 운세",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "현재 운·선택일의 일주/십성·관심 분야를 일별 달력과 연결하고 선택을 저장.",
       "apkEvidence": [
@@ -1076,18 +1173,21 @@
         "package:how8ja/features/woonse/presentation/widgets/features/change_date_widget/simple_date_calendar.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/LuckExplorer.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "fortune.scales",
       "area": "fortune",
       "title": "대운·년·월·일·시운 분석",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "5계층 천간/본기 십성·분야·납음/공망/오행·독립 강약/용신 후보를 동기화. 정밀 판정이 아닌 명시된 연구 규칙.",
       "apkEvidence": [
@@ -1099,15 +1199,18 @@
       "implementationEvidence": [
         "src/mobile/LuckExplorer.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "fortune.categories",
       "area": "fortune",
       "title": "분야별 운세·선택 기준",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "대운·세운·월일시운 각각 천간/본기 십성에 따른 5분야 분류와 근거. 사건 확률을 만들지 않음.",
       "apkEvidence": [
@@ -1115,29 +1218,35 @@
         "package:how8ja/features/woonse/presentation/widgets/features/category_woonse/category_woonse.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/LuckExplorer.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "fortune.timeline",
       "area": "fortune",
       "title": "오행 비율·운세 타임라인",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "매월 15일 정오의 5계층 오행 비율을 실제 계산해 SVG·수치표로 표시. 대표일 표본이며 절입 경계는 별도 표시.",
       "apkEvidence": [
         "package:how8ja/features/woonse/presentation/widgets/features/spirit_ratio_timeline_graph_widget.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/FortuneTimeline.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
@@ -1163,25 +1272,28 @@
       "id": "fortune.lucky",
       "area": "fortune",
       "title": "행운 선택 정보",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "5용신 방법 중 기준을 명시적으로 선택·저장하고 후보 오행의 색/방향/계절/하도 고정 대응수를 조회. 무작위 수나 성과 확률을 만들지 않음.",
       "apkEvidence": [
         "package:how8ja/features/woonse/presentation/widgets/features/lucky_choice_widget.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/lucky-choice.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "match.select",
       "area": "match",
       "title": "두 명식 선택·나란히 보기",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "목록에서 2명 선택→궁합 패널 바로 열기·나란히 표시 연결.",
       "apkEvidence": [
@@ -1190,36 +1302,42 @@
         "package:how8ja/features/match/presentation/match_select_screen/providers/selected_match_profile_provider.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/ReferenceVault.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "match.basic",
       "area": "match",
       "title": "기본 궁합·상호작용 분석",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "일간/일지/월지 관계와 양쪽 일간 기준 원국 전체의 천간/본기 십성 비교.",
       "apkEvidence": [
         "package:how8ja/features/match/domain/calculators/basic_match/basic_match_calculator.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "partial",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/CompatibilityDetails.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "match.scores",
       "area": "match",
       "title": "궁합 점수·범주·튜닝",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "동일 위치 글자 비율에 따른 구조 궁합 점수 0~100, 관계유형 구성 비율과 4비중 편집/저장 구현. 계산식을 명시하고 감정·성패 확률로 표현하지 않음.",
       "apkEvidence": [
@@ -1227,29 +1345,35 @@
         "package:how8ja/features/match/domain/calculators/match_compatibility/match_compatibility_calculator.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/compatibility-model.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "match.similar",
       "area": "match",
       "title": "비슷한 운명·궁합 해설",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "전체 보관함의 일주/일간/일지/월지 일치 조건 검색·일치 기둥 설명. 운명 유사성은 주장하지 않음.",
       "apkEvidence": [
         "package:how8ja/features/match/domain/calculators/basic_match/similar_destiny_calculator.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/compatibility-model.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
@@ -1372,7 +1496,7 @@
       "id": "tools.calendar",
       "area": "tools",
       "title": "월별 일주 달력·시주·입력 이동",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "이번 연결; 음력/절기 표시 없음",
       "apkEvidence": [
@@ -1380,27 +1504,37 @@
         "package:how8ja/features/manse_calendar/presentation/manse_calendar/hour_joo_item.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "independentVerification": "passed",
+      "implementationEvidence": [
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
+      ]
     },
     {
       "id": "tools.day-search",
       "area": "tools",
       "title": "일주 날짜 탐색·중단·결과 제한",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
-      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "gap": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
       "apkEvidence": [
         "package:how8ja/features/search/presentation/widgets/joo_search_widget.dart",
         "package:how8ja/features/profile_input/domain/usecases/find_birthday_from_saju_usecase.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "independentVerification": "passed",
+      "implementationEvidence": [
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
+      ]
     },
     {
       "id": "tools.similar",
       "area": "tools",
       "title": "유사 명식 조건·검색·결과",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "전체 명식을 조건으로 검색 후 구조 일치도순 최대50명 표시. 결과를 눌러 해당 명식 열기.",
       "apkEvidence": [
@@ -1409,18 +1543,21 @@
         "package:how8ja/features/similar_manse/presentation/setting_screen.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "partial",
+      "independentVerification": "passed",
       "implementationEvidence": [
         "src/mobile/ReferenceReader.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ]
     },
     {
       "id": "tools.guide",
       "area": "tools",
       "title": "십성·지장간·운성 조견표",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "이번 연결; 전체 만세력·계산 가이드 확장",
       "apkEvidence": [
@@ -1429,13 +1566,18 @@
         "package:how8ja/features/guide/presentation/manse_guide/widgets/sections/jijanggan_guide_section.dart"
       ],
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
-      "independentVerification": "pending"
+      "independentVerification": "passed",
+      "implementationEvidence": [
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
+      ]
     },
     {
       "id": "tools.terms",
       "area": "tools",
       "title": "절기 표시·년월 선택·음력 달력",
-      "implementation": "implemented",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
       "gap": "음력/윤달 달력 및 24절기 시각을 월별로 표시. 1900~2050 지원, 절기 표시 UTC+09:00 고정임을 명시.",
       "apkEvidence": [
@@ -1445,9 +1587,12 @@
       "evidenceLimit": "모듈명 존재 단서만 확인. 실제 화면/동작과 항목 범위는 추가 대조 필요.",
       "implementationEvidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
-      "independentVerification": "pending"
+      "independentVerification": "passed"
     },
     {
       "id": "settings.persist",

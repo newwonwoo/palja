@@ -17,9 +17,9 @@
 
 ## 전체 구현 체크리스트
 
-[79개 기능 체크리스트](docs/IMPLEMENTATION_CHECKLIST.md) · [작업·검증 기록](docs/completion-20261020.md).
+[79개 기능 체크리스트](docs/IMPLEMENTATION_CHECKLIST.md) · [최신 계산·분석·UI 검증](docs/verification-calculation-flows-20261021.md).
 
-코드 구현 78개 / 일부 구현 1개 / 미구현 0개입니다. 7개 검증 게이트와 실기기 확인이 남아 **100% 완료로 표기하지 않습니다.** 작업 완료 때마다 `npm run progress`로 코드 구현률과 전체 검증률을 분리 보고합니다. `npm run checklist:check`로 문서와 근거를 검사합니다. `npm run checklist:complete`는 전체 완료 전에는 실패합니다.
+코드 구현 **78/79 (98.7%)**, 전체 7개 게이트 검증 **78/79 (98.7%)**입니다. 이번 검증 완료는 33개에서 45개 증가했습니다. `data.upgrade`의 원래 개인키 서명·실제 설치 기기 업데이트/DB 보존 확인 1개가 남아 **100% 완료로 표기하지 않습니다.** 작업 완료 때마다 `npm run progress`로 코드 구현률과 전체 검증률을 분리 보고합니다. `npm run checklist:check`로 문서와 근거를 검사합니다. `npm run checklist:complete`는 전체 완료 전에는 실패합니다.
 
 ## 개인 DB 복원 / 최초 설치
 

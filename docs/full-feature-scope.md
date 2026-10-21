@@ -1,10 +1,10 @@
 # 전체 기능 범위와 구현 현황
 
-79개 작업 단위를 [전체 구현 체크리스트](IMPLEMENTATION_CHECKLIST.md)에서 관리한다. **코드 구현 78 / 일부 구현 1 / 미구현 0**이며, 입력·조작·결과·저장/복원·오프라인·회귀·독립 근거의 전체 검증을 마친 상태는 아니다. **100% 완료가 아니다.**
+79개 작업 단위를 [전체 구현 체크리스트](IMPLEMENTATION_CHECKLIST.md)에서 관리한다. **코드 구현 78/79 (98.7%)**, **7개 게이트 전체 검증 78/79 (98.7%)**다. 개별 게이트는 547/553 (98.9%). 원래 개인키로 서명한 APK의 실제 업데이트·DB 보존 확인 `data.upgrade` 1개가 남아 **100% 완료가 아니다.**
 
 - [기계 판독 가능한 기능 명세](full-feature-scope.json)
 - [항목별 7개 검증 게이트와 근거](implementation-progress.json)
-- [이번 구현·검증 범위와 남은 작업](completion-20261020.md)
+- [최신 계산·분석·UI 검증과 한계](verification-calculation-flows-20261021.md)
 - [개발 인수인계](PALJA_HANDOFF.md)
 
 `npm run checklist`로 문서를 다시 만들고, `npm run checklist:check`로 최신성과 근거 파일을 검사한다. `npm run checklist:complete`는 미완료 검증이나 부분 구현이 있으면 실패한다.

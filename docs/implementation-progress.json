@@ -6,41 +6,50 @@
       "evidence": [
         "src/calendar/locations.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "library.celebrity": {
       "note": "공개 출처를 확인한 인물 3명: 검색·분류·출처 저장·중복 추가 방지. 시각/성별 미확인은 유지.",
@@ -139,41 +148,50 @@
       "evidence": [
         "src/mobile/ReaderTiles.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "reader.current": {
       "note": "현재 운·연/월/일/시 선택을 명식마다 따로 저장. 기존 선택 필드를 호환하고 선택 백업에서 타인 제외.",
@@ -272,41 +290,50 @@
       "evidence": [
         "src/mobile/ReferenceReader.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "engine.zi-hour": {
       "note": "독립 계약: 시진 시작 23:00/23:30 × 일주 경계 자정/자시 시작/야자시 분리. 보정 후 적용·저장·백업. 조사표 자오해사 원본 의미/동일성은 미확인.",
@@ -361,286 +388,350 @@
       "evidence": [
         "src/calendar/precise.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "analysis.element": {
       "note": "원국+대운/세운/월운/일운/시운의 오행·음양 비중과 도식 동기화. 기존 산식 판정과 별도 표시.",
       "evidence": [
         "src/mobile/ReferenceReader.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "analysis.weights": {
       "note": "궁성·지장간·5계층운 비중과 선택형 합화 전환 비율 저장. 인접·월령 지원·쟁합 제외의 단순 합화 규칙을 명시.",
       "evidence": [
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "analysis.strength": {
       "note": "비겁+인성 상대 비중, 월지 생조·동오행 통근으로 신강약 경향/득령/득지/득세와 근거 표시. 제품 규칙이며 기존 판정을 보존.",
       "evidence": [
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "analysis.climate": {
       "note": "원국 및 5계층 개별 증분×비중의 한난·조습 지수와 기여표. 기존 2계층 게이지는 보존하며, 운끼리의 추가 합국은 제외한다고 명시.",
       "evidence": [
         "src/mobile/reader-model.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "analysis.che-yong": {
       "note": "일간 체·용 후보·월령 본기·절입 후 30일 배당 사령·사령 일치/불일치 투간을 실제 계산하고 근거를 표시. 명시한 배당표 규칙이며 고급 판정의 독립 검증은 별도 게이트.",
       "evidence": [
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "analysis.yongsin": {
       "note": "현재 5계층 오행 비중에서 억부/통관/집중도 병약, 5계층 조후, 월령 격신을 5방법으로 계산하고 희기구한 분류. 수치 문턱과 충돌 순서를 명시한 독립 연구 규칙; 근거 검증은 별도 게이트.",
       "evidence": [
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "analysis.gyeok": {
       "note": "월지 본기/투간 내격·4응용격·고전 10외잡격 구조와 화기 검토. 내격 우선·복수 후보 병기. 10종 지원 계약이며 고전 전체의 성립/파격 판정 아님.",
@@ -649,83 +740,100 @@
         "src/mobile/research-analysis.js",
         "tests/completion-extension.test.mjs",
         "docs/completion-20261020.md",
-        "docs/remaining-20261021.md"
+        "docs/remaining-20261021.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ],
-      "implementation": "implemented"
+      "implementation": "verified"
     },
     "analysis.hapchoong": {
       "note": "천간 합충, 지지 육합/삼합/방합·충형파해원진자형을 9열로 표시. 합화 변환은 별도 명시 규칙.",
       "evidence": [
         "src/mobile/reader-model.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "analysis.sinsal": {
       "note": "선언된 38종 지원·표/기준 연결·제외 시 전체 제거. 10간×12지 전수 및 월/년/순중 공망 검증. 모든 학파의 전체 목록 아님.",
@@ -733,587 +841,700 @@
         "src/mobile/shinsal-catalog.js",
         "tests/completion-extension.test.mjs",
         "docs/completion-20261020.md",
-        "docs/remaining-20261021.md"
+        "docs/remaining-20261021.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ],
-      "implementation": "implemented"
+      "implementation": "verified"
     },
     "analysis.gongmang": {
       "note": "원국과 선택 대운/년월일시운의 공망 지지·납음, 연지 삼재 분류 연결.",
       "evidence": [
         "src/mobile/LuckExplorer.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "analysis.personality": {
       "note": "10천간 물상+일지 본기 십성/운성으로 60일주별 자체 해설·SWOT 관찰 질문을 구성. 진단·예언으로 표현하지 않음.",
       "evidence": [
         "src/mobile/ResearchPanel.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "analysis.moolsang": {
       "note": "10천간 자연물 비유와 인성→일간→식상 관계 SVG 및 선택운 오행 연결. 외부 이미지 생성 없이 오프라인.",
       "evidence": [
         "src/mobile/ResearchPanel.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "fortune.date": {
       "note": "현재 운·선택일의 일주/십성·관심 분야를 일별 달력과 연결하고 선택을 저장.",
       "evidence": [
         "src/mobile/LuckExplorer.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "fortune.scales": {
       "note": "5계층 천간/본기 십성·분야·납음/공망/오행·독립 강약/용신 후보를 동기화. 정밀 판정이 아닌 명시된 연구 규칙.",
       "evidence": [
         "src/mobile/LuckExplorer.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "fortune.categories": {
       "note": "대운·세운·월일시운 각각 천간/본기 십성에 따른 5분야 분류와 근거. 사건 확률을 만들지 않음.",
       "evidence": [
         "src/mobile/LuckExplorer.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "fortune.timeline": {
       "note": "매월 15일 정오의 5계층 오행 비율을 실제 계산해 SVG·수치표로 표시. 대표일 표본이며 절입 경계는 별도 표시.",
       "evidence": [
         "src/mobile/FortuneTimeline.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "fortune.lucky": {
       "note": "5용신 방법 중 기준을 명시적으로 선택·저장하고 후보 오행의 색/방향/계절/하도 고정 대응수를 조회. 무작위 수나 성과 확률을 만들지 않음.",
       "evidence": [
         "src/mobile/lucky-choice.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "match.select": {
       "note": "목록에서 2명 선택→궁합 패널 바로 열기·나란히 표시 연결.",
       "evidence": [
         "src/mobile/ReferenceVault.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "match.basic": {
       "note": "일간/일지/월지 관계와 양쪽 일간 기준 원국 전체의 천간/본기 십성 비교.",
       "evidence": [
         "src/mobile/CompatibilityDetails.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "match.scores": {
       "note": "동일 위치 글자 비율에 따른 구조 궁합 점수 0~100, 관계유형 구성 비율과 4비중 편집/저장 구현. 계산식을 명시하고 감정·성패 확률로 표현하지 않음.",
       "evidence": [
         "src/mobile/compatibility-model.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/ci-verification-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "match.similar": {
       "note": "전체 보관함의 일주/일간/일지/월지 일치 조건 검색·일치 기둥 설명. 운명 유사성은 주장하지 않음.",
       "evidence": [
         "src/mobile/compatibility-model.js",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "tools.similar": {
       "note": "전체 명식을 조건으로 검색 후 구조 일치도순 최대50명 표시. 결과를 눌러 해당 명식 열기.",
       "evidence": [
         "src/mobile/ReferenceReader.jsx",
         "tests/completion-extension.test.mjs",
-        "docs/completion-20261020.md"
+        "docs/completion-20261020.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
           "status": "passed",
-          "evidence": "tests/completion-extension.test.mjs"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
           "status": "passed",
-          "evidence": "docs/completion-20261020.md"
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
-      ]
+      ],
+      "implementation": "verified"
     },
     "settings.display": {
       "note": "십성·지장간·운성·납음·신살 토글이 표/운목록에 적용되고 재열기·백업 저장.",
@@ -1636,7 +1857,7 @@
     },
     "input.lunar": {
       "implementation": "verified",
-      "note": "평달/윤달 입력·알려진 2023년 변환 사례·원래 음력 날짜/윤달 플래그 백업 검증. 역법 엔진 전체의 별도 검증은 남음.",
+      "note": "평달/윤달 입력·알려진 2023년 변환 사례·원래 음력 날짜/윤달 플래그 백업 검증. 역법 엔진의 표본/공유 데이터 한계는 engine.lunar 검증 문서 참조.",
       "evidence": [
         "tests/integrated.test.mjs",
         "docs/integrated-release-1.1.0.md",
@@ -1729,78 +1950,100 @@
       ]
     },
     "input.custom": {
-      "implementation": "implemented",
+      "implementation": "verified",
       "note": "간지 네 기둥·시주 미상과 대운수/방향/선택 시작연도를 직접 저장·수정·해석. 생일을 만들지 않음.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "input.reverse": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "implementation": "verified",
+      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
       "evidence": [
         "tests/pillar-input.test.mjs",
-        "tests/pillar-search.test.mjs"
+        "tests/pillar-search.test.mjs",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
@@ -1853,40 +2096,51 @@
       ]
     },
     "input.predicted-hour": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "implementation": "verified",
+      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
       "evidence": [
         "tests/pillar-input.test.mjs",
-        "tests/pillar-search.test.mjs"
+        "tests/pillar-search.test.mjs",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
@@ -2167,452 +2421,586 @@
       ]
     },
     "reader.six": {
-      "implementation": "implemented",
+      "implementation": "verified",
       "note": "시각 구조는 캡처 근거, 계산 수치 동일성 별도",
-      "evidence": [],
+      "evidence": [
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "reader.luckrails": {
-      "implementation": "implemented",
+      "implementation": "verified",
       "note": "기존/독립 기준별 대운·세운·월운 선택 연결. 독립 역법 10대운; 2050년 초과 연도 선택 제한.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "reader.letter": {
-      "implementation": "implemented",
+      "implementation": "verified",
       "note": "표시 옵션 및 용어 도움말 확장",
-      "evidence": [],
+      "evidence": [
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
+      ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "engine.pillars": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "implementation": "verified",
+      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "engine.lunar": {
-      "implementation": "implemented",
+      "implementation": "verified",
       "note": "korean-lunar-calendar 0.4.0 내장 한국 음력·윤달 변환. 지원 연도 내 샘플 왕복 검증.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "engine.solar-terms": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "implementation": "verified",
+      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "engine.timezone": {
-      "implementation": "implemented",
+      "implementation": "verified",
       "note": "IANA tzdb 2025b Asia/Seoul 전환표 적용. 중복 현지 시각 선택, 미존재 시각 거부.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "engine.dst": {
-      "implementation": "implemented",
+      "implementation": "verified",
       "note": "역사적 DST 보정 한 번만 적용하고 계산 근거에 표시. 공백/중복 시각 경계 테스트.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "engine.longitude": {
-      "implementation": "implemented",
+      "implementation": "verified",
       "note": "입력 경도와 당시 표준 offset 차이를 적용. 원시 출생정보는 변경하지 않음.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "engine.equation": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
+      "implementation": "verified",
+      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "engine.year-start": {
-      "implementation": "implemented",
+      "implementation": "verified",
       "note": "입춘/1월1일 연주 옵션 반영. 월주 천간은 절기년 기준을 유지한다고 명시.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/independent-calendar.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
     "analysis.yin-yang": {
-      "implementation": "implemented",
+      "implementation": "verified",
       "note": "사용자 상대 가중치에 따른 음양 합계와 비율 표시. 기존 강약/용신 판정은 별도.",
       "evidence": [
         "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
@@ -2951,145 +3339,192 @@
       ]
     },
     "tools.calendar": {
-      "implementation": "implemented",
+      "implementation": "verified",
       "note": "이번 연결; 음력/절기 표시 없음",
-      "evidence": [],
-      "gates": [
-        {
-          "name": "input",
-          "status": "pending"
-        },
-        {
-          "name": "action",
-          "status": "pending"
-        },
-        {
-          "name": "result",
-          "status": "pending"
-        },
-        {
-          "name": "persistenceWhenApplicable",
-          "status": "pending"
-        },
-        {
-          "name": "offline",
-          "status": "pending"
-        },
-        {
-          "name": "regression",
-          "status": "pending"
-        },
-        {
-          "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
-        }
-      ]
-    },
-    "tools.day-search": {
-      "implementation": "implemented",
-      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외하며 UI/실기기 및 해당 독립 근거 검증 게이트는 별도 추적.",
-      "evidence": [],
-      "gates": [
-        {
-          "name": "input",
-          "status": "pending"
-        },
-        {
-          "name": "action",
-          "status": "pending"
-        },
-        {
-          "name": "result",
-          "status": "pending"
-        },
-        {
-          "name": "persistenceWhenApplicable",
-          "status": "pending"
-        },
-        {
-          "name": "offline",
-          "status": "pending"
-        },
-        {
-          "name": "regression",
-          "status": "pending"
-        },
-        {
-          "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
-        }
-      ]
-    },
-    "tools.guide": {
-      "implementation": "implemented",
-      "note": "이번 연결; 전체 만세력·계산 가이드 확장",
-      "evidence": [],
-      "gates": [
-        {
-          "name": "input",
-          "status": "pending"
-        },
-        {
-          "name": "action",
-          "status": "pending"
-        },
-        {
-          "name": "result",
-          "status": "pending"
-        },
-        {
-          "name": "persistenceWhenApplicable",
-          "status": "pending"
-        },
-        {
-          "name": "offline",
-          "status": "pending"
-        },
-        {
-          "name": "regression",
-          "status": "pending"
-        },
-        {
-          "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
-        }
-      ]
-    },
-    "tools.terms": {
-      "implementation": "implemented",
-      "note": "음력/윤달 달력 및 24절기 시각을 월별로 표시. 1900~2050 지원, 절기 표시 UTC+09:00 고정임을 명시.",
       "evidence": [
-        "tests/integrated.test.mjs",
-        "docs/integrated-release-1.1.0.md"
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
       ],
       "gates": [
         {
           "name": "input",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "action",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "result",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "persistenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "offline",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "regression",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
         },
         {
           "name": "independentEngineOrPublishedReferenceWhenApplicable",
-          "status": "pending"
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
+        }
+      ]
+    },
+    "tools.day-search": {
+      "implementation": "verified",
+      "note": "기존 독립 구현·회귀 기준 유지. 원본 직접 대조는 범위에서 제외. 공개한 독립 구현 계약의 UI·보존·오프라인·수치/표 회귀를 통과. 실기기 업데이트는 data.upgrade에서 별도 추적.",
+      "evidence": [
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "action",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "offline",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
+        }
+      ]
+    },
+    "tools.guide": {
+      "implementation": "verified",
+      "note": "이번 연결; 전체 만세력·계산 가이드 확장",
+      "evidence": [
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "action",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "offline",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
+        }
+      ]
+    },
+    "tools.terms": {
+      "implementation": "verified",
+      "note": "음력/윤달 달력 및 24절기 시각을 월별로 표시. 1900~2050 지원, 절기 표시 UTC+09:00 고정임을 명시.",
+      "evidence": [
+        "tests/integrated.test.mjs",
+        "docs/integrated-release-1.1.0.md",
+        "tests/browser/calculation-flows.cjs",
+        "docs/verification-calculation-flows-20261021.md",
+        "tests/analysis-contracts.test.mjs"
+      ],
+      "gates": [
+        {
+          "name": "input",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "action",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "result",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "persistenceWhenApplicable",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "offline",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "regression",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md"
+        },
+        {
+          "name": "independentEngineOrPublishedReferenceWhenApplicable",
+          "status": "passed",
+          "evidence": "docs/verification-calculation-flows-20261021.md",
+          "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ]
     },
