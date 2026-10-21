@@ -47,9 +47,13 @@ Node.js 22 이상이 필요합니다. 저장소에서 `npm ci`를 실행한 뒤 
 | --- | --- |
 | `npm run dev` | 기존 사주 웹 화면 개발 |
 | `npm run dev:mobile` | 명식 보관함 화면을 브라우저에서 개발 |
+| `npm run preview` | 최신 보관함 앱을 빌드하고 `0.0.0.0:3000`에서 웹 미리보기 실행 |
+| `npm run preview:web` | 별도 `npm run build`로 만든 기존 웹사이트 미리보기 |
 | `npm test` | 모델·계산 연결부 등의 합성 회귀 테스트 |
 | `npm run build:mobile` | 오프라인 앱용 프런트 번들을 `dist-mobile`에 생성 |
 | `npm run android:sync` | 모바일 빌드 후 Android 프로젝트에 자산·플러그인 동기화 |
+
+보관함 웹 미리보기는 저장소 루트에서 `npm run preview`로 시작하고, 미리보기 창에는 3000번 포트를 연결합니다. 서버 프로세스가 종료되거나 작업 환경이 다시 시작되면 이 명령을 다시 실행해야 합니다. 로컬 브라우저 주소는 `http://localhost:3000/`이며, 원격 작업 환경의 사용자 접속 주소는 해당 환경의 미리보기/포트 연결 주소를 사용합니다. 이 로컬 주소를 사용자 기기에서 그대로 열어 원격 서버에 접속할 수는 없습니다.
 
 `build:mobile`과 `android:sync`는 APK 생성 명령이 아닙니다. APK 빌드는 JDK 21, Android SDK 36·build-tools 36.0.0을 준비한 뒤 `./scripts/android-build.sh`를 사용합니다. Windows는 `./scripts/android-build.ps1`을 사용합니다. 자세한 설정과 네이티브 테스트는 [Android 안내](android/README.md)를 참고하세요. 빌드 도구 설치·의존성 다운로드에는 인터넷이 필요할 수 있지만, 개인용 앱의 저장·계산 경로는 외부 서버 없이 구성합니다.
 
