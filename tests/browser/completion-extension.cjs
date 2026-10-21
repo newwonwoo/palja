@@ -69,7 +69,7 @@ async function settings(){await page.getByRole('navigation',{name:'명식 주 �
  await page.getByRole('button',{name:/^시.*지지 해$/}).waitFor();
  check('offline calculation policy affects actual hour branch',await page.getByRole('button',{name:/^시.*지지 해$/}).count()===1);
  await context.setOffline(false);await page.reload();await page.getByRole('button',{name:/^시.*지지 해$/}).waitFor();check('Zi calculation survives reopening',await page.getByRole('button',{name:/^시.*지지 해$/}).count()===1);
- await reading('분석');await page.getByLabel('신살 기준',{exact:true}).selectOption('none');await saved(s=>s.workspace.integrated.rules.sinsalBasis==='none');
+ await reading('분석');await page.getByRole('button',{name:'합화 비중',exact:true}).click();await page.getByLabel('신살 기준',{exact:true}).selectOption('none');await saved(s=>s.workspace.integrated.rules.sinsalBasis==='none');
  check('disable sinsal clears all actual table rows',await page.getByRole('region',{name:'신살 표'}).locator('.rr-shinsal-cell button').count()===0);
  const ruleDetails=page.getByLabel('지원 분석 규칙',{exact:true});await ruleDetails.locator('summary').click();check('rule catalogue and priority visible',(await ruleDetails.innerText()).includes('38종 지원')&&(await ruleDetails.innerText()).includes('덮어쓰지'));
  await settings();const policyDownload=page.waitForEvent('download');await page.getByRole('button',{name:/백업 내보내기/}).click();const policyBackup=await policyDownload;await policyBackup.saveAs(dir+'/policy-backup.json');
