@@ -1,6 +1,7 @@
 import {manualDaeun} from '../vault/manual-daewoon.js';
 import { birthForCalculation, isDefaultSolar } from './birth-defaults.js';
 import {preciseEntryBase} from '../calendar/precise.js';
+import { repairLegacyDaeunBoundary } from './legacy-daeun-boundary.js';
 import { assertPillarInput, isManualBirth, manualBirthLabel } from '../vault/pillar-input.js';
 import {
   calcSaju, calcDaeun, calcStrengthDetail, calcTCPA, calcYongsin,
@@ -11,7 +12,7 @@ import {
 export { HS, EB, HS_EL, EB_EL, EBH, getSS, getUnsung };
 export const STEM_KO = ['갑','을','병','정','무','기','경','신','임','계'];
 export const BRANCH_KO = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
-export const ENGINE_VERSION = 'legacy-saju-6389ec7-v1';
+export const ENGINE_VERSION = 'legacy-saju-6389ec7-v1-boundary-repair';
 
 export function solarDate(birth) {
   const { input_year: year, input_month: month, input_day: day, calendar_type: calendar } = birthForCalculation(birth);
@@ -67,13 +68,16 @@ export function calculateEntry(entry) {
           solar: { ...solar, hour: null, minute: null },
         };
     const hasSex = birth.sex === 'male' || birth.sex === 'female';
-    const daeun = hasTime && hasSex ? calcDaeun(solar.year, solar.month, solar.day, birth.sex, saju.pillars[2]) : [];
+    const legacyDaeun = hasTime && hasSex ? calcDaeun(solar.year, solar.month, solar.day, birth.sex, saju.pillars[2]) : [];
+    const { daeun, repaired: daeunBoundaryRepair } = hasTime && hasSex
+      ? repairLegacyDaeunBoundary(legacyDaeun, solar, birth.sex, saju.pillars[3], saju.pillars[2])
+      : { daeun: legacyDaeun, repaired: false };
     const strength = hasTime ? calcStrengthDetail(saju.pillars) : null;
     const tcpa = hasTime ? calcTCPA(saju.pillars) : null;
     const yongsin = hasTime ? calcYongsin(saju.pillars, tcpa.sBase) : null;
     return {
-      status: hasTime ? 'ready' : 'partial', assumedSolar, correctionUnapplied, saju, daeun, strength, yongsin, tcpa,
-      message: [!hasTime?'출생시각 미상 · 시주와 시각이 필요한 분석은 표시하지 않습니다.':!hasSex?'성별 미확인 · 대운 방향은 확인 후 계산합니다.':'', assumedSolar?'입력된 역법이 없어 기본 양력으로 계산합니다. 원본은 수정하지 않습니다.':'',correctionUnapplied?'원본 시각 보정 표기는 보존하되 자동 반영하지 않았습니다.':''].filter(Boolean).join(' '),
+      status: hasTime ? 'ready' : 'partial', assumedSolar, correctionUnapplied, saju, daeun, daeunBoundaryRepair, strength, yongsin, tcpa,
+      message: [!hasTime?'출생시각 미상 · 시주와 시각이 필요한 분석은 표시하지 않습니다.':!hasSex?'성별 미확인 · 대운 방향은 확인 후 계산합니다.':'', daeunBoundaryRepair?'대운 연경계를 인접 연도 절기로 보완했습니다. 기본 산식의 날짜 기준 근사이며 단계별 근거를 확인하세요.':'', assumedSolar?'입력된 역법이 없어 기본 양력으로 계산합니다. 원본은 수정하지 않습니다.':'',correctionUnapplied?'원본 시각 보정 표기는 보존하되 자동 반영하지 않았습니다.':''].filter(Boolean).join(' '),
       legacyForm: hasTime ? { name: entry.name, year: String(solar.year), month: String(solar.month), day: String(solar.day), hour: String(birth.input_hour), minute: String(birth.input_minute), gender: birth.sex || '' } : null,
     };
   } catch (error) {

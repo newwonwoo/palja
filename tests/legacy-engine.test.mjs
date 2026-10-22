@@ -215,14 +215,22 @@ function freezeEntry(value) {
   return Object.freeze(value);
 }
 
-test('confirmed solar adapter results preserve every original calculation result', () => {
+test('confirmed solar adapter preserves original results except the explicit empty daeun boundary repair', () => {
   for (const fixture of GOLDEN) {
     const [year, month, day, hour, minute] = fixture.args;
     const input = freezeEntry(entry({ input_year: year, input_month: month, input_day: day, input_hour: hour, input_minute: minute, sex: fixture.sex }));
     const before = structuredClone(input);
     const actual = engine.calculateEntry(input);
     assert.equal(actual.status, 'ready', fixture.id);
-    const projection = { saju: actual.saju, daeun: actual.daeun, strength: actual.strength, tcpa: actual.tcpa, yongsin: actual.yongsin };
+    const baselineDaeun = engine.calcDaeun(year, month, day, fixture.sex, actual.saju.pillars[2]);
+    if (!baselineDaeun.length) {
+      assert.equal(actual.daeunBoundaryRepair, true);
+      assert.equal(actual.daeun.length, 8);
+    } else {
+      assert.equal(actual.daeunBoundaryRepair, false);
+      assert.deepEqual(actual.daeun, baselineDaeun);
+    }
+    const projection = { saju: actual.saju, daeun: baselineDaeun, strength: actual.strength, tcpa: actual.tcpa, yongsin: actual.yongsin };
     assert.equal(digest(projection), fixture.sha256, fixture.id);
     assert.deepEqual(input, before, 'Calculating must not overwrite the source birth record.');
   }

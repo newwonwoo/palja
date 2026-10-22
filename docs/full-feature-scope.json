@@ -853,9 +853,9 @@
       "id": "engine.daewoon",
       "area": "engine",
       "title": "대운 순역·기산·시작일·10대운",
-      "implementation": "partial",
+      "implementation": "verified",
       "referenceBehavior": "unverified",
-      "gap": "독립 절입 엔진 순역/2기산법/10대운은 구현·검증. 기본 엔진의 연초·연말 인접 절기 누락으로 대운 공백 재현. 기본 사용 흐름 경계 보완이 필요.",
+      "gap": "모바일 기본 대운의 연경계 공백 보완: 기존 정상 결과·원국은 유지하고 빈 결과만 인접 연도 독립 절기로 보완. 기본 8대운/독립 10대운 구분. 5,764개 경계 및 개인자료 123개 대운·978화면 검증 통과.",
       "apkEvidence": [
         "package:how8ja/core/domains/manse/calculator/dea_joo_calculator.dart",
         "package:how8ja/features/setting/presentation/manse_settings/daewoon_calculation_options.dart"
@@ -868,7 +868,8 @@
         "tests/browser/calculation-flows.cjs",
         "docs/verification-calculation-flows-20261021.md",
         "tests/independent-calendar.test.mjs",
-        "docs/audit-20261022.md"
+        "docs/audit-20261022.md",
+        "docs/audit-resumed-20261022.md"
       ],
       "independentVerification": "passed"
     },
