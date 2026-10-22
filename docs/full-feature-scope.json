@@ -853,9 +853,9 @@
       "id": "engine.daewoon",
       "area": "engine",
       "title": "대운 순역·기산·시작일·10대운",
-      "implementation": "verified",
+      "implementation": "partial",
       "referenceBehavior": "unverified",
-      "gap": "순역 자동/직접 지정, 평균년 비례/UTC 달력 가산 2기산법, 시작일·10대운·단계별 근거. 전 학파 동일성은 주장하지 않음.",
+      "gap": "독립 절입 엔진 순역/2기산법/10대운은 구현·검증. 기본 엔진의 연초·연말 인접 절기 누락으로 대운 공백 재현. 기본 사용 흐름 경계 보완이 필요.",
       "apkEvidence": [
         "package:how8ja/core/domains/manse/calculator/dea_joo_calculator.dart",
         "package:how8ja/features/setting/presentation/manse_settings/daewoon_calculation_options.dart"
@@ -867,7 +867,8 @@
         "docs/completion-20261020.md",
         "tests/browser/calculation-flows.cjs",
         "docs/verification-calculation-flows-20261021.md",
-        "tests/independent-calendar.test.mjs"
+        "tests/independent-calendar.test.mjs",
+        "docs/audit-20261022.md"
       ],
       "independentVerification": "passed"
     },

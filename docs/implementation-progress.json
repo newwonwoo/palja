@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-21",
+  "updatedAt": "2026-10-22",
   "features": {
     "input.location": {
       "note": "23개 도시·17시간대·경도 직접 입력. 한국 2025b/해외 IANA 2026b 전환표 내장. 도시 중심 경도임을 표시.",
@@ -384,14 +384,15 @@
       "implementation": "verified"
     },
     "engine.daewoon": {
-      "note": "순역 자동/직접 지정, 평균년 비례/UTC 달력 가산 2기산법, 시작일·10대운·단계별 근거. 전 학파 동일성은 주장하지 않음.",
+      "note": "독립 절입 엔진의 순역/2기산법/10대운은 통과. 기본 엔진은 연초·연말의 인접 연도 절기를 검색하지 않아 대운 공백이 생김. 기본 사용 흐름 경계 보완 전에는 완료 제외.",
       "evidence": [
         "src/calendar/precise.js",
         "tests/completion-extension.test.mjs",
         "docs/completion-20261020.md",
         "tests/browser/calculation-flows.cjs",
         "docs/verification-calculation-flows-20261021.md",
-        "tests/independent-calendar.test.mjs"
+        "tests/independent-calendar.test.mjs",
+        "docs/audit-20261022.md"
       ],
       "gates": [
         {
@@ -406,8 +407,9 @@
         },
         {
           "name": "result",
-          "status": "passed",
-          "evidence": "docs/verification-calculation-flows-20261021.md"
+          "status": "blocked",
+          "evidence": "docs/audit-20261022.md",
+          "note": "기본 산식 연경계 공백 재현. 독립 엔진 전환 안내는 기본 엔진 수정의 대체가 아님."
         },
         {
           "name": "persistenceWhenApplicable",
@@ -431,7 +433,7 @@
           "note": "표본 수치/고정 표 또는 명시한 제품 계산·UI 계약의 별도 불변조건 대조. 공유 음력 데이터와 근사/후보 규칙의 한계는 검증 문서에 기록. 원본 동일성·미래 예측 정확도의 검증이 아님."
         }
       ],
-      "implementation": "verified"
+      "implementation": "partial"
     },
     "analysis.element": {
       "note": "원국+대운/세운/월운/일운/시운의 오행·음양 비중과 도식 동기화. 기존 산식 판정과 별도 표시.",
