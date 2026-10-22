@@ -478,8 +478,9 @@ export function importScreenshotPackage(state, payload) {
 }
 
 /** Apply only mappings explicitly selected by the user; never infer a missing value. */
-export function applyImportMappings(state, mappings) {
+export function applyImportMappings(state, mappings, namespace = null) {
   assertState(state);
+  if (namespace !== null && (typeof namespace !== 'string' || !namespace.trim())) fail('import mappings', ['namespace: must be a nonempty string']);
   const parsed = readPayload(mappings, 'import mappings');
   const errors = [];
   if (fields(parsed, ['calendar', 'sex', 'lunarLeap'], errors, '$')) {
@@ -498,7 +499,7 @@ export function applyImportMappings(state, mappings) {
   const changedAt = now();
   let changed = false;
   const entries = state.entries.map(entry => {
-    if (entry.source === null || entry.deletedAt !== null) return entry;
+    if (entry.source === null || entry.deletedAt !== null || (namespace !== null && entry.source.namespace !== namespace)) return entry;
     const patch = {};
     const symbol = entry.birth.calendar_symbol_raw;
     if (entry.birth.calendar_type === null && own(parsed.calendar, symbol) && parsed.calendar[symbol] !== null) {
