@@ -1,3 +1,4 @@
+import {extraShinsal} from './shinsal-catalog.js';
 /** Display adapter for the existing calculator. No writes to the vault and no new calendar engine.
  * Relation/hidden-stem rules below are the existing App.jsx lookup rules, not recovered 8ja rules.
  * Unsupported original controls are not substituted with fabricated scores.
@@ -114,6 +115,26 @@ export function climateView(result, view, includeLuck) {
   return {temperatureBase:result.tcpa.sTotal,temperature:current.sTotal,humidityBase:legacyHumidity(p),
     humidity:legacyHumidity([...p,...[d,y].filter(Boolean)])};
 }
+/** Five-layer extension with an explicit additive convention; legacy gauge stays unchanged.
+ * Each layer's increment is measured against the same natal baseline. Decades use
+ * the original decade slot; other layers use the original annual slot. Interactions
+ * between two extra luck layers are not invented or silently double-counted.
+ */
+export function multiLayerClimate(result,luck=[],weights){
+ const p=result?.saju?.pillars;
+ if(result?.status!=='ready'||p?.length!==4||!p.every(validPillar))return null;
+ const temperatureBase=calcTCPA(p).sTotal,humidityBase=legacyHumidity(p),names=['대운','세운','월운','일운','시운'];
+ const rows=luck.slice(0,5).map((pillar,i)=>{
+  const weight=weights?.luck?.[i]??1;
+  if(!Number.isFinite(weight)||weight<0||weight>10)throw new Error('조후 선택운 비중은 0~10이어야 합니다.');
+  if(!validPillar(pillar))return {name:names[i],pillar:null,weight,temperature:0,humidity:0};
+  const raw=i===0?calcTCPA(p,pillar.stem,pillar.branch):calcTCPA(p,null,null,pillar.stem,pillar.branch);
+  return {name:names[i],pillar,weight,temperature:(raw.sTotal-temperatureBase)*weight,humidity:(legacyHumidity([...p,pillar])-humidityBase)*weight};
+ });
+ const round=x=>Math.round(x*100)/100;
+ return {temperatureBase,humidityBase,temperature:round(temperatureBase+rows.reduce((n,r)=>n+r.temperature,0)),humidity:round(humidityBase+rows.reduce((n,r)=>n+r.humidity,0)),rows,
+  convention:'5계층 증분형 조후: 원국을 공통 기준으로 각 운을 기존 대운/세운 슬롯에 따로 대입한 변화량×선택운 비중을 합산. 운끼리의 추가 합국 상호작용은 제외. 실제 온도·습도가 아닌 상대 지수.'};
+}
 // Legacy seven-shinsal subset. 'No hit' is distinct from unsupported rules.
 // Independent, declared twelve-shinsal convention; not copied/recovered 8ja AOT code.
 // Primary implementation reference: https://jumchindang.com/wiki/십이신살 (checked 2026-10-12).
@@ -130,6 +151,7 @@ const GOEGANG=['庚辰','庚戌','壬辰','壬戌','戊辰','戊戌'];
 const WONJIN=['子未','丑午','寅酉','卯申','辰亥','巳戌'];
 export function shinsalView(columns,bases=['day','birthYear']) {
   const records=columns.map(c=>({column:c,movement:[],good:[],caution:[]}));
+  if(!bases.length)return records;
   const known=columns.filter(c=>c.kind==='calculated'&&validPillar(c.pillar));
   const day=known.find(c=>c.key==='day');
   for(const basis of bases){const source=known.find(c=>c.key===basis);if(!source)continue;
@@ -142,9 +164,11 @@ export function shinsalView(columns,bases=['day','birthYear']) {
     if(day&&bases.includes('day')&&YANGIN[day.pillar.stem]===p.branch)r.caution.push({name:'양인',basis:'日'});
     if(BAEKHO.includes(p.stem+p.branch))r.caution.push({name:'백호',basis:'柱'});
     if(GOEGANG.includes(p.stem+p.branch))r.caution.push({name:'괴강',basis:'柱'});
+    const year=known.find(c=>c.key==='birthYear'),month=known.find(c=>c.key==='month');
+    for(const star of extraShinsal(p,{dayStem:day?.pillar.stem,yearStem:year?.pillar.stem,dayPillar:day?.pillar,yearPillar:year?.pillar,isNatalDay:c.key==='day',yearBranch:year?.pillar.branch,monthBranch:month?.pillar.branch,basis:bases.includes('day')&&bases.includes('birthYear')?'both':bases.includes('day')?'day':'year',natalBranches:known.filter(n=>['hour','day','month','birthYear'].includes(n.key)&&n.index!==c.index).map(n=>n.pillar.branch)}))if(bases.length)r[star.type].push(star);
   }
   // Preserve the original distance rule on natal pillars only. Do not reinterpret it on a reordered 6-column table.
-  const natal=known.filter(c=>c.index>=2);
+  const natal=known.filter(c=>['hour','day','month','birthYear'].includes(c.key));
   for(const pair of WONJIN)for(const a of natal.filter(c=>c.pillar.branch===pair[0]))for(const b of natal.filter(c=>c.pillar.branch===pair[1])){
     if(Math.abs(a.index-b.index)<=2){for(const c of [a,b])if(!records[c.index].caution.some(v=>v.name==='원진'))records[c.index].caution.push({name:'원진',basis:'柱'});}
   }

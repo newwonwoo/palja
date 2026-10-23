@@ -88,6 +88,10 @@ function readPayload(value, label) {
 }
 
 function validateBirth(birth, errors, path) {
+  if(birth?.public_profile!==undefined){
+    const p=birth.public_profile,allowed=['id','url','publisher','place','category','checkedAt'];
+    if(!plain(p)||Object.keys(p).length!==allowed.length||allowed.some(k=>typeof p[k]!=='string'||!p[k]||p[k].length>1000)||Object.keys(p).some(k=>!allowed.includes(k))||!/^https:\/\//.test(p.url)||!/^\d{4}-\d{2}-\d{2}$/.test(p.checkedAt))issue(errors,path,'invalid public profile provenance');
+  }
   if(birth?.calculation_policy!==undefined&&birth.calculation_policy!==null)for(const message of validatePolicy(birth.calculation_policy))issue(errors,path,message);
   if(birth?.manual_daeun!=null){if(!isManualBirth(birth))issue(errors,path,'manual decade settings require direct pillar input');for(const message of manualDaeunErrors(birth.manual_daeun))issue(errors,path,message);}
   const required = ['version', 'input_year', 'input_month', 'input_day', 'calendar_type',
@@ -474,8 +478,9 @@ export function importScreenshotPackage(state, payload) {
 }
 
 /** Apply only mappings explicitly selected by the user; never infer a missing value. */
-export function applyImportMappings(state, mappings) {
+export function applyImportMappings(state, mappings, namespace = null) {
   assertState(state);
+  if (namespace !== null && (typeof namespace !== 'string' || !namespace.trim())) fail('import mappings', ['namespace: must be a nonempty string']);
   const parsed = readPayload(mappings, 'import mappings');
   const errors = [];
   if (fields(parsed, ['calendar', 'sex', 'lunarLeap'], errors, '$')) {
@@ -494,7 +499,7 @@ export function applyImportMappings(state, mappings) {
   const changedAt = now();
   let changed = false;
   const entries = state.entries.map(entry => {
-    if (entry.source === null || entry.deletedAt !== null) return entry;
+    if (entry.source === null || entry.deletedAt !== null || (namespace !== null && entry.source.namespace !== namespace)) return entry;
     const patch = {};
     const symbol = entry.birth.calendar_symbol_raw;
     if (entry.birth.calendar_type === null && own(parsed.calendar, symbol) && parsed.calendar[symbol] !== null) {

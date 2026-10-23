@@ -1,16 +1,11 @@
 import React, { useMemo, useState, useId } from 'react';
+import {SHINSAL_CATALOG} from './shinsal-catalog.js';
 import { HS_EL, EBH } from './engine.js';
 import { normalizeElementScores } from './detail-view-model.js';
 import { TONES, ELEMENT_NAMES, relations, shinsalView, climateView } from './reader-model.js';
 import { Rune, SixPillars } from './ReaderTiles.jsx';
 import { nayinOf, gongmangOf, samjaeOf } from './traditional-reference.js';
 
-const HELP = {
-  palace:{title:'궁성 비중',text:'현재 오행 분포는 기존 계산기의 고정 가중치를 사용합니다. 시간·일간·월간·연간은 0.6·0.6·1.2·0.6, 시지·일지·월지·연지는 0.6·1.2·3.0·0.6입니다. 이 창은 기준 안내이며 기본 비중과 실제 적용 값은 비중 편집에서 확인할 수 있습니다.'},
-  combination:{title:'합화 비중',text:'현재 화면은 합·충의 조합을 표시합니다. 합화 성립과 원본 앱의 합화 가중치는 아직 검증하지 않아 오행 점수에 임의로 가산하지 않습니다.'},
-  hidden:{title:'지장간 비중',text:'기존 계산기의 지장간 일수/30 비중을 지지 가중치에 곱합니다. 월지와 같은 지지에는 1.2배를 적용합니다. 정확히 어느 값이 사용됐는지는 명식표에서 지지를 눌러 확인할 수 있습니다.'},
-  scope:{title:'선택운 비중',text:'선택운 반영을 켜면 선택한 대운·세운을 조후 지표와 아래 합충·신살 표에 포함합니다. 오행 원형도·신강약·용신은 원국 기준을 유지합니다. 8자어때의 선택운 가중치와 동일한 계산은 아닙니다.'},
-};
 export function ElementDiagram({scores,onInfo}) {
   const uid=useId().replace(/:/g,'');
   const normalized=normalizeElementScores(scores);
@@ -26,7 +21,7 @@ export function ElementDiagram({scores,onInfo}) {
       {points.map(n=><circle key={n.key} cx={n.x} cy={n.y} r={n.r} data-tone={n.tone} className="rr-element-circle"/>)}
       {points.map((a,i)=>{const b=points[(i+1)%5],line=segment(a,b,7);return <line key={'gen'+a.key} {...line} stroke="#daa2b7" strokeWidth=".85" markerEnd={`url(#${uid}gen)`}/>;})}
       {points.map((a,i)=>{const b=points[(i+2)%5],line=segment(a,b,8);return <line key={'ctrl'+a.key} {...line} stroke="#83aabd" strokeWidth="1" markerEnd={`url(#${uid}ctrl)`}/>;})}
-      {points.map(n=><g key={'text'+n.key}><text x={n.x} y={n.y-2} textAnchor="middle" className="rr-element-label">{n.name}</text><text x={n.x} y={n.y+17} textAnchor="middle" className="rr-element-value">{n.percentage}</text></g>)}
+      {points.map(n=><g key={'text'+n.key} data-tone={n.tone}><text x={n.x} y={n.y-2} textAnchor="middle" className="rr-element-label">{n.name}</text><text x={n.x} y={n.y+17} textAnchor="middle" className="rr-element-value">{n.percentage}</text></g>)}
     </svg>
     <div className="rr-element-targets">{points.map(n=><button type="button" key={n.key} style={{left:`${n.x/3.6}%`,top:`${n.y/2.82}%`}} aria-label={`${n.name} 비중 ${n.percentage}% 자세히`} onClick={()=>onInfo({title:`${n.name} 오행`,text:`표시 오행 점수 ${n.score.toFixed(2)}를 백분율로 바꾼 값은 ${n.percentage}%입니다. 원의 크기도 이 비율에 따라 달라집니다. 조견표 값이나 궁합 점수가 아닙니다.`})}/>)}</div>
   </div>;
@@ -39,7 +34,7 @@ function ElementChip({value}) {
   if(!ELEMENT_NAMES[value])return <span className="rr-pending">—</span>;
   return <span className="rr-element-chip" data-tone={TONES[value]}>{ELEMENT_NAMES[value]}</span>;
 }
-export function AnalysisOverview({result,view,includeLuck,setIncludeLuck,onInfo,weighted,customWeights=false,onEditWeights}) {
+export function AnalysisOverview({result,view,includeLuck,setIncludeLuck,onInfo,weighted,customWeights=false,onEditWeights,onEditRules,research,display={nayin:true}}) {
   const climate=useMemo(()=>climateView(result,view,includeLuck),[result,view,includeLuck]);
   const y=result.yongsin,day=result.saju?.pillars?.[1],month=result.saju?.pillars?.[2];
   const monthMain=EBH[month?.branch]?.bon?.[0];
@@ -48,18 +43,18 @@ export function AnalysisOverview({result,view,includeLuck,setIncludeLuck,onInfo,
   const samjae=samjaeOf(natal[3]?.branch,view.annual?.branch);
   return <>
     <ElementDiagram scores={result.strength?.elementScores} onInfo={onInfo}/>
-    <p className="rr-analysis-caption">{customWeights?'오행·음양 사용자 비중 · ':'오행 원국 · '}조후·관계표는 {includeLuck?'선택운 포함':'원국만'}</p>
-    <div className="rr-weight-controls">{[['palace','궁성 비중'],['combination','합화 비중'],['hidden','지장간 비중']].map(([key,label])=><button type="button" key={key} onClick={()=>key==='combination'?onInfo(HELP[key]):onEditWeights?.()||undefined}>{label}</button>)}<button type="button" aria-pressed={includeLuck} onClick={()=>setIncludeLuck(!includeLuck)}>선택운 {includeLuck?'포함':'제외'}</button></div>
+    <p className="rr-analysis-caption">{customWeights?'오행·음양 사용자 비중 · ':'오행·음양 기본 비중 · '}오행·관계표는 {includeLuck?'선택운 포함':'원국만'}</p>
+    <div className="rr-weight-controls">{[['palace','궁성 비중'],['combination','합화 비중'],['hidden','지장간 비중']].map(([key,label])=><button type="button" key={key} onClick={()=>key==='combination'?onEditRules?.():onEditWeights?.()}>{label}</button>)}<button type="button" aria-pressed={includeLuck} onClick={()=>setIncludeLuck(!includeLuck)}>선택운 {includeLuck?'포함':'제외'}</button></div>
     <button type="button" className="rr-small-link rr-scope-help" onClick={()=>onEditWeights?.()}>선택운 비중 편집</button>{weighted&&weighted.total>0&&<div className="integration-yinyang"><span>음 {Math.round(weighted.yin/weighted.total*100)}%</span><span>양 {Math.round(weighted.yang/weighted.total*100)}%</span><span>{customWeights?'사용자 비중':'상대 가중치 참고'}</span></div>}
     {climate?<div className="rr-climate-row"><ClimateGauge left="한" right="난" base={climate.temperatureBase} value={climate.temperature} name="한난" onInfo={onInfo}/><ClimateGauge left="조" right="습" base={climate.humidityBase} value={climate.humidity} name="조습" onInfo={onInfo}/></div>:<p className="rr-empty">한난·조습은 출생시각 확인 후 표시합니다.</p>}
     <section className="rr-analysis-summary" aria-label="원국 분석 요약">
       <div className="rr-summary-line"><strong>{result.strength?.strength||'미확인'}</strong><span className={result.strength?.isDeukRyeong?'rr-emphasis':'rr-pending'}>{result.strength?(result.strength.isDeukRyeong?'득령':'실령'):'—'}</span><span>일간 <ElementChip value={day&&!day.unknown?HS_EL[day.stemIdx]:null}/></span><span>용 <ElementChip value={y?.primary}/></span></div>
       <div className="rr-summary-line"><span>월령</span><b>{monthMain||'—'}</b><small>월지 지장간 본기</small></div>
       {[['억부용신','eobbu'],['조후용신','johu'],['통관용신','tongwan']].map(([label,key])=><div className="rr-summary-line" key={key}><span>{label}</span><ElementChip value={y?.[key]?.primary}/><button type="button" className="rr-small-link" onClick={()=>onInfo({title:label,text:y?.[key]?.reason||'기존 계산기에서 해당 용신을 산출하지 않았습니다. 없음과 미검증을 구분해 확인해 주세요.'})}>판정 근거</button></div>)}
-      <div className="rr-patterns"><span>격국 · 용격</span><button type="button" onClick={()=>onInfo({title:'격국 판정',text:'규칙·월령·투간·합화 성립을 검증할 때까지 격국을 단정하지 않습니다.'})}>판정 미연결 · 안내</button></div>
-      <div className="integration-nayin" aria-label="납음과 공망 조견표"><h3>납음 · 공망</h3><p>전통 조견표로 분류한 보조 정보입니다. 오행 점수·용신에는 합산하지 않습니다.</p><div className="integration-nayin-grid">{[['시',0],['일',1],['월',2],['년',3]].map(([label,i])=>{const n=nayinOf(natal[i]);return <div key={label}><small>{label}주</small><strong>{n?.name||'미확인'}</strong>{n&&<span>{n.hanja} · {n.element}</span>}</div>})}</div><p className="integration-gongmang">일주 기준 공망: <b>{emptiness?emptiness.empty.join('·')+' ('+emptiness.decade+')':'미확인'}</b></p>
+      <div className="rr-patterns"><span>격국 · 용격</span><button type="button" onClick={onEditRules}>{research?.pattern?.inner.name||'월주 미확인'} · 규칙별 판정 보기</button></div>
+      {display.nayin&&<div className="integration-nayin" aria-label="납음과 공망 조견표"><h3>납음 · 공망</h3><p>전통 조견표로 분류한 보조 정보입니다. 오행 점수·용신에는 합산하지 않습니다.</p><div className="integration-nayin-grid">{[['시',0],['일',1],['월',2],['년',3]].map(([label,i])=>{const n=nayinOf(natal[i]);return <div key={label}><small>{label}주</small><strong>{n?.name||'미확인'}</strong>{n&&<span>{n.hanja} · {n.element}</span>}</div>})}</div><p className="integration-gongmang">일주 기준 공망: <b>{emptiness?emptiness.empty.join('·')+' ('+emptiness.decade+')':'미확인'}</b></p>
       <p>선택 연도 삼재(연지 기준): <b>{samjae?samjae.name:'미확인'}</b> {samjae&&<small>· {samjae.birthGroup} 그룹 / {samjae.annualBranch}년</small>}</p>
-      <p className="rr-subnote">삼재는 전통적인 연지 분류이며 실제 재난 발생이나 길흉을 예측하지 않습니다.</p></div>
+      <p className="rr-subnote">삼재는 전통적인 연지 분류이며 실제 재난 발생이나 길흉을 예측하지 않습니다.</p></div>}
     </section>
   </>;
 }
@@ -70,30 +65,30 @@ export function RelationSection({columns,part,hanja=true}) {
   const label=part==='stem'?'천간':'지지';
   return <section className="rr-relation-section" aria-label={`${label} 관계도`}>
     <div className="rr-section-label"><h2>{label}</h2><div className="rr-filter-pills">{[['all','전체'],['hap','합'],['clash','충·형·파·해']].map(([key,value])=><button type="button" key={key} className={filter===key?'active':''} aria-pressed={filter===key} aria-label={`${label} ${value} 보기`} onClick={()=>{setFilter(key);setSelectedId(null)}}>{value}</button>)}</div></div>
-    <div className="rr-relation-body">
-      <div className="rr-relation-columns">{columns.map(c=><div key={c.key}><span className="rr-col-name">{c.label}</span><Rune column={c} part={part} hanja={hanja} active={selected?.indices.includes(c.index)}/></div>)}</div>
+    <div className="rr-relation-scroll"><div className="rr-relation-body" style={{minWidth:columns.length>6?columns.length*56:undefined}}>
+      <div className="rr-relation-columns" style={{gridTemplateColumns:`repeat(${columns.length},minmax(0,1fr))`}}>{columns.map(c=><div key={c.key}><span className="rr-col-name">{c.label}</span><Rune column={c} part={part} hanja={hanja} active={selected?.indices.includes(c.index)}/></div>)}</div>
       <div className="rr-relation-lines">{items.length?items.map((item,i)=>{
-        const first=Math.min(...item.indices),last=Math.max(...item.indices),left=(first+.5)/6*100,right=(last+.5)/6*100;
+        const first=Math.min(...item.indices),last=Math.max(...item.indices),left=(first+.5)/columns.length*100,right=(last+.5)/columns.length*100;
         return <button type="button" key={item.id} className={`rr-relation-line ${selected?.id===item.id?'active':''}`} data-kind={item.type} aria-label={`${label} ${item.label} 관계 ${i+1}`} aria-pressed={selected?.id===item.id} onClick={()=>setSelectedId(item.id)}>
-          <i className="rr-line-stroke" style={{left:left+'%',width:(right-left)+'%'}}/>{item.indices.map(n=><i key={n} className="rr-line-point" style={{left:(n+.5)/6*100+'%'}}/>)}<span className="rr-line-name" style={{left:(left+right)/2+'%'}}>{item.label}</span>
+          <i className="rr-line-stroke" style={{left:left+'%',width:(right-left)+'%'}}/>{item.indices.map(n=><i key={n} className="rr-line-point" style={{left:(n+.5)/columns.length*100+'%'}}/>)}<span className="rr-line-name" style={{left:(left+right)/2+'%'}}>{item.label}</span>
         </button>;
       }):<p className="rr-empty">현재 계산 가능한 글자에 이 관계 조합이 없습니다.</p>}</div>
       {selected&&<div className="rr-relation-detail" aria-live="polite"><strong>{selected.label}</strong><p>{selected.detail}</p></div>}
       <p className="rr-subnote">전통 관계 조합표입니다. 합화 성립·실제 사건·길흉을 자동 판정하지 않습니다.</p>
-    </div>
+    </div></div>
   </section>;
 }
-export function ShinsalGrid({columns,dayStem,hanja=true,onInfo}) {
-  const [bases,setBases]=useState(['day','birthYear']);
+export function ShinsalGrid({columns,dayStem,hanja=true,onInfo,basis='both',onBasis,display}) {
+  const bases=basis==='both'?['day','birthYear']:basis==='day'?['day']:basis==='year'?['birthYear']:[];
   const records=useMemo(()=>shinsalView(columns,bases),[columns,bases]);
-  const toggle=key=>setBases(current=>current.includes(key)?current.filter(k=>k!==key):[...current,key]);
+  const toggle=key=>{const next=bases.includes(key)?bases.filter(k=>k!==key):[...bases,key];onBasis?.(next.length===2?'both':next[0]==='day'?'day':next[0]==='birthYear'?'year':'none');};
   return <section className="rr-shinsal-section" aria-label="신살 표">
-    <div className="rr-section-label"><h2>신살</h2><div className="rr-basis-pills">{[['day','일'],['birthYear','년']].map(([key,text])=><button type="button" key={key} data-basis={key} aria-label={`${text} 기준 신살`} aria-pressed={bases.includes(key)} onClick={()=>toggle(key)}>{text}</button>)}<button type="button" aria-label="신살 지원 범위" onClick={()=>onInfo({title:'신살 지원 범위',text:'십이신살은 삼합 그룹별 겁살 시작점에서 순서대로 배치하는 별도 조견표를 연결했습니다. 기존 길흉살에서는 천을귀인·양인·백호·괴강·원진을 표시합니다. 日/年은 기준 글자이며 柱는 해당 기둥의 조합입니다. 원진은 원국의 기존 거리 규칙을 유지합니다. 원본 앱의 추가 길신·흉살과 신살 가중치는 미검증입니다. 십이신살 참고는 점친당의 공개 만세력 엔진 조견표이며 원본 앱 코드 복원은 아닙니다. 미상 입력은 —로 남깁니다.'})}>?</button></div></div>
-    <div className="rr-shinsal-table"><SixPillars columns={columns} dayStem={dayStem} hanja={hanja} compact/>
-      {[['movement','십이신살','연·일지 조견표'],['good','길신','천을귀인 연결'],['caution','흉살','기존 4종 연결']].map(([key,title,note])=><React.Fragment key={key}>
-        <div className="rr-shinsal-title"><span>{title}</span><small>{note}</small></div><div className="rr-shinsal-row">{records.map(r=><div key={r.column.key} className={'rr-shinsal-cell rr-tint-'+r.column.key}>{r[key].length?r[key].map((item,i)=><button type="button" key={item.name+item.basis+i} onClick={()=>onInfo({title:`${r.column.label} · ${item.name}`,text:`기준 ${item.basis==='日'?'일주':item.basis==='年'?'연주':'해당 주 조합'} · ${key==='movement'?'삼합별 십이신살 조견표':'기존 계산기'} 조건에서 표시됩니다. 신살의 명칭만으로 길흉이나 사건을 확정하지 않습니다.`})}><small data-basis={item.basis}>{item.basis}</small><span>{item.name}</span></button>):<span className="rr-nohit" aria-label={r.column.label+' '+(r.column.kind==='unknown'?'입력 미확인':'연결 규칙에서 해당 없음')}>—</span>}</div>)}</div>
+    <div className="rr-section-label"><h2>신살</h2><div className="rr-basis-pills">{[['day','일'],['birthYear','년']].map(([key,text])=><button type="button" key={key} data-basis={key} aria-label={`${text} 기준 신살`} aria-pressed={bases.includes(key)} onClick={()=>toggle(key)}>{text}</button>)}<button type="button" aria-label="신살 지원 범위" onClick={()=>onInfo({title:'신살 지원 범위',text:SHINSAL_CATALOG.names.join(' · ')+' · '+SHINSAL_CATALOG.convention})}>?</button></div></div>
+    <div className="rr-shinsal-scroll"><div className="rr-shinsal-table" style={{minWidth:columns.length>6?columns.length*56:undefined}}><SixPillars display={display} columns={columns} dayStem={dayStem} hanja={hanja} compact/>
+      {[['movement','십이신살','연·일지 조견표'],['good','길신','기준별 조견표'],['caution','흉살','선언된 규칙표']].map(([key,title,note])=><React.Fragment key={key}>
+        <div className="rr-shinsal-title"><span>{title}</span><small>{note}</small></div><div className="rr-shinsal-row" style={{gridTemplateColumns:`repeat(${columns.length},minmax(0,1fr))`}}>{records.map(r=><div key={r.column.key} className={'rr-shinsal-cell rr-tint-'+r.column.key}>{r[key].length?r[key].map((item,i)=><button type="button" key={item.name+item.basis+i} onClick={()=>onInfo({title:`${r.column.label} · ${item.name}`,text:`기준 ${item.basis==='日'?'일주':item.basis==='年'?'연주':item.basis==='月'?'월지':item.basis==='日柱'?'해당 일주':'해당 주 조합'} · ${item.reason|| (key==='movement'?'삼합별 십이신살 조견표':'선언된 신살 조견표')} 조건에서 표시됩니다. 신살의 명칭만으로 길흉이나 사건을 확정하지 않습니다.`})}><small data-basis={item.basis}>{item.basis}</small><span>{item.name}</span></button>):<span className="rr-nohit" aria-label={r.column.label+' '+(r.column.kind==='unknown'?'입력 미확인':'연결 규칙에서 해당 없음')}>—</span>}</div>)}</div>
       </React.Fragment>)}
       <p className="rr-subnote">표의 ‘—’는 연결된 규칙의 결과입니다. 미연결 신살 전체가 없다는 뜻은 아닙니다.</p>
-    </div>
+    </div></div>
   </section>;
 }

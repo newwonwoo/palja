@@ -1,5 +1,6 @@
 import { Capacitor, registerPlugin } from '@capacitor/core';
 import { createEmptyVault, importScreenshotPackage, validateVault, createBackup } from './model.js';
+import { applyBundledMappings } from './bundled-mappings.js';
 
 const NativeVault = registerPlugin('SajuVault');
 const LIMIT = 8 * 1024 * 1024;
@@ -102,7 +103,7 @@ export async function saveState(state, expectedRevision) {
 
 export function initializeVault() {
   if (!bootstrapPromise) bootstrapPromise = (async () => {
-    const state = await loadState();
+    let state = await loadState();
     if (state.revision === 0 && typeof __HAS_BUNDLED_VAULT__ !== 'undefined' && __HAS_BUNDLED_VAULT__) {
       const response = await fetch('./private/initial-vault.json');
       if (!response.ok) throw new Error('앱에 포함된 초기 명식 자료를 열지 못했습니다.');
@@ -110,7 +111,18 @@ export function initializeVault() {
       checkSize(text);
       const imported = importScreenshotPackage(state, JSON.parse(text));
       await saveState(imported.state, state.revision);
-      return imported.state;
+      state = imported.state;
+    }
+    if (typeof __HAS_BUNDLED_IMPORT_MAPPINGS__ !== 'undefined' && __HAS_BUNDLED_IMPORT_MAPPINGS__) {
+      const response = await fetch('./private/import-mappings.json');
+      if (!response.ok) throw new Error('확인된 가져오기 설정을 열지 못했습니다.');
+      const text = await response.text();
+      checkSize(text);
+      const mapped = applyBundledMappings(state, JSON.parse(text));
+      if (mapped !== state) {
+        await saveState(mapped, state.revision);
+        state = mapped;
+      }
     }
     return state;
   })().catch(error => { bootstrapPromise = null; throw error; });

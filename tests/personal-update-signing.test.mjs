@@ -3,13 +3,15 @@ import assert from 'node:assert/strict';
 import { chmodSync, existsSync, mkdtempSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
-import { execFileSync } from 'node:child_process';
+import { execFile } from 'node:child_process';
+import {promisify} from 'node:util';
+const execute=promisify(execFile);
 
 const script = resolve('scripts/sign-personal-update.sh');
 const signer = '76b0434edf1bde06e8b82b41eb8b40d380f06cb6d989827a4ce5c6506cabcd02';
 
-test('local-signing helper is valid Bash and has no embedded private signing key', () => {
-  execFileSync('bash', ['-n', script]);
+test('local-signing helper is valid Bash and has no embedded private signing key', async () => {
+  await execute('bash', ['-n', script]);
   const source=readFileSync(script,'utf8');
   assert.match(source, /apksigner.*verify/);
   assert.match(source, /activity|versionCode|installed_version/);
@@ -18,7 +20,7 @@ test('local-signing helper is valid Bash and has no embedded private signing key
   assert.doesNotMatch(source, /BEGIN PRIVATE KEY/);
 });
 
-test('update signing requires ORIGINAL signer and refuses unrelated signing keys', () => {
+test('update signing requires ORIGINAL signer and refuses unrelated signing keys', async () => {
   const dir=mkdtempSync(join(tmpdir(),'palja-update-test-'));
   try {
     const bin=join(dir,'bin');
@@ -68,10 +70,10 @@ esac
     const env={...process.env, PATH:bin+':'+process.env.PATH,
       PALJA_KEY_ALIAS:'personal', PALJA_KS_PASS:'synthetic', PALJA_KEY_PASS:'synthetic',
       SIGNING_CERT:signer,KEY_CERT:'0000000000000000000000000000000000000000000000000000000000000000'};
-    assert.throws(()=>execFileSync('bash',[script,original,unsigned,key,out],{env,stdio:'pipe'}),/Command failed/);
+    await assert.rejects(execute('bash',[script,original,unsigned,key,out],{env}),/Command failed/);
     assert.equal(existsSync(out),false,'must never create output for a mismatched keystore');
     const approved={...env,KEY_CERT:signer};
-    const status=execFileSync('bash',[script,original,unsigned,key,out],{env:approved,encoding:'utf8'});
+    const {stdout:status}=await execute('bash',[script,original,unsigned,key,out],{env:approved,encoding:'utf8'});
     assert.match(status,/VERIFIED update APK/);
     assert.equal(existsSync(out),true);
     assert.equal(readFileSync(out,'utf8'),'synthetic-non-apk-fixture');

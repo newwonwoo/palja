@@ -1,3 +1,4 @@
+import {readPresentation} from '../vault/presentation.js';
 import React, { useMemo, useState } from 'react';
 import { referenceDay } from './engine.js';
 import {
@@ -27,8 +28,8 @@ function RefIcon({ name, size = 23, fill = false }) {
   return <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill={fill ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">{paths[name]}</svg>;
 }
 
-function PersonRow({ entry, self = false, open, favorite, busy, compact, comparison, selected, select }) {
-  const age = ageBadge(entry);
+function PersonRow({ entry, self = false, open, favorite, busy, compact, comparison, selected, select, ageMode }) {
+  const age = ageBadge(entry,new Date(),ageMode);
   const rawDay = referenceDay(entry);
   const day = dayGlyphs(entry, rawDay);
   const label = referenceBirthLabel(entry);
@@ -43,13 +44,13 @@ function PersonRow({ entry, self = false, open, favorite, busy, compact, compari
   </li>;
 }
 
-function ComparisonPanel({ selections, entries, open, close }) {
+function ComparisonPanel({ selections, entries, open, close, navigate }) {
   if (!selections.length) return null;
   const chosen = selections.map(id => entries.find(e => e.id === id)).filter(Boolean);
   return <div className="ref-comparison" role="status" aria-live="polite">
     <div className="ref-compare-top"><strong>궁합 비교</strong><span>{chosen.length}/2 선택</span><button type="button" onClick={close}>취소</button></div>
     <div className="ref-compare-cards">{chosen.map(entry => { const day = dayGlyphs(entry, referenceDay(entry)); return <div key={entry.id}><strong>{entry.name}</strong><span>{day.stem}{day.branch} · {referenceBirthLabel(entry)}</span></div>; })}</div>
-    {chosen.length === 2 ? <div className="ref-compare-actions"><p>두 명식의 입력정보를 먼저 확인하세요. 일주만으로 궁합 점수를 만들지 않습니다.</p>{chosen.map(entry => <button key={entry.id} type="button" onClick={() => open(entry.id)}>{entry.name} 상세 보기 <RefIcon name="chevron" size={15} /></button>)}</div> : <small>비교할 명식을 한 명 더 선택하세요.</small>}
+    {chosen.length === 2 ? <div className="ref-compare-actions"><button type="button" onClick={()=>navigate({name:'details',id:chosen[0].id,compareId:chosen[1].id})}>두 명식 궁합 분석 열기</button><p>두 명식의 입력정보를 먼저 확인하세요. 일주만으로 궁합 점수를 만들지 않습니다.</p>{chosen.map(entry => <button key={entry.id} type="button" onClick={() => open(entry.id)}>{entry.name} 상세 보기 <RefIcon name="chevron" size={15} /></button>)}</div> : <small>비교할 명식을 한 명 더 선택하세요.</small>}
   </div>;
 }
 
@@ -57,6 +58,8 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
   const [tab, setTab] = useState('friends');
   const [search, setSearch] = useState('');
   const { sort, compact } = readPreferences(vault);
+  const display=readPresentation(vault);
+  const [filters,setFilters]=useState({sex:'',minAge:null,maxAge:null,favoriteOnly:false});
   const setSort = sort => change(state => savePreferences(state,{sort}));
   const [groupId, setGroupId] = useState('');
   const groups = activeGroups(vault);
@@ -69,22 +72,23 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
   const favorites = entries.filter(e => e.favorite);
   const friends = entries.filter(e => !e.favorite);
   const queryActive = Boolean(search.trim());
-  const limited = queryActive || groupActive;
+  const limited = queryActive || groupActive || filters.sex || filters.minAge!==null || filters.maxAge!==null || filters.favoriteOnly;
   const recent = useMemo(() => vault.recent.map(item => entries.find(e => e.id === item.entryId)).filter(Boolean).filter((e, i, arr) => arr.findIndex(x => x.id === e.id) === i), [vault.recent, entries]);
   const pool = tab === 'recent' ? recent : entries;
   const groupedIds = new Set(groups.flatMap(g => g.entryIds));
   const visible = selectedGroup ? pool.filter(e => selectedGroup.entryIds.includes(e.id)) : groupId === 'ungrouped' ? pool.filter(e=>!groupedIds.has(e.id)) : pool;
   const matching = useMemo(() => filterAndSortEntries(visible, {query:search, sort:tab === 'recent' ? 'recent' : sort,
-    dayOf:referenceDay}), [visible, search, sort, tab]);
+    dayOf:referenceDay,ageMode:display.ageMode,...filters}), [visible, search, sort, tab,display.ageMode,filters]);
   // Recent items must preserve access order, not fall back to 가나다순.
   const ordered = tab === 'recent' ? visible.filter(e => matching.includes(e)) : matching;
-  const sections = tab === 'recent' ? [{ key:'recent', title:'최근 입력', count:ordered.length, items:ordered }] : limited
-    ? [{ key:'search', title:queryActive?'검색 결과':selectedGroup?.name || '미분류', count:ordered.length, items:ordered }]
+  const rawSections = tab === 'recent' ? [{ key:'recent', title:'최근 입력', count:ordered.length, items:ordered }] : limited
+    ? [{ key:'search', title:queryActive?'검색 결과':selectedGroup?.name || (groupId==='ungrouped'?'미분류':'필터 결과'), count:ordered.length, items:ordered }]
     : [
         ...(self ? [{ key:'me', title:'me', count:null, items:[self] }] : []),
         { key:'favorites', title:'즐겨찾기', count:favorites.length, items:ordered.filter(e => e.favorite) },
         { key:'friends', title:'친구', count:friends.length, items:ordered.filter(e => !e.favorite) },
       ];
+  const sections=limited||tab==='recent'?rawSections:[...rawSections].sort((a,b)=>display.bannerOrder.indexOf(a.key)-display.bannerOrder.indexOf(b.key));
   const toggleCompare = () => { setCompare(v => !v); setSelection([]); };
   const select = id => setSelection(current => current.includes(id) ? current.filter(x => x !== id) : current.length >= 2 ? [current[1], id] : [...current, id]);
   return <div className="reference-vault" data-testid="reference-vault">
@@ -99,14 +103,14 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
         {groups.length > 0 && <div className="ref-group-filter"><select aria-label="그룹 필터" value={groupId} onChange={e=>setGroupId(e.target.value)}><option value="">전체 그룹</option><option value="ungrouped">미분류</option>{groups.map(g=><option key={g.id} value={g.id}>{g.name}</option>)}</select><button type="button" onClick={()=>navigate({name:'groups'})}>그룹 관리</button><button type="button" onClick={()=>navigate({name:'bulk'})}>일괄 관리</button></div>}
       </div>
     </div>
-    <div className="ref-results">
+    <div className="ref-results"><details className="completion-box"><summary>상세 필터</summary><div className="completion-filter"><label>성별<select aria-label="성별 필터" value={filters.sex} onChange={e=>setFilters({...filters,sex:e.target.value})}><option value="">전체</option><option value="male">남성</option><option value="female">여성</option><option value="unknown">미확인</option></select></label>{[['minAge','최소 나이'],['maxAge','최대 나이']].map(([k,l])=><label key={k}>{l}<input aria-label={l} type="number" min="0" max="150" value={filters[k]??''} onChange={e=>setFilters({...filters,[k]:e.target.value===''?null:Number(e.target.value)})}/></label>)}<label><input type="checkbox" checked={filters.favoriteOnly} onChange={e=>setFilters({...filters,favoriteOnly:e.target.checked})}/>즐겨찾기만</label><button type="button" onClick={()=>setFilters({sex:'',minAge:null,maxAge:null,favoriteOnly:false})}>필터 초기화</button></div></details>
       {sections.filter(section=>section.items.length || (!limited && section.key!=='me')).map(section=><section className={'ref-section section-'+section.key} key={section.key} aria-label={section.title}>
         <h2>{section.title}{section.count!==null&&<span> {section.count}</span>}</h2>
-        <ul className="ref-people">{section.items.map(entry=><PersonRow key={entry.id} entry={entry} self={section.key==='me'} open={open} favorite={favorite} busy={busy} compact={compact} comparison={compare} selected={selection.includes(entry.id)} select={select}/>)}</ul>
+        <ul className={'ref-people '+(display.listLayout==='cards'?'ref-card-layout':'')}>{section.items.map(entry=><PersonRow key={entry.id} entry={entry} self={section.key==='me'} open={open} favorite={favorite} busy={busy} compact={compact} comparison={compare} selected={selection.includes(entry.id)} select={select} ageMode={display.ageMode}/>)}</ul>
       </section>)}
       {!ordered.length && <section className="ref-no-results"><RefIcon name="search" size={29}/><strong>{queryActive?'검색 결과가 없습니다':groupActive?'이 그룹에 명식이 없습니다':tab==='recent'?'최근 입력한 명식이 없습니다':'아직 명식이 없습니다'}</strong><p>{queryActive?'이름·날짜·나이·일주를 바꿔 검색해 보세요.':'오른쪽 상단의 추가 버튼으로 명식을 등록할 수 있습니다.'}</p></section>}
       {entries.some(e=>e.source) && <p className="ref-accuracy">원본에서 가져온 나이·일주는 저장 당시 표시값입니다. 역법·성별이 확인되지 않은 명식은 임의로 계산하지 않습니다.</p>}
     </div>
-    {compare && <ComparisonPanel selections={selection} entries={entries} open={open} close={()=>{setCompare(false);setSelection([]);}}/>}
+    {compare && <ComparisonPanel navigate={navigate} selections={selection} entries={entries} open={open} close={()=>{setCompare(false);setSelection([]);}}/>}
   </div>;
 }

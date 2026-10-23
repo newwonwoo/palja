@@ -1,8 +1,12 @@
 # palja — 오프라인 사주보관함 Android 앱
 
+2026-10-23 [시니어 리뷰·테스트 3사이클](docs/senior-review-3cycles-20261023.md): 별도 코더·테스터 에이전트의 반복 탐색과 수정·재검증. 구현·전체 게이트 각각 **78/79 (98.7%)**, 직전 대비 변동 없음.
+
+2026-10-23 [반복 전수점검·독립 검증](docs/audit-20261023.md): 오류 6건 수정, 신규 브라우저 검사 36개 및 개인자료 978회 통과. 코드 구현·전체 게이트 검증 각각 **78/79 (98.7%)**, 직전 대비 변동 없음. 실기기 업데이트 보존 검증 1개 남음.
+
 **이 저장소가 모바일 앱의 단일 개발 기준입니다.** 기존 웹사이트는 별도 저장소 [newwonwoo/saju](https://github.com/newwonwoo/saju)의 `main`으로 계속 유지합니다.
 
-- **현재 앱 버전:** 1.1.2 (versionCode 12), `com.newwonwoo.saju`
+- **현재 소스 버전:** 1.1.5 (versionCode 15), `com.newwonwoo.saju`. 이번 확장은 개발 중이며 새 개인 업데이트 APK로 배포되지 않았습니다.
 - **모바일 앱의 새 기본 브랜치:** `main` (이 저장소)
 - **원본 개발 통합 소스:** `newwonwoo/saju` → `app/offline-vault` @ `3459207e30fd9b5589cb9e09260bf9c9f572b0a3`
 - **필독:** [새 저장소 인수인계](docs/PALJA_HANDOFF.md) · [기능 완료 추적표](docs/full-feature-scope.md)
@@ -14,6 +18,12 @@
 # 사주 보관함
 
 기존 React/Vite 사주 계산기를 바탕으로 만든 **개인용 오프라인 Android 명식 보관함**입니다. 앱에 화면과 계산 코드를 함께 넣고, 명식은 기기 내부에 저장합니다. 개발용 APK 빌드와 자동 검증을 수행했으며, 실제 휴대폰 설치 검증은 아직 하지 않았습니다. [검증 기록](docs/verification.md)에 범위와 결과를 정리했습니다.
+
+## 전체 구현 체크리스트
+
+[79개 기능 체크리스트](docs/IMPLEMENTATION_CHECKLIST.md) · [최신 계산·분석·UI 검증](docs/verification-calculation-flows-20261021.md).
+
+2026-10-22 [재점검 및 대운 경계 수정](docs/audit-resumed-20261022.md) 기준 코드 구현 **78/79 (98.7%)**, 전체 7개 게이트 검증 **78/79 (98.7%)**입니다. 기본 대운의 연경계 공백을 수정하고 검증해 직전보다 1개·1.2%p 증가했습니다. `data.upgrade`의 원래 개인키 서명·실기기 업데이트/DB 보존 확인 1개가 남아 **100% 완료로 표기하지 않습니다.** 작업 완료 때마다 `npm run progress`로 코드 구현률과 전체 검증률을 분리 보고합니다. `npm run checklist:check`로 문서와 근거를 검사합니다. `npm run checklist:complete`는 전체 완료 전에는 실패합니다.
 
 ## 개인 DB 복원 / 최초 설치
 
@@ -41,9 +51,13 @@ Node.js 22 이상이 필요합니다. 저장소에서 `npm ci`를 실행한 뒤 
 | --- | --- |
 | `npm run dev` | 기존 사주 웹 화면 개발 |
 | `npm run dev:mobile` | 명식 보관함 화면을 브라우저에서 개발 |
+| `npm run preview` | 최신 보관함 앱을 빌드하고 `0.0.0.0:3000`에서 웹 미리보기 실행 |
+| `npm run preview:web` | 별도 `npm run build`로 만든 기존 웹사이트 미리보기 |
 | `npm test` | 모델·계산 연결부 등의 합성 회귀 테스트 |
 | `npm run build:mobile` | 오프라인 앱용 프런트 번들을 `dist-mobile`에 생성 |
 | `npm run android:sync` | 모바일 빌드 후 Android 프로젝트에 자산·플러그인 동기화 |
+
+보관함 웹 미리보기는 저장소 루트에서 `npm run preview`로 시작하고, 미리보기 창에는 3000번 포트를 연결합니다. 서버 프로세스가 종료되거나 작업 환경이 다시 시작되면 이 명령을 다시 실행해야 합니다. 로컬 브라우저 주소는 `http://localhost:3000/`이며, 원격 작업 환경의 사용자 접속 주소는 해당 환경의 미리보기/포트 연결 주소를 사용합니다. 이 로컬 주소를 사용자 기기에서 그대로 열어 원격 서버에 접속할 수는 없습니다.
 
 `build:mobile`과 `android:sync`는 APK 생성 명령이 아닙니다. APK 빌드는 JDK 21, Android SDK 36·build-tools 36.0.0을 준비한 뒤 `./scripts/android-build.sh`를 사용합니다. Windows는 `./scripts/android-build.ps1`을 사용합니다. 자세한 설정과 네이티브 테스트는 [Android 안내](android/README.md)를 참고하세요. 빌드 도구 설치·의존성 다운로드에는 인터넷이 필요할 수 있지만, 개인용 앱의 저장·계산 경로는 외부 서버 없이 구성합니다.
 

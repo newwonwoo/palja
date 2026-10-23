@@ -1,5 +1,6 @@
 import { setWorkspace, validateVault, deleteEntry } from './model.js';
 import { emptyWorkspace, normalizedGroupName, readPreferences } from './workspace.js';
+import {readPresentation} from './presentation.js';
 const fail = message => { throw new Error(message); };
 const clone = value => JSON.parse(JSON.stringify(value));
 let sequence = 0;
@@ -15,6 +16,11 @@ export function savePreferences(state, patch) {
   const workspace = workspaceFor(state);
   workspace.preferences = {...readPreferences(state),...patch};
   return setWorkspace(state, workspace);
+}
+export function savePresentation(state,patch){
+ const workspace=workspaceFor(state);
+ workspace.presentation={...readPresentation(state),...clone(patch)};
+ return setWorkspace(state,workspace);
 }
 export function saveGroup(state, {id = null, name, entryIds = []}) {
   const workspace = workspaceFor(state);
