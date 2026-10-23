@@ -6,6 +6,7 @@ import './completion.css';
 import DisplaySettings from './DisplaySettings.jsx';
 import {readPresentation,presentationStyle} from '../vault/presentation.js';
 import CalculationPolicy from './CalculationPolicy.jsx';
+import { useUnsavedForm } from './UnsavedForm.jsx';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import LegacyApp from '../App.jsx';
 import {
@@ -86,13 +87,15 @@ function EntryForm({ entry, vault, change, navigate, busy, seedBirth, candidateN
   const [pending, setPending] = useState(null);
   const [form, setForm] = useState(() => {
     const birth = entry?.birth || seedBirth || {};
-    return { name: entry?.name || '', memo: entry?.memo || '', year: birth.input_year ?? '', month: birth.input_month ?? '', day: birth.input_day ?? '', hour: birth.input_hour ?? '', minute: birth.input_minute ?? '', calendar: birth.calendar_type || 'solar', leap: birth.lunar_leap_month === true ? 'true' : birth.lunar_leap_month === false ? 'false' : '', time: birth.time_status || 'unknown', sex: birth.sex || '', policy:birth.calculation_policy||null, correction: birth.correction_settings?.legacy_confirmed === true };
+    return { name: entry?.name || '', memo: entry?.memo || '', year: birth.input_year ?? '', month: birth.input_month ?? '', day: birth.input_day ?? '', hour: birth.input_hour ?? '', minute: birth.input_minute ?? '', calendar: entry ? birth.calendar_type ?? '' : birth.calendar_type || 'solar', leap: birth.lunar_leap_month === true ? 'true' : birth.lunar_leap_month === false ? 'false' : '', time: birth.time_status || 'unknown', sex: birth.sex || '', policy:birth.calculation_policy||null, correction: birth.correction_settings?.legacy_confirmed === true };
   });
+  const initialForm = useRef(form).current;
+  const guard = useUnsavedForm(form, busy);
   const update = (key, value) => setForm(current => ({ ...current, [key]: value }));
   const number = value => value === '' ? null : Number(value);
   const persist = async draft => {
     const saved = await change(state => upsertEntry(state, draft), '명식을 저장했습니다.');
-    if (saved) { setPending(null); navigate({ name: 'details', id: entry?.id || saved.state.entries.at(-1).id }, true); }
+    if (saved) { setPending(null); guard.allowLeave(); navigate({ name: 'details', id: entry?.id || saved.state.entries.at(-1).id }, true); }
   };
   const save = async event => {
     event.preventDefault();
@@ -107,12 +110,13 @@ function EntryForm({ entry, vault, change, navigate, busy, seedBirth, candidateN
       input_hour: form.time === 'known' ? number(form.hour) : null,
       input_minute: form.time === 'known' ? number(form.minute) : null,
       time_raw: form.time === 'known' ? pad(form.hour) + ':' + pad(form.minute) : form.time === 'unknown' ? '--:--' : null,
-      correction_settings: { ...(entry?.birth.correction_settings || {}), legacy_confirmed: form.correction },
-      settings_status: { ...(entry?.birth.settings_status || {}), calendar_type: form.calendar ? 'user_confirmed' : 'unconfirmed', sex: form.sex ? 'user_confirmed' : 'unconfirmed' },
+      correction_settings: entry && form.correction === initialForm.correction ? entry.birth.correction_settings : { ...(entry?.birth.correction_settings || {}), legacy_confirmed: form.correction },
+      settings_status: { ...(entry?.birth.settings_status || {}), ...(!entry || form.calendar !== initialForm.calendar ? { calendar_type: form.calendar ? 'user_confirmed' : 'unconfirmed' } : {}), ...(!entry || form.sex !== initialForm.sex ? { sex: form.sex ? 'user_confirmed' : 'unconfirmed' } : {}) },
     };
-    const draft = { name: form.name.trim(), memo: form.memo, birth };
+    const birthChanged = !entry || Object.keys(form).filter(key => !['name', 'memo'].includes(key)).some(key => JSON.stringify(form[key]) !== JSON.stringify(initialForm[key]));
+    const draft = { name: form.name.trim(), memo: form.memo, ...(birthChanged ? { birth } : {}) };
     if (entry) draft.id = entry.id;
-    const duplicates = duplicateCandidates(vault, draft);
+    const duplicates = duplicateCandidates(vault, { ...draft, birth: draft.birth || entry?.birth });
     if (duplicates.length) setPending({ draft, duplicates });
     else await persist(draft);
   };
@@ -134,6 +138,7 @@ function EntryForm({ entry, vault, change, navigate, busy, seedBirth, candidateN
     <div className="form-save"><button type="submit" className="primary full-width" disabled={busy}><Icon name="check" size={20} />{busy ? '저장 중…' : '명식 저장'}</button><p className="field-hint">이 기기에 저장됩니다. {form.policy?'독립 역법: 1900~2050년.':'기존 역법: 1900~2030년.'}</p></div>
   </fieldset></form>
     {pending && <DuplicateDialog candidates={pending.duplicates} busy={busy} onCancel={() => setPending(null)} onConfirm={() => persist(pending.draft)}/>}
+    {guard.dialog}
   </>;
 }
 
@@ -207,6 +212,7 @@ export default function MobileApp() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [toast, setToast] = useState('');
+  const [startupFailed, setStartupFailed] = useState(false);
   const [route, setRoute] = useState(() => window.history.state?.sajuRoute || INITIAL_ROUTE);
   const routeRef = useRef(route);
   routeRef.current = route;
@@ -216,7 +222,7 @@ export default function MobileApp() {
 
   useEffect(() => {
     let cancelled = false;
-    initializeVault().then(value => { if (!cancelled) { vaultRef.current = value; setVault(value); } }).catch(failure => { if (!cancelled) setError(errorText(failure)); });
+    initializeVault().then(value => { if (!cancelled) { vaultRef.current = value; setVault(value); setStartupFailed(false); } }).catch(failure => { if (!cancelled) { setStartupFailed(true); setError(errorText(failure)); } });
     const pop = event => {
       const next = event.state?.sajuRoute || INITIAL_ROUTE;
       const resume = () => { window.history.replaceState({sajuRoute:next}, '', '#'+next.name); setRoute(next); window.scrollTo(0,0); };
@@ -236,9 +242,16 @@ export default function MobileApp() {
   const notify = message => { clearTimeout(toastTimer.current); setToast(message); toastTimer.current = setTimeout(() => setToast(''), 3500); };
   const navigate = (next, replace = false) => {
     if (JSON.stringify(next) === JSON.stringify(route) && !replace) return;
-    if (replace) window.history.replaceState({ sajuRoute: next }, '', '#' + next.name);
-    else window.history.pushState({ sajuRoute: next }, '', '#' + next.name);
-    setRoute(next); window.scrollTo(0, 0);
+    const resume = () => {
+      if (replace) window.history.replaceState({ sajuRoute: next }, '', '#' + next.name);
+      else window.history.pushState({ sajuRoute: next }, '', '#' + next.name);
+      setRoute(next); window.scrollTo(0, 0);
+    };
+    if (routeRef.current.name === 'form') {
+      const event = new CustomEvent('saju:before-history-leave', { cancelable: true, detail: { next, resume } });
+      if (!window.dispatchEvent(event)) return;
+    }
+    resume();
   };
   const change = async (producer, success) => {
     if (busyRef.current || !vaultRef.current) return null;
@@ -274,7 +287,7 @@ export default function MobileApp() {
 
   return <div data-palette={readPresentation(vault||{}).palette} data-card={readPresentation(vault||{}).cardStyle} style={presentationStyle(readPresentation(vault||{}))} className={'mobile-root ' + (page === 'analysis' ? 'analysis-page reference-light-page' : page === 'vault' ? 'reference-vault-page' : 'reference-light-page ' + page + '-page' + (page === 'details' ? ' reader-page' : ''))}>
     {page !== 'vault' && page !== 'details' && <header className="app-header"><div>{canBack ? <button className="icon-button" aria-label="뒤로" onClick={back}><Icon name="back" /></button> : <span className="brand-seal">命</span>}<span className="header-title">{page === 'analysis' ? entry.name + ' · 상세 해석' : '사주 보관함'}</span></div><span className="offline-label"><i />{busy ? '저장 중' : '오프라인'}</span></header>}
-    {!vault ? <main className="mobile-main"><section className="empty-state"><Icon name="vault" size={40} /><h1>{error ? '보관함을 열지 못했어요' : '보관함을 열고 있어요'}</h1>{error && <button className="primary" onClick={() => window.location.reload()}>다시 시도</button>}</section></main> : page === 'analysis' && analysis?.legacyForm ? <div className="legacy-analysis"><AnalysisBoundary key={entry.id} onReturn={back}><LegacyApp initialForm={analysis.legacyForm} onReturn={back} /></AnalysisBoundary></div> : <main className="mobile-main">
+    {!vault ? <main className="mobile-main"><section className="empty-state"><Icon name="vault" size={40} /><h1>{startupFailed ? '보관함을 열지 못했어요' : '보관함을 열고 있어요'}</h1>{startupFailed && <button className="primary" onClick={() => window.location.reload()}>다시 시도</button>}</section></main> : page === 'analysis' && analysis?.legacyForm ? <div className="legacy-analysis"><AnalysisBoundary key={entry.id} onReturn={back}><LegacyApp initialForm={analysis.legacyForm} onReturn={back} /></AnalysisBoundary></div> : <main className="mobile-main">
       {page === 'vault' && <ReferenceVault vault={vault} change={change} navigate={navigate} open={open} onExit={exitVault} favorite={id => change(state => toggleFavorite(state, id))} busy={busy} />}
       {page === 'details' && entry && <ReferenceReader key={entry.id+':'+(route.compareId||'')} initialCompareId={route.compareId} entry={entry} vault={vault} navigate={navigate} change={change} busy={busy} />}
       {page === 'tools' && <ManseTools key={JSON.stringify([route.tab, route.pillarInput])} navigate={navigate} initialTab={route.tab} pillarInput={route.pillarInput} />}

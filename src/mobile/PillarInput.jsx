@@ -3,6 +3,7 @@ import { upsertEntry } from '../vault/model.js';
 import { PILLAR_FIELDS, SIXTY_PILLARS, assertPillarInput, manualBirth, pillarText, duplicateCandidates } from '../vault/pillar-input.js';
 import { STEM_KO, BRANCH_KO } from './engine.js';
 import { stemColor, branchColor } from './list-utils.js';
+import { useUnsavedForm } from './UnsavedForm.jsx';
 import './pillar-input.css';
 const STEMS = [...'甲乙丙丁戊己庚辛壬癸'], BRANCHES = [...'子丑寅卯辰巳午未申酉戌亥'];
 export const blankPillarInput = () => ({ version: 1, pillars: { year: null, month: null, day: null, hour: null } });
@@ -38,17 +39,19 @@ export default function ManualPillarForm({ entry, vault, navigate, change, busy 
   const [name, setName] = useState(entry?.name || ''), [memo, setMemo] = useState(entry?.memo || '');
   const [sex, setSex] = useState(entry?.birth.sex || ''), [error, setError] = useState(''), [pending, setPending] = useState(null);
   const [decade,setDecade]=useState(entry?.birth.manual_daeun||null);
+  const initialBirthInput = useRef(JSON.stringify({ input, sex, decade })).current;
+  const guard = useUnsavedForm({ input, name, memo, sex, decade }, busy);
   const persist = async draft => {
     const saved = await change(state => upsertEntry(state, draft), '간지 명식을 저장했습니다.');
-    if (saved) { setPending(null); navigate({ name: 'details', id: entry?.id || saved.state.entries.at(-1).id }, true); }
+    if (saved) { setPending(null); guard.allowLeave(); navigate({ name: 'details', id: entry?.id || saved.state.entries.at(-1).id }, true); }
   };
-  const draftValue = () => ({ ...(entry ? { id: entry.id } : {}), name: name.trim(), memo, birth: {...manualBirth(input, sex || null),manual_daeun:decade} });
+  const draftValue = () => ({ ...(entry ? { id: entry.id } : {}), name: name.trim(), memo, ...(entry && JSON.stringify({ input, sex, decade }) === initialBirthInput ? {} : { birth: {...manualBirth(input, sex || null),manual_daeun:decade} }) });
   const save = async event => {
     event.preventDefault(); setError('');
     try {
       const draft = draftValue();
       if (!draft.name) throw new Error('이름을 입력해 주세요.');
-      const duplicates = duplicateCandidates(vault, draft);
+      const duplicates = duplicateCandidates(vault, { ...draft, birth: draft.birth || entry?.birth });
       if (duplicates.length) setPending({ draft, duplicates }); else await persist(draft);
     } catch (failure) { setError(failure.message); }
   };
@@ -73,5 +76,6 @@ export default function ManualPillarForm({ entry, vault, navigate, change, busy 
       <p className="pi-footnote">역검색은 현재 입력한 간지만 전달합니다. 이름과 메모는 저장 버튼을 눌러야 보관됩니다.</p>
     </fieldset></form>
     {pending && <DuplicateDialog candidates={pending.duplicates} busy={busy} onCancel={() => setPending(null)} onConfirm={() => persist(pending.draft)}/>}
+    {guard.dialog}
   </section>;
 }

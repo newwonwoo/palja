@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-10-22",
+  "updatedAt": "2026-10-23",
   "features": {
     "input.location": {
       "note": "23개 도시·17시간대·경도 직접 입력. 한국 2025b/해외 IANA 2026b 전환표 내장. 도시 중심 경도임을 표시.",
@@ -1817,7 +1817,10 @@
       "note": "실제 오프라인 날짜/성별/00:00 수정, 원래 ID·출생정보 이력·재열기·전체 백업 보존 검증.",
       "evidence": [
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/audit-20261023.md",
+        "docs/independent-audit-20261023.md",
+        "tests/browser/audit-regressions.cjs"
       ],
       "gates": [
         {
@@ -1960,7 +1963,10 @@
         "docs/integrated-release-1.1.0.md",
         "tests/browser/calculation-flows.cjs",
         "docs/verification-calculation-flows-20261021.md",
-        "tests/analysis-contracts.test.mjs"
+        "tests/analysis-contracts.test.mjs",
+        "docs/audit-20261023.md",
+        "docs/independent-audit-20261023.md",
+        "tests/browser/audit-regressions.cjs"
       ],
       "gates": [
         {
@@ -2336,7 +2342,10 @@
       "note": "실제 그룹/미분류 결과, 그룹 데이터 재열기/백업 검증. 필터 자체는 임시 UI 상태.",
       "evidence": [
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/audit-20261023.md",
+        "docs/independent-audit-20261023.md",
+        "tests/browser/audit-regressions.cjs"
       ],
       "gates": [
         {
@@ -3582,7 +3591,10 @@
       "note": "브라우저 내부 DB·오프라인 저장·두 탭 stale writer 차단·최신 값/미저장 초안 보존. JVM SQLite 동시 쓰기/손상/용량 회귀. 실기기 업데이트는 별도.",
       "evidence": [
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/audit-20261023.md",
+        "docs/independent-audit-20261023.md",
+        "tests/browser/audit-regressions.cjs"
       ],
       "gates": [
         {
@@ -3770,7 +3782,10 @@
       "note": "오프라인 명식 PNG 파일 생성·실제 다운로드와 PNG/native payload 형식 회귀. Android 기기별 공유 대상 UI 검증은 별도.",
       "evidence": [
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/audit-20261023.md",
+        "docs/independent-audit-20261023.md",
+        "tests/browser/audit-regressions.cjs"
       ],
       "gates": [
         {

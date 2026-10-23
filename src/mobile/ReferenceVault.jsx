@@ -82,7 +82,7 @@ export default function ReferenceVault({ vault, navigate, open, favorite, busy, 
   // Recent items must preserve access order, not fall back to 가나다순.
   const ordered = tab === 'recent' ? visible.filter(e => matching.includes(e)) : matching;
   const rawSections = tab === 'recent' ? [{ key:'recent', title:'최근 입력', count:ordered.length, items:ordered }] : limited
-    ? [{ key:'search', title:queryActive?'검색 결과':selectedGroup?.name || '미분류', count:ordered.length, items:ordered }]
+    ? [{ key:'search', title:queryActive?'검색 결과':selectedGroup?.name || (groupId==='ungrouped'?'미분류':'필터 결과'), count:ordered.length, items:ordered }]
     : [
         ...(self ? [{ key:'me', title:'me', count:null, items:[self] }] : []),
         { key:'favorites', title:'즐겨찾기', count:favorites.length, items:ordered.filter(e => e.favorite) },
