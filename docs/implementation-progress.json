@@ -1820,7 +1820,10 @@
         "docs/verification-offline-flows-20261021.md",
         "docs/audit-20261023.md",
         "docs/independent-audit-20261023.md",
-        "tests/browser/audit-regressions.cjs"
+        "tests/browser/audit-regressions.cjs",
+        "docs/senior-review-3cycles-20261023.md",
+        "tests/browser/senior-cycles.cjs",
+        "tests/browser/senior-concurrency.cjs"
       ],
       "gates": [
         {
@@ -1966,7 +1969,10 @@
         "tests/analysis-contracts.test.mjs",
         "docs/audit-20261023.md",
         "docs/independent-audit-20261023.md",
-        "tests/browser/audit-regressions.cjs"
+        "tests/browser/audit-regressions.cjs",
+        "docs/senior-review-3cycles-20261023.md",
+        "tests/browser/senior-cycles.cjs",
+        "tests/browser/senior-concurrency.cjs"
       ],
       "gates": [
         {
@@ -2296,7 +2302,10 @@
       "note": "한 명식의 두 그룹 배정·그룹 삭제/복원·구성원 ID 보존·새 컨텍스트 백업 복원 검증.",
       "evidence": [
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/senior-review-3cycles-20261023.md",
+        "tests/browser/senior-cycles.cjs",
+        "tests/browser/senior-concurrency.cjs"
       ],
       "gates": [
         {
@@ -2345,7 +2354,10 @@
         "docs/verification-offline-flows-20261021.md",
         "docs/audit-20261023.md",
         "docs/independent-audit-20261023.md",
-        "tests/browser/audit-regressions.cjs"
+        "tests/browser/audit-regressions.cjs",
+        "docs/senior-review-3cycles-20261023.md",
+        "tests/browser/senior-cycles.cjs",
+        "tests/browser/senior-concurrency.cjs"
       ],
       "gates": [
         {
@@ -3069,7 +3081,10 @@
       "note": "오프라인 텍스트/이모지 저장·재열기·두 탭 revision 충돌 차단과 미저장 초안 보존 검증.",
       "evidence": [
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/senior-review-3cycles-20261023.md",
+        "tests/browser/senior-cycles.cjs",
+        "tests/browser/senior-concurrency.cjs"
       ],
       "gates": [
         {
@@ -3117,7 +3132,10 @@
         "tests/integrated.test.mjs",
         "docs/integrated-release-1.1.0.md",
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/senior-review-3cycles-20261023.md",
+        "tests/browser/senior-cycles.cjs",
+        "tests/browser/senior-concurrency.cjs"
       ],
       "gates": [
         {
@@ -3165,7 +3183,10 @@
         "tests/integrated.test.mjs",
         "docs/integrated-release-1.1.0.md",
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/senior-review-3cycles-20261023.md",
+        "tests/browser/senior-cycles.cjs",
+        "tests/browser/senior-concurrency.cjs"
       ],
       "gates": [
         {
@@ -3309,7 +3330,10 @@
         "tests/integrated.test.mjs",
         "docs/integrated-release-1.1.0.md",
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/senior-review-3cycles-20261023.md",
+        "tests/browser/senior-cycles.cjs",
+        "tests/browser/senior-concurrency.cjs"
       ],
       "gates": [
         {
@@ -3640,7 +3664,10 @@
       "note": "오프라인 전체 내보내기·새 컨텍스트 가져오기의 entries/workspace 완전 일치·반복 가져오기 중복 없음 검증.",
       "evidence": [
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/senior-review-3cycles-20261023.md",
+        "tests/browser/senior-cycles.cjs",
+        "tests/browser/senior-concurrency.cjs"
       ],
       "gates": [
         {
@@ -3688,7 +3715,10 @@
         "tests/integrated.test.mjs",
         "docs/integrated-release-1.1.0.md",
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/senior-review-3cycles-20261023.md",
+        "tests/browser/senior-cycles.cjs",
+        "tests/browser/senior-concurrency.cjs"
       ],
       "gates": [
         {
@@ -3736,7 +3766,10 @@
         "tests/integrated.test.mjs",
         "docs/integrated-release-1.1.0.md",
         "tests/browser/remaining-flows.cjs",
-        "docs/verification-offline-flows-20261021.md"
+        "docs/verification-offline-flows-20261021.md",
+        "docs/senior-review-3cycles-20261023.md",
+        "tests/browser/senior-cycles.cjs",
+        "tests/browser/senior-concurrency.cjs"
       ],
       "gates": [
         {

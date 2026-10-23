@@ -7,7 +7,7 @@ export default function BulkManage({vault,change,busy,navigate}){
  const [search,setSearch]=useState(''),[selected,setSelected]=useState([]),[groupId,setGroupId]=useState(''),[intent,setIntent]=useState(null);
  const entries=useMemo(()=>vault.entries.filter(e=>!e.deletedAt),[vault.entries]);
  const groups=activeGroups(vault);
- const matches=entries.filter(e=>e.name.toLocaleLowerCase('ko').includes(search.trim().toLocaleLowerCase('ko'))||String(e.birth?.date_raw||'').includes(search.trim()));
+ const matches=entries.filter(e=>e.name.toLocaleLowerCase('ko').includes(search.trim().toLocaleLowerCase('ko'))||referenceBirthLabel(e).includes(search.trim()));
  const chosen=entries.filter(e=>selected.includes(e.id));
  const toggle=id=>setSelected(list=>list.includes(id)?list.filter(x=>x!==id):[...list,id]);
  const apply=async()=>{

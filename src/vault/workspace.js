@@ -54,7 +54,15 @@ export function validateWorkspace(workspace, entryIds) {
 export function mergeWorkspaces(local, incoming, allowedEntryIds, conflicts) {
   if (!incoming.workspace) return local.workspace;
   const source = incoming.workspace;
-  if (!local.workspace) return { ...JSON.parse(JSON.stringify(source)), version: 1, preferences: { ...source.preferences }, groups: source.groups.map(g => ({ ...g, entryIds: g.entryIds.filter(id => allowedEntryIds.has(id)) })) };
+  if (!local.workspace) {
+    const copied = JSON.parse(JSON.stringify(source));
+    const integrated = mergeIntegrated(undefined, copied.integrated, allowedEntryIds, conflicts);
+    // Filtering must not add optional fields to an otherwise unchanged old backup.
+    if (integrated) for (const key of ['selections', 'presets']) {
+      if (!Object.hasOwn(copied.integrated, key)) delete integrated[key];
+    }
+    return { ...copied, version: 1, preferences: { ...source.preferences }, groups: copied.groups.map(g => ({ ...g, entryIds: g.entryIds.filter(id => allowedEntryIds.has(id)) })), ...(integrated ? { integrated } : {}) };
+  }
   const groups = [...local.workspace.groups];
   for (const item of source.groups) {
     const old = groups.find(g => g.id === item.id);

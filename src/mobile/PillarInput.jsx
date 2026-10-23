@@ -4,6 +4,7 @@ import { PILLAR_FIELDS, SIXTY_PILLARS, assertPillarInput, manualBirth, pillarTex
 import { STEM_KO, BRANCH_KO } from './engine.js';
 import { stemColor, branchColor } from './list-utils.js';
 import { useUnsavedForm } from './UnsavedForm.jsx';
+import { entryEditConflict, assertEntryEditCurrent } from '../vault/edit-conflicts.js';
 import './pillar-input.css';
 const STEMS = [...'甲乙丙丁戊己庚辛壬癸'], BRANCHES = [...'子丑寅卯辰巳午未申酉戌亥'];
 export const blankPillarInput = () => ({ version: 1, pillars: { year: null, month: null, day: null, hour: null } });
@@ -39,15 +40,18 @@ export default function ManualPillarForm({ entry, vault, navigate, change, busy 
   const [name, setName] = useState(entry?.name || ''), [memo, setMemo] = useState(entry?.memo || '');
   const [sex, setSex] = useState(entry?.birth.sex || ''), [error, setError] = useState(''), [pending, setPending] = useState(null);
   const [decade,setDecade]=useState(entry?.birth.manual_daeun||null);
+  const originalEntry = useRef(entry).current;
+  const stale = entryEditConflict(originalEntry, entry);
   const initialBirthInput = useRef(JSON.stringify({ input, sex, decade })).current;
   const guard = useUnsavedForm({ input, name, memo, sex, decade }, busy);
   const persist = async draft => {
-    const saved = await change(state => upsertEntry(state, draft), '간지 명식을 저장했습니다.');
+    const saved = await change(state => { assertEntryEditCurrent(state, originalEntry); return upsertEntry(state, draft); }, '간지 명식을 저장했습니다.');
     if (saved) { setPending(null); guard.allowLeave(); navigate({ name: 'details', id: entry?.id || saved.state.entries.at(-1).id }, true); }
   };
   const draftValue = () => ({ ...(entry ? { id: entry.id } : {}), name: name.trim(), memo, ...(entry && JSON.stringify({ input, sex, decade }) === initialBirthInput ? {} : { birth: {...manualBirth(input, sex || null),manual_daeun:decade} }) });
   const save = async event => {
     event.preventDefault(); setError('');
+    if (stale) return;
     try {
       const draft = draftValue();
       if (!draft.name) throw new Error('이름을 입력해 주세요.');
@@ -60,10 +64,11 @@ export default function ManualPillarForm({ entry, vault, navigate, change, busy 
     catch (failure) { setError(failure.message); }
   };
   return <section className="pillar-input-page">
+    {stale && <section className="panel" role="alert"><p>다른 화면에서 이 명식이 {entry?.deletedAt ? '삭제' : '변경'}되었습니다. 작성 중인 내용은 유지되며 덮어쓰지 않습니다.</p><button type="button" onClick={() => navigate(entry?.deletedAt ? {name:'vault'} : {name:'form',id:entry.id,editSession:crypto.randomUUID()}, true)}>{entry?.deletedAt ? '보관함으로 이동' : '최신 내용으로 다시 열기'}</button></section>}
     {!entry && <nav className="pi-mode-tabs" aria-label="명식 입력 방식"><button type="button" onClick={() => navigate({ name: 'form' }, true)}>생년월일</button><button type="button" aria-current="page">간지 직접</button></nav>}
     <h1>{entry ? '간지 명식 수정' : '간지 직접 입력'}</h1>
     <p className="pi-lead">생일 대신 네 기둥을 입력합니다.<br/>모르는 시주는 비워 두세요.</p>
-    <form onSubmit={save}><fieldset className="pi-fields" disabled={busy || Boolean(pending)}>
+    <form onSubmit={save}><fieldset className="pi-fields" disabled={busy || Boolean(pending) || stale}>
       <PillarInputFields value={input} onChange={setInput}/>
       <div className="pi-rule-note"><strong>날짜를 임의로 만들지 않습니다</strong><p>육십갑자 조합만 검사합니다. 실제 날짜에 해당하는 명식인지는 역검색으로 확인하세요. 생일이 없으므로 현재 나이·정확한 대운 기산일은 계산하지 않습니다. 대운수는 알고 있는 값을 별도로 입력할 수 있습니다.</p></div>
       <label className="pi-field">이름<input aria-label="간지 명식 이름" value={name} maxLength={200} required onChange={event => setName(event.target.value)} placeholder="이름 또는 연구용 별칭"/></label>

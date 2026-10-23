@@ -7,6 +7,7 @@ import DisplaySettings from './DisplaySettings.jsx';
 import {readPresentation,presentationStyle} from '../vault/presentation.js';
 import CalculationPolicy from './CalculationPolicy.jsx';
 import { useUnsavedForm } from './UnsavedForm.jsx';
+import { entryEditConflict, assertEntryEditCurrent } from '../vault/edit-conflicts.js';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import LegacyApp from '../App.jsx';
 import {
@@ -90,15 +91,18 @@ function EntryForm({ entry, vault, change, navigate, busy, seedBirth, candidateN
     return { name: entry?.name || '', memo: entry?.memo || '', year: birth.input_year ?? '', month: birth.input_month ?? '', day: birth.input_day ?? '', hour: birth.input_hour ?? '', minute: birth.input_minute ?? '', calendar: entry ? birth.calendar_type ?? '' : birth.calendar_type || 'solar', leap: birth.lunar_leap_month === true ? 'true' : birth.lunar_leap_month === false ? 'false' : '', time: birth.time_status || 'unknown', sex: birth.sex || '', policy:birth.calculation_policy||null, correction: birth.correction_settings?.legacy_confirmed === true };
   });
   const initialForm = useRef(form).current;
+  const originalEntry = useRef(entry).current;
+  const stale = entryEditConflict(originalEntry, entry);
   const guard = useUnsavedForm(form, busy);
   const update = (key, value) => setForm(current => ({ ...current, [key]: value }));
   const number = value => value === '' ? null : Number(value);
   const persist = async draft => {
-    const saved = await change(state => upsertEntry(state, draft), '명식을 저장했습니다.');
+    const saved = await change(state => { assertEntryEditCurrent(state, originalEntry); return upsertEntry(state, draft); }, '명식을 저장했습니다.');
     if (saved) { setPending(null); guard.allowLeave(); navigate({ name: 'details', id: entry?.id || saved.state.entries.at(-1).id }, true); }
   };
   const save = async event => {
     event.preventDefault();
+    if (stale) return;
     const year = number(form.year), month = number(form.month), day = number(form.day);
     const hasDate = [year, month, day].every(Number.isInteger);
     const birth = {
@@ -120,7 +124,7 @@ function EntryForm({ entry, vault, change, navigate, busy, seedBirth, candidateN
     if (duplicates.length) setPending({ draft, duplicates });
     else await persist(draft);
   };
-  return <><form className="entry-form" onSubmit={save}><fieldset className="entry-form-fields" disabled={busy || Boolean(pending)}>
+  return <>{stale && <section className="panel" role="alert"><p>다른 화면에서 이 명식이 {entry?.deletedAt ? '삭제' : '변경'}되었습니다. 작성 중인 내용은 유지되며 덮어쓰지 않습니다.</p><button type="button" onClick={() => navigate(entry?.deletedAt ? {name:'vault'} : {name:'form',id:entry.id,editSession:crypto.randomUUID()}, true)}>{entry?.deletedAt ? '보관함으로 이동' : '최신 내용으로 다시 열기'}</button></section>}<form className="entry-form" onSubmit={save}><fieldset className="entry-form-fields" disabled={busy || Boolean(pending) || stale}>
     {!entry && <nav className="pi-mode-tabs" aria-label="명식 입력 방식"><button type="button" aria-current="page">생년월일</button><button type="button" onClick={() => navigate({ name: 'form', mode: 'pillars' }, true)}>간지 직접</button></nav>}
     {candidateNote && <p className="pi-rule-note">{candidateNote}</p>}
     <section className="intro compact"><span className="eyebrow">{entry ? '기록 다듬기' : '새로운 기록'}</span><h1>{entry ? '명식 수정' : '명식 추가'}</h1><p>모르는 정보는 비워 두어도 괜찮아요.</p></section>
@@ -247,7 +251,7 @@ export default function MobileApp() {
       else window.history.pushState({ sajuRoute: next }, '', '#' + next.name);
       setRoute(next); window.scrollTo(0, 0);
     };
-    if (routeRef.current.name === 'form') {
+    if (['form', 'groups'].includes(routeRef.current.name)) {
       const event = new CustomEvent('saju:before-history-leave', { cancelable: true, detail: { next, resume } });
       if (!window.dispatchEvent(event)) return;
     }
@@ -279,7 +283,7 @@ export default function MobileApp() {
     catch (failure) { setError(errorText(failure)); }
   };
   const open = async id => { if (await change(state => recordOpen(state, id))) navigate({ name: 'details', id }); };
-  const entry = vault?.entries.find(item => item.id === route.id && !item.deletedAt);
+  const entry = vault?.entries.find(item => item.id === route.id && (!item.deletedAt || route.name === 'form'));
   const page = ['details', 'analysis', 'hour-candidates'].includes(route.name) && !entry ? 'vault' : route.name === 'analysis' && !calculateEntry(entry).legacyForm ? 'details' : route.name;
   const canBack = page !== 'vault';
   const back = () => { if (window.history.state?.sajuRoute?.name !== 'vault' && window.history.length > 1) window.history.back(); else navigate(INITIAL_ROUTE, true); };
@@ -296,8 +300,8 @@ export default function MobileApp() {
       {page === 'bulk' && <BulkManage vault={vault} change={change} busy={busy} navigate={navigate} />}
       {page === 'hour-candidates' && entry && <HourCandidatesPage key={entry.id} entry={entry} navigate={navigate}/>}
       {page === 'form' && (isManualBirth(entry?.birth) || route.mode === 'pillars'
-        ? <ManualPillarForm key={entry?.id || 'new-pillars'} entry={entry} vault={vault} change={change} navigate={navigate} busy={busy}/>
-        : <EntryForm key={entry?.id || JSON.stringify(route.seedBirth) || 'new'} seedBirth={route.seedBirth} candidateNote={route.candidateNote} entry={entry} vault={vault} change={change} navigate={navigate} busy={busy}/>)}
+        ? <ManualPillarForm key={(entry?.id || 'new-pillars') + ':' + (route.editSession || '')} entry={entry} vault={vault} change={change} navigate={navigate} busy={busy}/>
+        : <EntryForm key={(entry?.id || JSON.stringify(route.seedBirth) || 'new') + ':' + (route.editSession || '')} seedBirth={route.seedBirth} candidateNote={route.candidateNote} entry={entry} vault={vault} change={change} navigate={navigate} busy={busy}/>)}
       {page === 'settings' && <Settings vault={vault} navigate={navigate} change={change} busy={busy} setError={setError} notify={notify} showImportMappings={route.showImportMappings} />}
     </main>}
     {vault && page !== 'analysis' && page !== 'form' && page !== 'vault' && page !== 'details' && <nav className="bottom-nav" aria-label="주 메뉴"><button className={page === 'vault' ? 'active' : ''} onClick={() => navigate(INITIAL_ROUTE, true)}><Icon name="vault" /><span>보관함</span></button><button className="nav-add" onClick={() => navigate({ name: 'form' })}><span className="add-circle"><Icon name="plus" size={24} /></span><span>명식 추가</span></button><button className={page === 'settings' ? 'active' : ''} onClick={() => navigate({ name: 'settings' })}><Icon name="settings" /><span>설정</span></button></nav>}

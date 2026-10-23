@@ -39,7 +39,8 @@ export function setNoteDeleted(state,id,deleted){return updateIntegrated(state,x
 export function restoreNoteVersion(state,id,index){const n=integrated(state).notes.find(n=>n.id===id);if(!n||!n.history[index])throw new Error('이력 없음');return saveNote(state,n.entryId,{...n.history[index],id});}
 /** Export only selected records. Strip embedded original screenshot packages to avoid leaking other people. */
 export function selectedBackup(state,ids,{withMemo=false}={}) {
- const selected=new Set(ids),out=createEmptyVault(),copy=clone(state);out.entries=copy.entries.filter(e=>selected.has(e.id)&&!e.deletedAt).map(e=>({...e,source:null,birthRevisions:withMemo?e.birthRevisions:[],memo:withMemo?e.memo:'',referenceDisplay:e.referenceDisplay}));
+ const requested=new Set(ids),out=createEmptyVault(),copy=clone(state);out.entries=copy.entries.filter(e=>requested.has(e.id)&&!e.deletedAt).map(e=>({...e,source:null,birthRevisions:withMemo?e.birthRevisions:[],memo:withMemo?e.memo:'',referenceDisplay:e.referenceDisplay}));
+ const selected=new Set(out.entries.map(e=>e.id));
  out.selfId=selected.has(state.selfId)?state.selfId:null;
  out.workspace=copy.workspace||emptyWorkspace();out.workspace.groups=out.workspace.groups.map(g=>({...g,entryIds:g.entryIds.filter(id=>selected.has(id))})).filter(g=>g.entryIds.length);
  if(out.workspace.integrated){out.workspace.integrated.notes=withMemo?out.workspace.integrated.notes.filter(n=>selected.has(n.entryId)):[];out.workspace.integrated.selection=null;out.workspace.integrated.selections=(out.workspace.integrated.selections||[]).filter(s=>selected.has(s.entryId));out.workspace.integrated.presets=(out.workspace.integrated.presets||[]).filter(p=>selected.has(p.entryId));}

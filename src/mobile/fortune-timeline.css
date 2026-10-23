@@ -2,3 +2,5 @@
 @media(min-width:540px){.ft-months{grid-template-columns:repeat(4,minmax(0,1fr))}}
 
 .chart-export{margin:12px 5px}.chart-export small{display:block;color:#7c879a;font-size:11px;line-height:1.6;margin-top:6px}.chart-export p{color:#376c5a;font-size:12px}
+/* Long bookmark names must leave the delete action reachable on small screens. */
+.integration-presets li{min-width:0}.integration-presets li button:first-child{min-width:0;overflow-wrap:anywhere}.integration-presets li button:last-child{flex-shrink:0}
